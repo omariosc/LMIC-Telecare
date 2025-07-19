@@ -48,19 +48,19 @@ export default function Home() {
         <nav className="container mx-auto px-4 py-4 flex justify-between items-center min-h-[64px]">
           {/* Logo - Top Left */}
           <div className="font-extrabold text-xl text-[#0A2540] flex items-center gap-2">
-            <span data-lang-en="">Jusur (جسور)</span>
+            <span data-lang-en="">Jusur <span className="hide-nav">(جسور)</span></span>
             <span data-lang-ar="" className="hidden">
               جسور
             </span>
-            <TrophyIcon className="h-4 w-4 text-yellow-700" />
+            <TrophyIcon className="hide-nav h-4 w-4 text-yellow-700" />
             <span
-              className="text-yellow-700 text-sm font-semibold"
+              className="hide-nav text-yellow-700 text-sm font-semibold"
               data-lang-en=""
             >
               Winner (إن شاء الله)
             </span>
             <span
-              className="text-yellow-700 text-sm font-semibold"
+              className="hide-nav text-yellow-700 text-sm font-semibold"
               data-lang-ar=""
               style={{ display: "none" }}
             >
@@ -76,7 +76,9 @@ export default function Home() {
               className="bg-green-600 text-white px-5 py-2 rounded-full font-semibold text-sm hover:bg-green-700 transition-colors flex items-center gap-2"
             >
               <CurrencyDollarIcon className="h-4 w-4" />
-              <span className="hidden min-[590px]:block" data-lang-en="">Donate</span>
+              <span className="hide-nav" data-lang-en="">
+                Donate
+              </span>
               <span data-lang-ar="" className="hidden">
                 تبرع
               </span>
