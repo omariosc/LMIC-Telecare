@@ -15,6 +15,8 @@ import {
   PhoneArrowUpRightIcon,
   HeartIcon,
   CurrencyDollarIcon,
+  Bars3Icon,
+  UserIcon,
 } from "@heroicons/react/24/outline";
 
 export const metadata: Metadata = {
@@ -44,106 +46,139 @@ export const metadata: Metadata = {
 export default function Home() {
   return (
     <>
-      {/* Header & Navigation */}
-      <header className="bg-white/90 backdrop-blur-lg sticky top-0 z-50 border-b border-gray-200">
-        <nav className="container mx-auto px-6 py-4 flex justify-between items-center">
-          <div className="font-extrabold text-2xl text-[#0A2540]">
-            <span data-lang-en="">Jusur (جسور)</span>
-            <span data-lang-ar="" className="hidden">
-              جسور
-            </span>
+      {/* Small Device Warning - Shows for screens under 250px */}
+      <div className="fixed inset-0 bg-[#0A2540] text-white items-center justify-center z-[9999] px-4 text-center hidden">
+        <div>
+          <div className="text-4xl mb-4">📱</div>
+          <h1 className="text-lg font-bold mb-2">
+            Your device is too small for Jusur (جسور)
+          </h1>
+          <p className="text-sm text-gray-300">
+            Please use a larger screen or rotate your device
+          </p>
+        </div>
+      </div>
+
+      {/* Header & Navigation - Fixed Top */}
+      <header className="bg-white fixed top-0 left-0 right-0 z-50">
+        <nav className="container mx-auto px-4 py-4 flex justify-between items-center min-h-[64px]">
+          {/* Logo - Top Left */}
+          <div className="font-extrabold text-xl md:text-2xl text-[#0A2540] flex-shrink-0 flex items-center gap-2">
+            <div>
+              <span data-lang-en="" className="hidden min-[550px]:block">Jusur (جسور)</span>
+              <span data-lang-en="" className="min-[550px]:hidden">Jusur</span>
+              <span data-lang-ar="" className="hidden min-[550px]:block">جسور</span>
+              <span data-lang-ar="" className="min-[550px]:hidden">جسور</span>
+            </div>
+            <div className="text-yellow-500 text-sm hidden min-[550px]:flex items-center gap-1">
+              <TrophyIcon className="h-4 w-4" />
+              <span data-lang-en="">Winner (إن شاء الله)</span>
+              <span data-lang-ar="" className="hidden">فائز (إن شاء الله)</span>
+            </div>
           </div>
-          <div className="hidden md:flex items-center space-x-6">
-            <a href="#features" className="text-gray-600 hover:text-[#0A2540]">
-              <span data-lang-en="">Features</span>
-              <span data-lang-ar="" className="hidden">
-                الميزات
-              </span>
-            </a>
-            <a href="#impact" className="text-gray-600 hover:text-[#0A2540]">
-              <span data-lang-en="">Impact</span>
-              <span data-lang-ar="" className="hidden">
-                التأثير
-              </span>
-            </a>
-            <a href="#faq" className="text-gray-600 hover:text-[#0A2540]">
-              <span data-lang-en="">FAQ</span>
-              <span data-lang-ar="" className="hidden">
-                الأسئلة الشائعة
-              </span>
-            </a>
-          </div>
-          <div className="flex items-center space-x-4">
+
+          {/* Navigation - Top Right */}
+          <div className="flex items-center space-x-3">
+            {/* Donate Button */}
             <a
               href="/donation"
-              className="bg-green-600 text-white px-4 py-2 rounded-full font-semibold text-sm hover:bg-green-700 transition-colors flex items-center gap-2"
+              className="bg-green-600 text-white px-5 py-2 rounded-full font-semibold text-sm hover:bg-green-700 transition-colors flex items-center gap-2"
             >
               <CurrencyDollarIcon className="h-4 w-4" />
-              <span data-lang-en="">Donate</span>
-              <span data-lang-ar="" className="hidden">
+              <span className="hidden min-[550px]:block" data-lang-en="">
+                Donate
+              </span>
+              <span className="hidden min-[550px]:block" data-lang-ar="">
                 تبرع
               </span>
             </a>
+
+            {/* Language Toggle */}
             <button
               id="lang-toggle"
-              className="bg-gray-200 text-gray-700 px-4 py-2 rounded-full font-semibold text-sm hover:bg-gray-300"
+              className="bg-gray-100 text-gray-700 px-3 py-2 rounded-full font-semibold text-sm hover:bg-gray-200 transition-colors"
             >
-              <span data-lang-en="">عربي</span>
+              <span data-lang-en="">ع</span>
               <span data-lang-ar="" className="hidden">
-                English
+                EN
               </span>
             </button>
-            <button
-              id="mobile-menu-button"
-              className="md:hidden p-2 rounded-md text-gray-600 hover:bg-gray-100"
-            >
-              <svg
-                className="h-6 w-6"
-                fill="none"
-                viewBox="0 0 24 24"
-                stroke="currentColor"
-              >
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  strokeWidth="2"
-                  d="M4 6h16M4 12h16m-7 6h7"
-                />
-              </svg>
-            </button>
+
+            {/* User/Login Dropdown */}
+            <div className="relative group">
+              <button className="text-gray-700 hover:text-[#0A2540] px-3 py-2 rounded-md font-medium text-sm flex items-center gap-2 transition-colors">
+                <UserIcon className="h-4 w-4" />
+                <svg
+                  className="w-4 h-4 ml-1"
+                  fill="none"
+                  stroke="currentColor"
+                  viewBox="0 0 24 24"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth={2}
+                    d="M19 9l-7 7-7-7"
+                  />
+                </svg>
+              </button>
+
+              {/* Dropdown Menu */}
+              <div className="absolute right-0 mt-2 w-56 bg-white rounded-md shadow-lg border border-gray-200 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 z-50">
+                <div className="py-2">
+                  <a
+                    href="/login/gaza-clinician"
+                    className="block px-4 py-2 text-sm text-gray-900 hover:bg-gray-50 hover:text-[#0A2540] transition-colors"
+                  >
+                    <span data-lang-en="" className="hidden min-[550px]:block">
+                      Login (Gaza Clinician)
+                    </span>
+                    <span data-lang-en="" className="min-[550px]:hidden">
+                      Login Gaza
+                    </span>
+                    <span data-lang-ar="" className="hidden">
+                      دخول طبيب غزة
+                    </span>
+                  </a>
+                  <a
+                    href="/login/uk-clinician"
+                    className="block px-4 py-2 text-sm text-gray-900 hover:bg-gray-50 hover:text-[#0A2540] transition-colors"
+                  >
+                    <span data-lang-en="" className="hidden min-[550px]:block">
+                      Login (UK Clinician)
+                    </span>
+                    <span data-lang-en="" className="min-[550px]:hidden">
+                      Login UK
+                    </span>
+                    <span data-lang-ar="" className="hidden">
+                      دخول طبيب بريطاني
+                    </span>
+                  </a>
+                  <a
+                    href="/register/uk-clinician"
+                    className="block px-4 py-2 text-sm text-gray-900 hover:bg-gray-50 hover:text-[#0A2540] transition-colors"
+                  >
+                    <span data-lang-en="" className="hidden min-[550px]:block">
+                      Register (UK Clinician)
+                    </span>
+                    <span data-lang-en="" className="min-[550px]:hidden">
+                      Register UK
+                    </span>
+                    <span data-lang-ar="" className="hidden">
+                      تسجيل طبيب بريطاني
+                    </span>
+                  </a>
+                </div>
+              </div>
+            </div>
           </div>
         </nav>
-        <div id="mobile-menu" className="hidden md:hidden px-6 pb-4 space-y-3">
-          <a
-            href="#features"
-            className="block text-gray-600 hover:text-[#0A2540]"
-          >
-            <span data-lang-en="">Features</span>
-            <span data-lang-ar="" className="hidden">
-              الميزات
-            </span>
-          </a>
-          <a
-            href="#impact"
-            className="block text-gray-600 hover:text-[#0A2540]"
-          >
-            <span data-lang-en="">Impact</span>
-            <span data-lang-ar="" className="hidden">
-              التأثير
-            </span>
-          </a>
-          <a href="#faq" className="block text-gray-600 hover:text-[#0A2540]">
-            <span data-lang-en="">FAQ</span>
-            <span data-lang-ar="" className="hidden">
-              الأسئلة الشائعة
-            </span>
-          </a>
-        </div>
       </header>
 
+      {/* Main Content */}
       <main>
         {/* Hero Section */}
-        <section className="bg-gradient-to-b from-[#0A2540] to-[#103A63] text-white text-center py-20 md:py-28 px-6">
+        <section className="bg-gradient-to-b from-[#0A2540] to-[#103A63] text-white text-center pt-28 pb-20 px-6">
           <div className="container mx-auto">
             <h1 className="text-4xl md:text-6xl font-extrabold leading-tight">
               <span data-lang-en="">
@@ -157,10 +192,10 @@ export default function Home() {
             <div className="mt-6 text-lg md:text-xl text-gray-200 max-w-4xl mx-auto">
               <p>
                 <span data-lang-en="">
-                  <strong>Jusur (Raa-Waw-Seen-Jeem)</strong> is the Arabic word
-                  for bridges. Just because we cannot get physical aid into
-                  Gaza, it does not mean we cannot provide them support,
-                  bridging our knowledge to people who need it the most.
+                  <strong>Jusur (جسور)</strong> is the Arabic word for bridges.
+                  Just because we cannot get physical aid into Gaza, it does not
+                  mean we cannot provide them support, bridging our knowledge to
+                  people who need it the most.
                 </span>
                 <span data-lang-ar="" className="hidden">
                   <strong>جسور</strong> كلمة عربية تعني الجسور. مجرد أننا لا
@@ -231,7 +266,7 @@ export default function Home() {
           <div className="container mx-auto px-6">
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 max-w-7xl mx-auto text-center">
               <div className="bg-white p-6 rounded-xl shadow-md">
-                <h3 className="text-4xl font-extrabold text-[#0A2540]">
+                <h3 className="text-4xl font-extrabold text-red-500">
                   2.3 Million
                 </h3>
                 <p className="mt-2 font-semibold text-gray-600">
@@ -242,8 +277,8 @@ export default function Home() {
                 </p>
               </div>
               <div className="bg-white p-6 rounded-xl shadow-md">
-                <h3 className="text-4xl font-extrabold text-[#0A2540]">
-                  Only 35
+                <h3 className="text-4xl font-extrabold text-red-500">
+                  Only 17/36
                 </h3>
                 <p className="mt-2 font-semibold text-gray-600">
                   <span data-lang-en="">Hospitals partially functional</span>
@@ -253,7 +288,7 @@ export default function Home() {
                 </p>
               </div>
               <div className="bg-white p-6 rounded-xl shadow-md">
-                <h3 className="text-4xl font-extrabold text-[#0A2540]">90%</h3>
+                <h3 className="text-4xl font-extrabold text-red-500">90%</h3>
                 <p className="mt-2 font-semibold text-gray-600">
                   <span data-lang-en="">Specialist shortage</span>
                   <span data-lang-ar="" className="hidden">
@@ -262,7 +297,7 @@ export default function Home() {
                 </p>
               </div>
               <div className="bg-white p-6 rounded-xl shadow-md">
-                <h3 className="text-4xl font-extrabold text-[#0A2540]">
+                <h3 className="text-4xl font-extrabold text-red-500">
                   Limited
                 </h3>
                 <p className="mt-2 font-semibold text-gray-600">
@@ -728,29 +763,33 @@ export default function Home() {
               </span>
             </p>
 
-            <div className="mb-6">
-              <span className="text-gray-300">
+            <div className="mb-8 mt-8">
+              <div className="text-gray-300 mb-3">
                 <span data-lang-en="">Contact: </span>
                 <span data-lang-ar="" className="hidden">
                   اتصل بنا:{" "}
                 </span>
-              </span>
+              </div>
               <a
-                href="mailto:support@jusur.org.uk"
+                href="mailto:O.Choudhry@leeds.ac.uk"
                 className="bg-blue-600 text-white px-2 py-2 rounded-full font-semibold hover:bg-blue-700 transition-colors"
               >
-                support@jusur.org.uk
+                O.Choudhry@leeds.ac.uk
               </a>
             </div>
 
-            <div className="text-yellow-400 font-semibold flex items-center justify-center gap-2 mb-6">
-              <TrophyIcon className="h-5 w-5" />
-              <span data-lang-en="">
-                Hack for Gaza 2025 Winner (إن شاء الله)
-              </span>
-              <span data-lang-ar="" className="hidden">
-                هاكاثون من أجل غزة 2025
-              </span>
+            <div className="text-yellow-400 font-semibold text-center mb-6">
+              <div className="flex items-center justify-center mb-2">
+                <TrophyIcon className="h-5 w-5" />
+              </div>
+              <div>
+                <span data-lang-en="">
+                  Hack for Gaza 2025 Winner (إن شاء الله)
+                </span>
+                <span data-lang-ar="" className="hidden">
+                  هاكاثون من أجل غزة 2025
+                </span>
+              </div>
             </div>
 
             <div className="border-t border-gray-700 pt-6 text-gray-400 text-sm">
