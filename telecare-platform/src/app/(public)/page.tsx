@@ -17,6 +17,14 @@ import {
   CurrencyDollarIcon,
   Bars3Icon,
   UserIcon,
+  MagnifyingGlassIcon,
+  AcademicCapIcon,
+  ComputerDesktopIcon,
+  UsersIcon,
+  WifiIcon,
+  PowerIcon,
+  EyeSlashIcon,
+  FireIcon,
 } from "@heroicons/react/24/outline";
 
 export const metadata: Metadata = {
@@ -65,15 +73,25 @@ export default function Home() {
           {/* Logo - Top Left */}
           <div className="font-extrabold text-xl md:text-2xl text-[#0A2540] flex-shrink-0 flex items-center gap-2">
             <div>
-              <span data-lang-en="" className="hidden min-[550px]:block">Jusur (جسور)</span>
-              <span data-lang-en="" className="min-[550px]:hidden">Jusur</span>
-              <span data-lang-ar="" className="hidden min-[550px]:block">جسور</span>
-              <span data-lang-ar="" className="min-[550px]:hidden">جسور</span>
+              <span data-lang-en="" className="hidden min-[550px]:block">
+                Jusur (جسور)
+              </span>
+              <span data-lang-en="" className="min-[550px]:hidden">
+                Jusur
+              </span>
+              <span data-lang-ar="" className="hidden min-[550px]:block">
+                جسور
+              </span>
+              <span data-lang-ar="" className="min-[550px]:hidden">
+                جسور
+              </span>
             </div>
             <div className="text-yellow-500 text-sm hidden min-[550px]:flex items-center gap-1">
               <TrophyIcon className="h-4 w-4" />
               <span data-lang-en="">Winner (إن شاء الله)</span>
-              <span data-lang-ar="" className="hidden">فائز (إن شاء الله)</span>
+              <span data-lang-ar="" className="hidden">
+                فائز (إن شاء الله)
+              </span>
             </div>
           </div>
 
@@ -178,7 +196,7 @@ export default function Home() {
       {/* Main Content */}
       <main>
         {/* Hero Section */}
-        <section className="bg-gradient-to-b from-[#0A2540] to-[#103A63] text-white text-center pt-28 pb-20 px-6">
+        <section className="bg-gradient-to-b from-green-800 to-green-950 text-white text-center pt-28 pb-20 px-6">
           <div className="container mx-auto">
             <h1 className="text-4xl md:text-6xl font-extrabold leading-tight">
               <span data-lang-en="">
@@ -195,7 +213,7 @@ export default function Home() {
                   <strong>Jusur (جسور)</strong> is the Arabic word for bridges.
                   Just because we cannot get physical aid into Gaza, it does not
                   mean we cannot provide them support, bridging our knowledge to
-                  people who need it the most.
+                  people who need it the <em>most</em>.
                 </span>
                 <span data-lang-ar="" className="hidden">
                   <strong>جسور</strong> كلمة عربية تعني الجسور. مجرد أننا لا
@@ -205,12 +223,60 @@ export default function Home() {
                 </span>
               </p>
             </div>
+            <div className="mt-8 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 max-w-7xl mx-auto text-center">
+              <div className="bg-white p-6 rounded-xl shadow-md">
+                <h3 className="text-4xl font-extrabold text-red-500">
+                  2.3 Million
+                </h3>
+                <p className="mt-2 font-semibold text-gray-600">
+                  <span data-lang-en="">People need urgent healthcare</span>
+                  <span data-lang-ar="" className="hidden">
+                    شخص بحاجة لرعاية صحية عاجلة
+                  </span>
+                </p>
+              </div>
+              <div className="bg-white p-6 rounded-xl shadow-md">
+                <h3 className="text-4xl font-extrabold text-red-500">
+                  Only 17/36
+                </h3>
+                <p className="mt-2 font-semibold text-gray-600">
+                  <span data-lang-en="">
+                    Hospitals{" "}
+                    <span className="text-red-500">partially&nbsp;</span>
+                    functional
+                  </span>
+                  <span data-lang-ar="" className="hidden">
+                    مستشفى يعمل جزئياً
+                  </span>
+                </p>
+              </div>
+              <div className="bg-white p-6 rounded-xl shadow-md">
+                <h3 className="text-4xl font-extrabold text-red-500">90%</h3>
+                <p className="mt-2 font-semibold text-gray-600">
+                  <span data-lang-en="">Shortage of specialists</span>
+                  <span data-lang-ar="" className="hidden">
+                    نقص في الأخصائيين
+                  </span>
+                </p>
+              </div>
+              <div className="bg-white p-6 rounded-xl shadow-md">
+                <h3 className="text-4xl font-extrabold text-red-500">
+                  Limited
+                </h3>
+                <p className="mt-2 font-semibold text-gray-600">
+                  <span data-lang-en="">Medical supply access</span>
+                  <span data-lang-ar="" className="hidden">
+                    وصول محدود للإمدادات الطبية
+                  </span>
+                </p>
+              </div>
+            </div>
             <div className="mt-8">
-              <div className="inline-block bg-white/10 text-white font-semibold px-4 py-2 rounded-full mt-4">
+              <div className="inline-block bg-red-800/80 text-white font-semibold px-4 py-2 rounded-full mt-4">
                 <p>
                   <span data-lang-en="">
-                    <strong>100% UK Surgeons Agree:</strong> Your remote
-                    guidance is the #1 most impactful intervention.
+                    <strong>UK Doctors Agree*:</strong> Your remote guidance is
+                    currently the #1 most impactful intervention.
                   </span>
                   <span data-lang-ar="" className="hidden">
                     <strong>100% من جراحي بريطانيا يوافقون:</strong> إرشادك عن
@@ -221,12 +287,14 @@ export default function Home() {
             </div>
             <p className="mt-8 text-lg md:text-xl max-w-3xl mx-auto text-gray-300">
               <span data-lang-en="">
-                In Gaza, hospitals are overwhelmed, operating at over 350%
+                In Gaza, hospitals are overwhelmed, operating at over{" "}
+                <strong className="text-red-500">350%&nbsp;</strong>
                 capacity with a critical shortage of specialist doctors. Triage
                 is happening, but without the right expertise to guide complex
-                treatments, lives that could be saved are being lost. When
-                physical aid cannot get in, knowledge is the most powerful
-                resource we can send.
+                treatments,{" "}
+                <strong>lives that could be saved are being lost</strong>. When
+                physical aid cannot get in, knowledge is the <em>most</em>{" "}
+                powerful resource we can send.
               </span>
               <span data-lang-ar="" className="hidden">
                 في غزة، المستشفيات مكتظة وتعمل بأكثر من 350% من طاقتها مع نقص
@@ -261,56 +329,6 @@ export default function Home() {
           </div>
         </section>
 
-        {/* Stats Section */}
-        <section className="py-20 bg-gray-50">
-          <div className="container mx-auto px-6">
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 max-w-7xl mx-auto text-center">
-              <div className="bg-white p-6 rounded-xl shadow-md">
-                <h3 className="text-4xl font-extrabold text-red-500">
-                  2.3 Million
-                </h3>
-                <p className="mt-2 font-semibold text-gray-600">
-                  <span data-lang-en="">People need urgent healthcare</span>
-                  <span data-lang-ar="" className="hidden">
-                    شخص بحاجة لرعاية صحية عاجلة
-                  </span>
-                </p>
-              </div>
-              <div className="bg-white p-6 rounded-xl shadow-md">
-                <h3 className="text-4xl font-extrabold text-red-500">
-                  Only 17/36
-                </h3>
-                <p className="mt-2 font-semibold text-gray-600">
-                  <span data-lang-en="">Hospitals partially functional</span>
-                  <span data-lang-ar="" className="hidden">
-                    مستشفى يعمل جزئياً
-                  </span>
-                </p>
-              </div>
-              <div className="bg-white p-6 rounded-xl shadow-md">
-                <h3 className="text-4xl font-extrabold text-red-500">90%</h3>
-                <p className="mt-2 font-semibold text-gray-600">
-                  <span data-lang-en="">Specialist shortage</span>
-                  <span data-lang-ar="" className="hidden">
-                    نقص في الأخصائيين
-                  </span>
-                </p>
-              </div>
-              <div className="bg-white p-6 rounded-xl shadow-md">
-                <h3 className="text-4xl font-extrabold text-red-500">
-                  Limited
-                </h3>
-                <p className="mt-2 font-semibold text-gray-600">
-                  <span data-lang-en="">Medical supply access</span>
-                  <span data-lang-ar="" className="hidden">
-                    وصول محدود للإمدادات الطبية
-                  </span>
-                </p>
-              </div>
-            </div>
-          </div>
-        </section>
-
         {/* Why UK Specialists Section */}
         <section className="py-20 md:py-28 bg-white">
           <div className="container mx-auto px-6">
@@ -324,15 +342,22 @@ export default function Home() {
                 </span>
               </h2>
             </div>
-            <div className="mt-12 grid grid-cols-1 md:grid-cols-2 gap-10 max-w-5xl mx-auto">
-              <div className="bg-gray-50 p-8 rounded-xl border">
-                <h3 className="text-xl font-bold">
-                  <span data-lang-en="">Remote Consultation Expertise</span>
-                  <span data-lang-ar="" className="hidden">
-                    خبرة في الاستشارات عن بعد
-                  </span>
-                </h3>
-                <p className="mt-2 text-gray-600">
+
+            {/* UK Specialists Benefits - Green Border */}
+            <div className="mt-12 grid grid-cols-1 md:grid-cols-2 gap-6 max-w-5xl mx-auto">
+              <div className="bg-gray-50 p-6 rounded-xl border-2 border-green-500">
+                <div className="flex items-center gap-3 mb-4">
+                  <div className="w-10 h-10 bg-green-100 rounded-lg flex items-center justify-center">
+                    <VideoCameraIcon className="h-6 w-6 text-green-600" />
+                  </div>
+                  <h3 className="text-lg font-bold">
+                    <span data-lang-en="">Remote Consultation Expertise</span>
+                    <span data-lang-ar="" className="hidden">
+                      خبرة في الاستشارات عن بعد
+                    </span>
+                  </h3>
+                </div>
+                <p className="text-gray-600">
                   <span data-lang-en="">
                     UK doctors provide life-saving specialist guidance when
                     local expertise is overwhelmed or unavailable.
@@ -343,16 +368,21 @@ export default function Home() {
                   </span>
                 </p>
               </div>
-              <div className="bg-gray-50 p-8 rounded-xl border">
-                <h3 className="text-xl font-bold">
-                  <span data-lang-en="">
-                    Immediate Access, Breaking Barriers
-                  </span>
-                  <span data-lang-ar="" className="hidden">
-                    وصول فوري، كسر الحواجز
-                  </span>
-                </h3>
-                <p className="mt-2 text-gray-600">
+              <div className="bg-gray-50 p-6 rounded-xl border-2 border-green-500">
+                <div className="flex items-center gap-3 mb-4">
+                  <div className="w-10 h-10 bg-green-100 rounded-lg flex items-center justify-center">
+                    <BoltIcon className="h-6 w-6 text-green-600" />
+                  </div>
+                  <h3 className="text-lg font-bold">
+                    <span data-lang-en="">
+                      Immediate Access, Breaking Barriers
+                    </span>
+                    <span data-lang-ar="" className="hidden">
+                      وصول فوري، كسر الحواجز
+                    </span>
+                  </h3>
+                </div>
+                <p className="text-gray-600">
                   <span data-lang-en="">
                     Digital consultations bypass physical restrictions and
                     blockade limitations to deliver urgent medical support.
@@ -364,10 +394,218 @@ export default function Home() {
                 </p>
               </div>
             </div>
-            <p className="text-center mt-8 text-lg text-gray-700 font-semibold">
+
+            {/* Gaza Healthcare Challenges - Red Border */}
+            <div className="mt-12">
+              <h3 className="text-2xl font-bold text-gray-900 text-center mb-8">
+                <span data-lang-en="">
+                  Critical Challenges in Gaza Healthcare
+                </span>
+                <span data-lang-ar="" className="hidden">
+                  التحديات الحاسمة في الرعاية الصحية في غزة
+                </span>
+              </h3>
+
+              {/* Medical/Clinical Challenges */}
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 max-w-7xl mx-auto mb-8">
+                <div className="bg-gray-50 p-6 rounded-xl border-2 border-red-500">
+                  <div className="flex items-center gap-3 mb-4">
+                    <div className="w-10 h-10 bg-red-100 rounded-lg flex items-center justify-center">
+                      <FireIcon className="h-6 w-6 text-red-600" />
+                    </div>
+                    <h4 className="text-lg font-bold">
+                      <span data-lang-en="">Complex Trauma</span>
+                      <span data-lang-ar="" className="hidden">
+                        صدمة معقدة
+                      </span>
+                    </h4>
+                  </div>
+                  <p className="text-gray-600 text-sm">
+                    <span data-lang-en="">
+                      Limited advanced surgical expertise for complex blast
+                      injuries
+                    </span>
+                    <span data-lang-ar="" className="hidden">
+                      خبرة جراحية متقدمة محدودة للإصابات المعقدة من الانفجارات
+                    </span>
+                  </p>
+                </div>
+
+                <div className="bg-gray-50 p-6 rounded-xl border-2 border-red-500">
+                  <div className="flex items-center gap-3 mb-4">
+                    <div className="w-10 h-10 bg-red-100 rounded-lg flex items-center justify-center">
+                      <AcademicCapIcon className="h-6 w-6 text-red-600" />
+                    </div>
+                    <h4 className="text-lg font-bold">
+                      <span data-lang-en="">Training Deficit</span>
+                      <span data-lang-ar="" className="hidden">
+                        نقص التدريب
+                      </span>
+                    </h4>
+                  </div>
+                  <p className="text-gray-600 text-sm">
+                    <span data-lang-en="">
+                      Limited opportunities for continuing education and skill
+                      development
+                    </span>
+                    <span data-lang-ar="" className="hidden">
+                      فرص محدودة للتعليم المستمر وتطوير المهارات
+                    </span>
+                  </p>
+                </div>
+
+                <div className="bg-gray-50 p-6 rounded-xl border-2 border-red-500">
+                  <div className="flex items-center gap-3 mb-4">
+                    <div className="w-10 h-10 bg-red-100 rounded-lg flex items-center justify-center">
+                      <MagnifyingGlassIcon className="h-6 w-6 text-red-600" />
+                    </div>
+                    <h4 className="text-lg font-bold">
+                      <span data-lang-en="">Diagnostic Limitations</span>
+                      <span data-lang-ar="" className="hidden">
+                        قيود التشخيص
+                      </span>
+                    </h4>
+                  </div>
+                  <p className="text-gray-600 text-sm">
+                    <span data-lang-en="">
+                      Lack of diagnostic modalities like pathology and advanced
+                      imaging
+                    </span>
+                    <span data-lang-ar="" className="hidden">
+                      نقص في وسائل التشخيص مثل علم الأمراض والتصوير المتقدم
+                    </span>
+                  </p>
+                </div>
+
+                <div className="bg-gray-50 p-6 rounded-xl border-2 border-red-500">
+                  <div className="flex items-center gap-3 mb-4">
+                    <div className="w-10 h-10 bg-red-100 rounded-lg flex items-center justify-center">
+                      <UsersIcon className="h-6 w-6 text-red-600" />
+                    </div>
+                    <h4 className="text-lg font-bold">
+                      <span data-lang-en="">Multidisciplinary Gap</span>
+                      <span data-lang-ar="" className="hidden">
+                        فجوة متعددة التخصصات
+                      </span>
+                    </h4>
+                  </div>
+                  <p className="text-gray-600 text-sm">
+                    <span data-lang-en="">
+                      Lack of experts in some specialties which hinders the
+                      implementation of multidisciplinary coordinated team-based
+                      approaches to complex cases
+                    </span>
+                    <span data-lang-ar="" className="hidden">
+                      نقص الخبراء في بعض التخصصات مما يعيق تنفيذ نُهج فرق متعددة
+                      التخصصات منسقة للحالات المعقدة
+                    </span>
+                  </p>
+                </div>
+              </div>
+
+              {/* Infrastructure Challenges */}
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 max-w-7xl mx-auto">
+                <div className="bg-gray-50 p-6 rounded-xl border-2 border-red-500">
+                  <div className="flex items-center gap-3 mb-4">
+                    <div className="w-10 h-10 bg-red-100 rounded-lg flex items-center justify-center">
+                      <WifiIcon className="h-6 w-6 text-red-600" />
+                    </div>
+                    <h4 className="text-lg font-bold">
+                      <span data-lang-en="">Connectivity Issues</span>
+                      <span data-lang-ar="" className="hidden">
+                        مشاكل الاتصال
+                      </span>
+                    </h4>
+                  </div>
+                  <p className="text-gray-600 text-sm">
+                    <span data-lang-en="">
+                      Internet availability limited to few hours daily with low
+                      average speeds
+                    </span>
+                    <span data-lang-ar="" className="hidden">
+                      توفر الإنترنت محدود لساعات قليلة يومياً بسرعات منخفضة
+                    </span>
+                  </p>
+                </div>
+
+                <div className="bg-gray-50 p-6 rounded-xl border-2 border-red-500">
+                  <div className="flex items-center gap-3 mb-4">
+                    <div className="w-10 h-10 bg-red-100 rounded-lg flex items-center justify-center">
+                      <ComputerDesktopIcon className="h-6 w-6 text-red-600" />
+                    </div>
+                    <h4 className="text-lg font-bold">
+                      <span data-lang-en="">Device Limitations</span>
+                      <span data-lang-ar="" className="hidden">
+                        قيود الأجهزة
+                      </span>
+                    </h4>
+                  </div>
+                  <p className="text-gray-600 text-sm">
+                    <span data-lang-en="">
+                      Shortage of computing devices, solutions must work on
+                      basic smartphones
+                    </span>
+                    <span data-lang-ar="" className="hidden">
+                      نقص في أجهزة الحوسبة، يجب أن تعمل الحلول على الهواتف
+                      الذكية الأساسية
+                    </span>
+                  </p>
+                </div>
+
+                <div className="bg-gray-50 p-6 rounded-xl border-2 border-red-500">
+                  <div className="flex items-center gap-3 mb-4">
+                    <div className="w-10 h-10 bg-red-100 rounded-lg flex items-center justify-center">
+                      <PowerIcon className="h-6 w-6 text-red-600" />
+                    </div>
+                    <h4 className="text-lg font-bold">
+                      <span data-lang-en="">Power Restrictions</span>
+                      <span data-lang-ar="" className="hidden">
+                        قيود الطاقة
+                      </span>
+                    </h4>
+                  </div>
+                  <p className="text-gray-600 text-sm">
+                    <span data-lang-en="">
+                      Electricity available almost only in hospitals or medical
+                      points
+                    </span>
+                    <span data-lang-ar="" className="hidden">
+                      الكهرباء متوفرة تقريباً فقط في المستشفيات أو النقاط الطبية
+                    </span>
+                  </p>
+                </div>
+
+                <div className="bg-gray-50 p-6 rounded-xl border-2 border-red-500">
+                  <div className="flex items-center gap-3 mb-4">
+                    <div className="w-10 h-10 bg-red-100 rounded-lg flex items-center justify-center">
+                      <EyeSlashIcon className="h-6 w-6 text-red-600" />
+                    </div>
+                    <h4 className="text-lg font-bold">
+                      <span data-lang-en="">Data Security Concerns</span>
+                      <span data-lang-ar="" className="hidden">
+                        مخاوف أمن البيانات
+                      </span>
+                    </h4>
+                  </div>
+                  <p className="text-gray-600 text-sm">
+                    <span data-lang-en="">
+                      Patient privacy must be maintained despite infrastructure
+                      challenges
+                    </span>
+                    <span data-lang-ar="" className="hidden">
+                      يجب الحفاظ على خصوصية المرضى رغم تحديات البنية التحتية
+                    </span>
+                  </p>
+                </div>
+              </div>
+            </div>
+
+            <p className="text-center mt-12 text-lg text-gray-700 font-semibold">
               <span data-lang-en="">
-                Your expertise can bridge the gap between critical need and
-                life-saving care.
+                Your expertise can bridge the gap between{" "}
+                <strong className="text-red-500">critical need</strong>{" "}
+                and&nbsp;
+                <strong className="text-green-500">life-saving care</strong>.
               </span>
               <span data-lang-ar="" className="hidden">
                 خبرتك يمكن أن تسد الفجوة بين الحاجة الماسة والرعاية المنقذة
@@ -567,7 +805,7 @@ export default function Home() {
             <div className="mt-16 relative flex flex-col md:flex-row justify-between items-center max-w-5xl mx-auto">
               <div className="hidden md:block absolute top-8 left-0 w-full h-0.5 border-t-2 border-dashed border-gray-300"></div>
               <div className="relative flex flex-col items-center text-center z-10 mb-12 md:mb-0">
-                <div className="w-16 h-16 bg-blue-600 text-white rounded-full flex items-center justify-center text-2xl font-bold border-4 border-white">
+                <div className="w-16 h-16 bg-green-600 text-white rounded-full flex items-center justify-center text-2xl font-bold border-4 border-white">
                   1
                 </div>
                 <h3 className="mt-4 text-xl font-bold">
@@ -586,7 +824,7 @@ export default function Home() {
                 </p>
               </div>
               <div className="relative flex flex-col items-center text-center z-10 mb-12 md:mb-0">
-                <div className="w-16 h-16 bg-blue-600 text-white rounded-full flex items-center justify-center text-2xl font-bold border-4 border-white">
+                <div className="w-16 h-16 bg-green-600 text-white rounded-full flex items-center justify-center text-2xl font-bold border-4 border-white">
                   2
                 </div>
                 <h3 className="mt-4 text-xl font-bold">
@@ -607,7 +845,7 @@ export default function Home() {
                 </p>
               </div>
               <div className="relative flex flex-col items-center text-center z-10">
-                <div className="w-16 h-16 bg-blue-600 text-white rounded-full flex items-center justify-center text-2xl font-bold border-4 border-white">
+                <div className="w-16 h-16 bg-green-600 text-white rounded-full flex items-center justify-center text-2xl font-bold border-4 border-white">
                   3
                 </div>
                 <h3 className="mt-4 text-xl font-bold">
@@ -742,7 +980,7 @@ export default function Home() {
       </main>
 
       {/* Footer */}
-      <footer className="bg-[#0A2540] text-white">
+      <footer className="bg-gradient-to-r from-green-800 to-green-950 text-white">
         <div className="container mx-auto px-6 py-12 text-center">
           <div className="max-w-4xl mx-auto">
             <h3 className="font-extrabold text-2xl mb-4">
@@ -763,22 +1001,7 @@ export default function Home() {
               </span>
             </p>
 
-            <div className="mb-8 mt-8">
-              <div className="text-gray-300 mb-3">
-                <span data-lang-en="">Contact: </span>
-                <span data-lang-ar="" className="hidden">
-                  اتصل بنا:{" "}
-                </span>
-              </div>
-              <a
-                href="mailto:O.Choudhry@leeds.ac.uk"
-                className="bg-blue-600 text-white px-2 py-2 rounded-full font-semibold hover:bg-blue-700 transition-colors"
-              >
-                O.Choudhry@leeds.ac.uk
-              </a>
-            </div>
-
-            <div className="text-yellow-400 font-semibold text-center mb-6">
+            <div className="text-yellow-400 font-semibold text-center">
               <div className="flex items-center justify-center mb-2">
                 <TrophyIcon className="h-5 w-5" />
               </div>
@@ -792,7 +1015,7 @@ export default function Home() {
               </div>
             </div>
 
-            <div className="border-t border-gray-700 pt-6 text-gray-400 text-sm">
+            <div className="mt-6 text-gray-400 text-sm">
               <p>&copy; 2025 Jusur (جسور) Platform. All rights reserved.</p>
             </div>
           </div>
