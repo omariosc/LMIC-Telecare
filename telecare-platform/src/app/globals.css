@@ -1,0 +1,192 @@
+@import "tailwindcss";
+@import "../styles/components.css";
+
+:root {
+  /* Medical Color Palette */
+  --color-medical-blue-50: #eff6ff;
+  --color-medical-blue-100: #dbeafe;
+  --color-medical-blue-500: #0066cc;
+  --color-medical-blue-600: #0052a3;
+  --color-medical-blue-700: #003d7a;
+  --color-medical-blue-900: #1e3a8a;
+  
+  --color-medical-green-50: #f0fdf4;
+  --color-medical-green-100: #dcfce7;
+  --color-medical-green-500: #10b981;
+  --color-medical-green-600: #059669;
+  --color-medical-green-700: #047857;
+  
+  --color-medical-red-50: #fef2f2;
+  --color-medical-red-500: #ef4444;
+  --color-medical-red-600: #dc2626;
+  
+  --color-medical-orange-50: #fff7ed;
+  --color-medical-orange-500: #f97316;
+  --color-medical-orange-600: #ea580c;
+  
+  /* Gaza Flag Colors */
+  --color-gaza-red: #ce1126;
+  --color-gaza-green: #007a3d;
+  --color-gaza-black: #000000;
+  --color-gaza-white: #ffffff;
+  
+  /* Neutral Colors */
+  --color-gray-50: #f9fafb;
+  --color-gray-100: #f3f4f6;
+  --color-gray-200: #e5e7eb;
+  --color-gray-300: #d1d5db;
+  --color-gray-400: #9ca3af;
+  --color-gray-500: #6b7280;
+  --color-gray-600: #4b5563;
+  --color-gray-700: #374151;
+  --color-gray-800: #1f2937;
+  --color-gray-900: #111827;
+  
+  /* Background and Foreground */
+  --background: #ffffff;
+  --foreground: #111827;
+}
+
+@theme inline {
+  /* Color System */
+  --color-primary: var(--color-medical-blue-600);
+  --color-primary-foreground: white;
+  --color-secondary: var(--color-medical-green-600);
+  --color-secondary-foreground: white;
+  --color-accent: var(--color-medical-orange-500);
+  --color-accent-foreground: white;
+  --color-destructive: var(--color-medical-red-500);
+  --color-destructive-foreground: white;
+  
+  /* Background Colors */
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-muted: var(--color-gray-100);
+  --color-muted-foreground: var(--color-gray-600);
+  --color-card: var(--background);
+  --color-card-foreground: var(--foreground);
+  --color-border: var(--color-gray-200);
+  
+  /* Typography */
+  --font-sans: var(--font-inter);
+  --line-height-tight: 1.25;
+  --line-height-snug: 1.375;
+  --line-height-normal: 1.5;
+  --line-height-relaxed: 1.625;
+  
+  /* Mobile-First Responsive Breakpoints */
+  --breakpoint-xs: 475px;
+  --breakpoint-sm: 640px;
+  --breakpoint-md: 768px;
+  --breakpoint-lg: 1024px;
+  --breakpoint-xl: 1280px;
+  --breakpoint-2xl: 1536px;
+  
+  /* Spacing Scale */
+  --spacing-px: 1px;
+  --spacing-0: 0;
+  --spacing-1: 0.25rem;
+  --spacing-2: 0.5rem;
+  --spacing-3: 0.75rem;
+  --spacing-4: 1rem;
+  --spacing-5: 1.25rem;
+  --spacing-6: 1.5rem;
+  --spacing-8: 2rem;
+  --spacing-10: 2.5rem;
+  --spacing-12: 3rem;
+  --spacing-16: 4rem;
+  --spacing-20: 5rem;
+  --spacing-24: 6rem;
+  --spacing-32: 8rem;
+  
+  /* Touch-Friendly Sizes (minimum 44px) */
+  --size-touch-min: 44px;
+  --size-button-sm: 36px;
+  --size-button-md: 44px;
+  --size-button-lg: 52px;
+  
+  /* Medical Icons and Imagery */
+  --border-radius-sm: 0.25rem;
+  --border-radius-md: 0.375rem;
+  --border-radius-lg: 0.5rem;
+  --border-radius-xl: 0.75rem;
+  
+  /* Shadows for Medical UI */
+  --shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.05);
+  --shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
+  --shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --background: #0a0a0a;
+    --foreground: #ededed;
+  }
+}
+
+/* Base Styles */
+body {
+  background: var(--background);
+  color: var(--foreground);
+  font-family: var(--font-sans), ui-sans-serif, system-ui, sans-serif;
+  line-height: var(--line-height-normal);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* Mobile-First Base Styles */
+html {
+  scroll-behavior: smooth;
+}
+
+/* Touch-friendly interactive elements */
+button, 
+a[role="button"], 
+input[type="button"], 
+input[type="submit"] {
+  min-height: var(--size-touch-min);
+  min-width: var(--size-touch-min);
+}
+
+/* High contrast for medical readability */
+.medical-text {
+  color: var(--color-gray-900);
+  font-weight: 500;
+}
+
+/* Emergency/Critical styles */
+.critical {
+  color: var(--color-medical-red-600);
+  font-weight: 600;
+}
+
+.urgent {
+  color: var(--color-medical-orange-600);
+  font-weight: 600;
+}
+
+.success {
+  color: var(--color-medical-green-600);
+  font-weight: 600;
+}
+
+/* Accessibility improvements */
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+  
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}
+
+/* Focus styles for keyboard navigation */
+:focus-visible {
+  outline: 2px solid var(--color-primary);
+  outline-offset: 2px;
+}

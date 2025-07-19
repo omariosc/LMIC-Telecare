@@ -1,0 +1,313 @@
+/* Mobile-First Component Utilities */
+
+/* Container with responsive padding */
+.container-responsive {
+  width: 100%;
+  margin-left: auto;
+  margin-right: auto;
+  padding-left: 1rem;
+  padding-right: 1rem;
+}
+
+@media (min-width: 640px) {
+  .container-responsive {
+    padding-left: 1.5rem;
+    padding-right: 1.5rem;
+  }
+}
+
+@media (min-width: 768px) {
+  .container-responsive {
+    padding-left: 2rem;
+    padding-right: 2rem;
+  }
+}
+
+@media (min-width: 1024px) {
+  .container-responsive {
+    max-width: 1024px;
+    padding-left: 2.5rem;
+    padding-right: 2.5rem;
+  }
+}
+
+@media (min-width: 1280px) {
+  .container-responsive {
+    max-width: 1280px;
+  }
+}
+
+/* Button Components */
+.btn-primary {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: var(--size-touch-min);
+  padding: 0.75rem 1.5rem;
+  font-weight: 600;
+  font-size: 1rem;
+  line-height: 1.5;
+  border-radius: var(--border-radius-lg);
+  background-color: var(--color-primary);
+  color: var(--color-primary-foreground);
+  border: none;
+  cursor: pointer;
+  transition: all 0.2s ease-in-out;
+  text-decoration: none;
+}
+
+.btn-primary:hover {
+  background-color: var(--color-medical-blue-700);
+  transform: translateY(-1px);
+  box-shadow: var(--shadow-md);
+}
+
+.btn-primary:active {
+  transform: translateY(0);
+}
+
+.btn-secondary {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: var(--size-touch-min);
+  padding: 0.75rem 1.5rem;
+  font-weight: 600;
+  font-size: 1rem;
+  line-height: 1.5;
+  border-radius: var(--border-radius-lg);
+  background-color: transparent;
+  color: var(--color-primary);
+  border: 2px solid var(--color-primary);
+  cursor: pointer;
+  transition: all 0.2s ease-in-out;
+  text-decoration: none;
+}
+
+.btn-secondary:hover {
+  background-color: var(--color-primary);
+  color: var(--color-primary-foreground);
+}
+
+.btn-urgent {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: var(--size-touch-min);
+  padding: 0.75rem 1.5rem;
+  font-weight: 600;
+  font-size: 1rem;
+  line-height: 1.5;
+  border-radius: var(--border-radius-lg);
+  background-color: var(--color-medical-red-500);
+  color: white;
+  border: none;
+  cursor: pointer;
+  transition: all 0.2s ease-in-out;
+  text-decoration: none;
+}
+
+.btn-urgent:hover {
+  background-color: var(--color-medical-red-600);
+  transform: translateY(-1px);
+  box-shadow: var(--shadow-md);
+}
+
+/* Mobile-First Typography */
+.heading-hero {
+  font-size: 2rem;
+  line-height: var(--line-height-tight);
+  font-weight: 800;
+  letter-spacing: -0.025em;
+}
+
+@media (min-width: 640px) {
+  .heading-hero {
+    font-size: 2.5rem;
+  }
+}
+
+@media (min-width: 768px) {
+  .heading-hero {
+    font-size: 3rem;
+  }
+}
+
+@media (min-width: 1024px) {
+  .heading-hero {
+    font-size: 3.5rem;
+  }
+}
+
+.heading-section {
+  font-size: 1.5rem;
+  line-height: var(--line-height-tight);
+  font-weight: 700;
+}
+
+@media (min-width: 640px) {
+  .heading-section {
+    font-size: 1.875rem;
+  }
+}
+
+@media (min-width: 768px) {
+  .heading-section {
+    font-size: 2.25rem;
+  }
+}
+
+.text-large {
+  font-size: 1.125rem;
+  line-height: var(--line-height-relaxed);
+}
+
+@media (min-width: 640px) {
+  .text-large {
+    font-size: 1.25rem;
+  }
+}
+
+/* Card Components */
+.card {
+  background-color: var(--color-card);
+  border: 1px solid var(--color-border);
+  border-radius: var(--border-radius-xl);
+  padding: 1.5rem;
+  box-shadow: var(--shadow-sm);
+  transition: all 0.2s ease-in-out;
+}
+
+.card:hover {
+  box-shadow: var(--shadow-md);
+  transform: translateY(-2px);
+}
+
+@media (min-width: 768px) {
+  .card {
+    padding: 2rem;
+  }
+}
+
+/* Medical Status Indicators */
+.status-critical {
+  display: inline-flex;
+  align-items: center;
+  padding: 0.25rem 0.75rem;
+  border-radius: var(--border-radius-md);
+  background-color: var(--color-medical-red-50);
+  color: var(--color-medical-red-600);
+  font-weight: 600;
+  font-size: 0.875rem;
+}
+
+.status-urgent {
+  display: inline-flex;
+  align-items: center;
+  padding: 0.25rem 0.75rem;
+  border-radius: var(--border-radius-md);
+  background-color: var(--color-medical-orange-50);
+  color: var(--color-medical-orange-600);
+  font-weight: 600;
+  font-size: 0.875rem;
+}
+
+.status-success {
+  display: inline-flex;
+  align-items: center;
+  padding: 0.25rem 0.75rem;
+  border-radius: var(--border-radius-md);
+  background-color: var(--color-medical-green-50);
+  color: var(--color-medical-green-600);
+  font-weight: 600;
+  font-size: 0.875rem;
+}
+
+/* Mobile Grid Layouts */
+.grid-mobile-first {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 1rem;
+}
+
+@media (min-width: 640px) {
+  .grid-mobile-first {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 1.5rem;
+  }
+}
+
+@media (min-width: 1024px) {
+  .grid-mobile-first {
+    grid-template-columns: repeat(3, 1fr);
+    gap: 2rem;
+  }
+}
+
+/* Touch-Friendly Navigation */
+.nav-mobile {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+@media (min-width: 768px) {
+  .nav-mobile {
+    flex-direction: row;
+    gap: 1rem;
+  }
+}
+
+.nav-item {
+  padding: 0.75rem 1rem;
+  min-height: var(--size-touch-min);
+  display: flex;
+  align-items: center;
+  color: var(--color-gray-700);
+  text-decoration: none;
+  border-radius: var(--border-radius-md);
+  transition: all 0.2s ease-in-out;
+}
+
+.nav-item:hover {
+  background-color: var(--color-gray-100);
+  color: var(--color-primary);
+}
+
+/* Loading States */
+.skeleton {
+  background: linear-gradient(90deg, var(--color-gray-200) 25%, var(--color-gray-100) 50%, var(--color-gray-200) 75%);
+  background-size: 200% 100%;
+  animation: skeleton-loading 1.5s infinite;
+}
+
+@keyframes skeleton-loading {
+  0% {
+    background-position: 200% 0;
+  }
+  100% {
+    background-position: -200% 0;
+  }
+}
+
+/* RTL Support Utilities */
+.rtl-support {
+  direction: ltr;
+}
+
+[dir="rtl"] .rtl-support {
+  direction: rtl;
+}
+
+/* High Contrast Mode Support */
+@media (prefers-contrast: high) {
+  .btn-primary,
+  .btn-secondary,
+  .btn-urgent {
+    border: 2px solid currentColor;
+  }
+  
+  .card {
+    border: 2px solid var(--color-border);
+  }
+}
