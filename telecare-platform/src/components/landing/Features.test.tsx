@@ -17,7 +17,9 @@ describe("Features Component", () => {
   it("should display feature grid with multiple items", () => {
     render(<Features />);
 
-    const featureItems = screen.getAllByTestId(/^feature-\d+$/).filter(el => !el.getAttribute('data-testid')?.includes('-icon'));
+    const featureItems = screen
+      .getAllByTestId(/^feature-\d+$/)
+      .filter((el) => !el.getAttribute("data-testid")?.includes("-icon"));
     expect(featureItems.length).toBe(6);
   });
 
@@ -81,21 +83,27 @@ describe("Features Component", () => {
   it("should emphasize emergency and urgency", () => {
     render(<Features />);
 
-    const emergencyElements = screen.getAllByText(/24.*7|emergency|urgent|instant/i);
+    const emergencyElements = screen.getAllByText(
+      /24.*7|emergency|urgent|instant/i
+    );
     expect(emergencyElements.length).toBeGreaterThan(0);
   });
 
   it("should mention security and privacy", () => {
     render(<Features />);
 
-    const securityElements = screen.getAllByText(/secure|encrypted|private|hipaa|gdpr/i);
+    const securityElements = screen.getAllByText(
+      /secure|encrypted|private|hipaa|gdpr/i
+    );
     expect(securityElements.length).toBeGreaterThan(0);
   });
 
   it("should highlight Gaza-specific benefits", () => {
     render(<Features />);
 
-    const gazaElements = screen.getAllByText(/gaza|palestine|blockade|humanitarian/i);
+    const gazaElements = screen.getAllByText(
+      /gaza|palestine|blockade|humanitarian/i
+    );
     expect(gazaElements.length).toBeGreaterThan(0);
   });
 });

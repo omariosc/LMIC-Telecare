@@ -17,28 +17,36 @@ describe("Partners Component", () => {
   it("should display multiple partner organizations", () => {
     render(<Partners />);
 
-    const partnerItems = screen.getAllByTestId(/^partner-\d+$/).filter(el => !el.getAttribute('data-testid')?.includes('-logo'));
+    const partnerItems = screen
+      .getAllByTestId(/^partner-\d+$/)
+      .filter((el) => !el.getAttribute("data-testid")?.includes("-logo"));
     expect(partnerItems.length).toBe(5);
   });
 
   it("should have medical organization partners", () => {
     render(<Partners />);
 
-    const medicalElements = screen.getAllByText(/medical.*association|nhs|hospital|health/i);
+    const medicalElements = screen.getAllByText(
+      /medical.*association|nhs|hospital|health/i
+    );
     expect(medicalElements.length).toBeGreaterThan(0);
   });
 
   it("should have humanitarian organization partners", () => {
     render(<Partners />);
 
-    const humanitarianElements = screen.getAllByText(/humanitarian|relief|aid|charity/i);
+    const humanitarianElements = screen.getAllByText(
+      /humanitarian|relief|aid|charity/i
+    );
     expect(humanitarianElements.length).toBeGreaterThan(0);
   });
 
   it("should have technology or innovation partners", () => {
     render(<Partners />);
 
-    const techElements = screen.getAllByText(/technology|innovation|tech|digital/i);
+    const techElements = screen.getAllByText(
+      /technology|innovation|tech|digital/i
+    );
     expect(techElements.length).toBeGreaterThan(0);
   });
 
@@ -52,7 +60,9 @@ describe("Partners Component", () => {
   it("should mention partnership support for Gaza", () => {
     render(<Partners />);
 
-    const elements = screen.getAllByText(/gaza|palestine|support|collaboration/i);
+    const elements = screen.getAllByText(
+      /gaza|palestine|support|collaboration/i
+    );
     expect(elements.length).toBeGreaterThan(0);
   });
 
@@ -73,21 +83,27 @@ describe("Partners Component", () => {
   it("should include partnership call-to-action", () => {
     render(<Partners />);
 
-    const elements = screen.getAllByText(/join.*partner|become.*partner|partner.*with.*us/i);
+    const elements = screen.getAllByText(
+      /join.*partner|become.*partner|partner.*with.*us/i
+    );
     expect(elements.length).toBeGreaterThan(0);
   });
 
   it("should emphasize humanitarian mission", () => {
     render(<Partners />);
 
-    const elements = screen.getAllByText(/humanitarian|crisis|mission|emergency/i);
+    const elements = screen.getAllByText(
+      /humanitarian|crisis|mission|emergency/i
+    );
     expect(elements.length).toBeGreaterThan(0);
   });
 
   it("should display coming soon or placeholder messaging", () => {
     render(<Partners />);
 
-    const elements = screen.getAllByText(/coming soon|placeholder|logo|partner/i);
+    const elements = screen.getAllByText(
+      /coming soon|placeholder|logo|partner/i
+    );
     expect(elements.length).toBeGreaterThan(0);
   });
 });

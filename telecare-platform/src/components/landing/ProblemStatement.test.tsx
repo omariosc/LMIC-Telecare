@@ -80,6 +80,8 @@ describe("ProblemStatement Component", () => {
     render(<ProblemStatement />);
 
     // Should explain why UK doctors are needed
-    expect(screen.getByText(/why uk medical specialists are critical/i)).toBeDefined();
+    expect(
+      screen.getByText(/why uk medical specialists are critical/i)
+    ).toBeDefined();
   });
 });

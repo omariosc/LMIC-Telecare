@@ -5,7 +5,7 @@ import React, { useState, useEffect } from "react";
 type Platform = "ios" | "android" | "unknown";
 
 const APP_INFO = {
-  name: "HerSignal",
+  name: "Telecare Platform",
   version: "2.4.1",
   iosVersion: "iOS 14.0+",
   androidVersion: "Android 8.0+",
@@ -13,8 +13,9 @@ const APP_INFO = {
   lastUpdated: "Dec 15, 2024",
   rating: "4.8",
   downloads: "100K+",
-  appStoreUrl: "https://apps.apple.com/app/hersignal/id123456789",
-  playStoreUrl: "https://play.google.com/store/apps/details?id=com.hersignal.app",
+  appStoreUrl: "https://apps.apple.com/app/telecare/id123456789",
+  playStoreUrl:
+    "https://play.google.com/store/apps/details?id=com.telecare.app",
 } as const;
 
 const DOWNLOAD_STATS = [
@@ -27,14 +28,14 @@ const DOWNLOAD_STATS = [
 const detectPlatform = (): Platform => {
   if (typeof window === "undefined") return "unknown";
   if (!navigator.userAgent) return "unknown";
-  
+
   const userAgent = navigator.userAgent.toLowerCase();
   if (/iphone|ipad|ipod/.test(userAgent)) return "ios";
   if (/android/.test(userAgent)) return "android";
   return "unknown";
 };
 
-export const DownloadButtons: React.FC = () => {
+export const AppDownload: React.FC = () => {
   const [platform, setPlatform] = useState<Platform>("unknown");
 
   useEffect(() => {
@@ -43,25 +44,25 @@ export const DownloadButtons: React.FC = () => {
 
   const handleAppStoreClick = () => {
     // Analytics tracking
-    if (typeof window !== "undefined" && window.gtag) {
-      window.gtag("event", "download_click", {
+    if (typeof window !== "undefined" && (window as any).gtag) {
+      (window as any).gtag("event", "download_click", {
         platform: "ios",
-        store: "app_store"
+        store: "app_store",
       });
     }
-    
+
     window.open(APP_INFO.appStoreUrl, "_blank");
   };
 
   const handlePlayStoreClick = () => {
     // Analytics tracking
-    if (typeof window !== "undefined" && window.gtag) {
-      window.gtag("event", "download_click", {
+    if (typeof window !== "undefined" && (window as any).gtag) {
+      (window as any).gtag("event", "download_click", {
         platform: "android",
-        store: "google_play"
+        store: "google_play",
       });
     }
-    
+
     window.open(APP_INFO.playStoreUrl, "_blank");
   };
 
@@ -77,7 +78,7 @@ export const DownloadButtons: React.FC = () => {
   };
 
   return (
-    <section 
+    <section
       className="py-24 md:py-32 relative overflow-hidden medical-gradient"
       role="region"
       aria-label="app download section"
@@ -88,18 +89,22 @@ export const DownloadButtons: React.FC = () => {
         <div className="absolute bottom-10 left-10 w-40 h-40 bg-medical-orange-400 rounded-full blur-2xl animate-pulse-slow" />
       </div>
 
-      <div data-testid="download-buttons-container" className="container-responsive relative z-10">
+      <div
+        data-testid="download-buttons-container"
+        className="container-responsive relative z-10"
+      >
         <div className="text-center max-w-5xl mx-auto mb-16 animate-fade-in">
           <div className="inline-flex items-center gap-2 px-4 py-2 bg-medical-purple-100 rounded-full text-medical-purple-700 font-medium text-sm mb-6">
             📱 Mobile App
           </div>
-          
+
           <h2 className="text-4xl md:text-5xl lg:text-6xl font-black text-gray-900 mb-6">
             <span className="text-gradient">Download Our App</span>
           </h2>
-          
+
           <p className="text-xl md:text-2xl text-gray-700 leading-relaxed mb-8">
-            Get instant access to HerSignal on your mobile device with our feature-rich app
+            Get instant access to the Telecare platform on your mobile device
+            with our feature-rich app
           </p>
 
           {/* Platform Message */}
@@ -118,20 +123,27 @@ export const DownloadButtons: React.FC = () => {
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
             {/* Download Buttons */}
             <div className="space-y-8">
-              <div data-testid="download-buttons-grid" className="flex flex-col sm:flex-row gap-4">
+              <div
+                data-testid="download-buttons-grid"
+                className="flex flex-col sm:flex-row gap-4"
+              >
                 {/* App Store Button */}
                 <button
                   aria-label="Download on App Store"
                   role="button"
                   className={`flex-1 bg-gradient-to-r from-gray-900 via-gray-800 to-gray-900 text-white rounded-xl p-4 hover-lift transition-all duration-300 shadow-lg ${
-                    platform === "ios" ? "ring-2 ring-medical-blue-500 ring-offset-2" : ""
+                    platform === "ios"
+                      ? "ring-2 ring-medical-blue-500 ring-offset-2"
+                      : ""
                   }`}
                   onClick={handleAppStoreClick}
                 >
                   <div className="flex items-center justify-center gap-3">
                     <div className="text-2xl">🍎</div>
                     <div className="text-left">
-                      <div className="text-xs text-gray-300">Download on the</div>
+                      <div className="text-xs text-gray-300">
+                        Download on the
+                      </div>
                       <div className="text-lg font-bold">App Store</div>
                     </div>
                   </div>
@@ -142,7 +154,9 @@ export const DownloadButtons: React.FC = () => {
                   aria-label="Get it on Google Play"
                   role="button"
                   className={`flex-1 bg-gradient-to-r from-green-600 via-green-500 to-green-600 text-white rounded-xl p-4 hover-lift transition-all duration-300 shadow-lg ${
-                    platform === "android" ? "ring-2 ring-medical-blue-500 ring-offset-2" : ""
+                    platform === "android"
+                      ? "ring-2 ring-medical-blue-500 ring-offset-2"
+                      : ""
                   }`}
                   onClick={handlePlayStoreClick}
                 >
@@ -175,7 +189,9 @@ export const DownloadButtons: React.FC = () => {
                   </div>
                   <div className="flex justify-between">
                     <span className="text-gray-600">Android:</span>
-                    <span className="font-medium">{APP_INFO.androidVersion}</span>
+                    <span className="font-medium">
+                      {APP_INFO.androidVersion}
+                    </span>
                   </div>
                 </div>
               </div>
@@ -187,11 +203,15 @@ export const DownloadButtons: React.FC = () => {
 
             {/* QR Code Section */}
             <div data-testid="qr-code-section" className="text-center">
-              <h3 className="text-xl font-bold text-gray-900 mb-4">Quick Download</h3>
-              <p className="text-gray-600 mb-6">Scan with your phone camera to download instantly</p>
-              
+              <h3 className="text-xl font-bold text-gray-900 mb-4">
+                Quick Download
+              </h3>
+              <p className="text-gray-600 mb-6">
+                Scan with your phone camera to download instantly
+              </p>
+
               {/* QR Code Placeholder */}
-              <div 
+              <div
                 data-testid="qr-code-placeholder"
                 className="w-48 h-48 mx-auto bg-gradient-to-br from-gray-100 to-gray-200 rounded-xl border-2 border-dashed border-gray-300 flex items-center justify-center mb-4 hover-lift"
               >
@@ -210,9 +230,12 @@ export const DownloadButtons: React.FC = () => {
         </div>
 
         {/* Download Statistics */}
-        <div data-testid="download-stats" className="grid grid-cols-2 md:grid-cols-4 gap-6 mb-16">
+        <div
+          data-testid="download-stats"
+          className="grid grid-cols-2 md:grid-cols-4 gap-6 mb-16"
+        >
           {DOWNLOAD_STATS.map((stat, index) => (
-            <div 
+            <div
               key={stat.label}
               className="card card-medical hover-lift text-center group"
               style={{ animationDelay: `${index * 0.1}s` }}
@@ -232,27 +255,32 @@ export const DownloadButtons: React.FC = () => {
 
         {/* Features Preview */}
         <div className="text-center">
-          <h3 className="text-2xl font-bold text-gray-900 mb-8">Why Download Our App?</h3>
-          
+          <h3 className="text-2xl font-bold text-gray-900 mb-8">
+            Why Download Our App?
+          </h3>
+
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
             {[
               {
                 icon: "⚡",
                 title: "Instant Notifications",
-                description: "Get real-time alerts and updates directly to your phone"
+                description:
+                  "Get real-time alerts and updates directly to your phone",
               },
               {
                 icon: "📊",
                 title: "Advanced Analytics",
-                description: "Access detailed insights and data visualization on the go"
+                description:
+                  "Access detailed insights and data visualization on the go",
               },
               {
                 icon: "🔒",
                 title: "Enhanced Security",
-                description: "Biometric authentication and secure data encryption"
-              }
+                description:
+                  "Biometric authentication and secure data encryption",
+              },
             ].map((feature, index) => (
-              <div 
+              <div
                 key={feature.title}
                 className="card card-medical hover-lift text-center group"
                 style={{ animationDelay: `${index * 0.2}s` }}

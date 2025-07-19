@@ -35,7 +35,7 @@ describe("FAQ Component", () => {
     render(<FAQ />);
 
     const firstToggle = screen.getAllByRole("button")[0];
-    
+
     // Should not throw error when clicked
     await user.click(firstToggle);
     expect(true).toBe(true); // Placeholder - actual toggle behavior tested below
@@ -76,7 +76,9 @@ describe("FAQ Component", () => {
     render(<FAQ />);
 
     const section = screen.getByRole("region");
-    expect(section.getAttribute("aria-label")).toContain("frequently asked questions");
+    expect(section.getAttribute("aria-label")).toContain(
+      "frequently asked questions"
+    );
   });
 
   it("should be mobile-responsive", () => {
@@ -91,7 +93,7 @@ describe("FAQ Component", () => {
 
     // FAQ items should be optimized for mobile interaction
     const faqItems = screen.getAllByTestId(/faq-\d+/);
-    faqItems.forEach(item => {
+    faqItems.forEach((item) => {
       expect(item.classList.toString()).toContain("border");
     });
   });

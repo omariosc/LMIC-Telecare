@@ -2,34 +2,31 @@
 
 import React from "react";
 
-const CRISIS_HEADLINE = "Life-Saving Medical Support for Gaza";
-const SURGEON_STATISTIC = "1,200+ UK Surgeons Ready to Help";
-const CRISIS_URGENCY = "Critical healthcare crisis demands immediate action";
+const CRISIS_HEADLINE = "A Healthcare System in Collapse";
+const SURGEON_STATISTIC =
+  "100% UK Surgeons Agree: Your remote guidance is the #1 most impactful intervention";
+const CRISIS_URGENCY =
+  "In Gaza, hospitals are overwhelmed, operating at over 350% capacity with a critical shortage of specialist doctors. Triage is happening, but without the right expertise to guide complex treatments, lives that could be saved are being lost. When physical aid cannot get in, knowledge is the most powerful resource we can send.";
 
 const CRISIS_STATISTICS = [
   {
-    value: "2.3M",
-    label: "People need urgent healthcare",
-    color: "medical-red-600",
-    bgColor: "medical-red-50",
-    borderColor: "medical-red-200",
+    value: "350%+",
+    label: "Average Hospital Capacity",
+    type: "critical",
     icon: "🏥",
   },
   {
-    value: "35",
-    label: "Hospitals partially functional",
-    color: "medical-orange-600",
-    bgColor: "medical-orange-50",
-    borderColor: "medical-orange-200",
-    icon: "🚑",
+    value: "75%+",
+    label: "Shortage of Surgical Specialists",
+    type: "critical",
+    icon: "⚕️",
   },
   {
-    value: "24/7",
-    label: "Platform availability",
-    color: "medical-green-600",
-    bgColor: "medical-green-50",
-    borderColor: "medical-green-200",
-    icon: "⚡",
+    value: "100%",
+    label:
+      "UK Surgeons Agree: Your remote guidance is the #1 most impactful intervention",
+    type: "success",
+    icon: "💚",
   },
 ] as const;
 
@@ -47,68 +44,70 @@ export const Hero: React.FC = () => {
   };
 
   return (
-    <section 
-      className="relative min-h-screen flex items-center justify-center overflow-hidden gradient-mesh"
+    <section
+      className="relative section-padding bg-gradient-to-b from-background to-muted/20 overflow-hidden"
       role="banner"
       aria-label="hero section"
     >
-      {/* Background decorative elements */}
-      <div className="absolute inset-0 bg-gradient-to-br from-medical-blue-50/50 via-white to-medical-green-50/50" />
-      <div className="absolute top-1/4 left-1/4 w-72 h-72 bg-medical-blue-100/20 rounded-full blur-3xl animate-float" />
-      <div className="absolute bottom-1/4 right-1/4 w-96 h-96 bg-medical-green-100/20 rounded-full blur-3xl animate-pulse-slow" />
-      
-      <div data-testid="hero-container" className="container-responsive relative z-10">
+      {/* Subtle background decorative elements */}
+      <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top,_var(--tw-gradient-stops))] from-primary/5 via-transparent to-transparent" />
+      <div className="absolute top-20 left-10 w-64 h-64 bg-primary/5 rounded-full blur-3xl animate-pulse-subtle" />
+      <div
+        className="absolute bottom-20 right-10 w-80 h-80 bg-gaza-green/5 rounded-full blur-3xl animate-pulse-subtle"
+        style={{ animationDelay: "1s" }}
+      />
+
+      <div data-testid="hero-container" className="container relative z-10">
         <div className="text-center max-w-6xl mx-auto animate-fade-in">
           {/* Crisis Badge */}
-          <div className="inline-flex items-center gap-2 px-4 py-2 bg-medical-red-50 border border-medical-red-200 rounded-full text-medical-red-700 font-medium text-sm mb-6 animate-bounce-subtle">
+          <div className="inline-flex items-center gap-2 px-4 py-2 bg-destructive/10 border border-destructive/20 rounded-full text-destructive font-medium text-sm mb-8">
             🚨 Crisis Response Active
           </div>
 
           {/* Crisis Headline */}
-          <h1 className="text-4xl md:text-6xl lg:text-7xl font-black text-gray-900 mb-6 leading-tight">
-            <span className="text-gradient animate-text bg-gradient-to-r from-medical-blue-600 via-medical-green-600 to-medical-blue-600">
+          <h1 className="text-4xl md:text-6xl lg:text-7xl font-bold text-foreground mb-8 leading-tight tracking-tight">
+            <span className="bg-gradient-to-r from-primary via-gaza-green to-primary bg-clip-text text-transparent">
               {CRISIS_HEADLINE}
             </span>
           </h1>
-          
+
           {/* Surgeon Statistic */}
-          <div className="mb-6">
-            <div className="inline-flex items-center gap-3 px-6 py-3 bg-white/80 backdrop-blur-sm border border-medical-blue-200 rounded-full shadow-lg">
-              <div className="w-3 h-3 bg-medical-green-500 rounded-full animate-pulse-slow"></div>
-              <p className="text-lg font-semibold text-medical-blue-700">
+          <div className="mb-8">
+            <div className="inline-flex items-center gap-3 px-6 py-4 bg-card/80 backdrop-blur-sm border border-border rounded-lg shadow-lg">
+              <div className="w-2 h-2 bg-success rounded-full animate-pulse"></div>
+              <p className="text-lg font-medium text-foreground">
                 {SURGEON_STATISTIC}
               </p>
             </div>
           </div>
 
           {/* Crisis Urgency Message */}
-          <p className="text-xl md:text-2xl text-gray-700 mb-12 max-w-4xl mx-auto leading-relaxed">
-            {CRISIS_URGENCY}. Connect verified UK healthcare specialists with Gaza clinicians 
-            for urgent medical consultations during this critical time.
+          <p className="text-xl md:text-2xl text-muted-foreground mb-12 max-w-4xl mx-auto leading-relaxed">
+            {CRISIS_URGENCY}
           </p>
 
           {/* Call-to-Action Buttons */}
           <div className="flex flex-col sm:flex-row gap-4 justify-center items-center mb-16">
-            <button 
-              className="btn-primary hover-lift"
+            <button
+              className="btn btn-primary btn-lg gap-2"
               onClick={handleUKDoctorRegister}
               aria-label="Register as UK Doctor"
             >
               <span>🩺</span>
               Register as UK Doctor
             </button>
-            
-            <button 
-              className="btn-secondary hover-lift"
+
+            <button
+              className="btn btn-secondary btn-lg gap-2"
               onClick={handleGazaPlatformAccess}
               aria-label="Access Gaza Platform"
             >
               <span>🏥</span>
               Access Gaza Platform
             </button>
-            
-            <button 
-              className="btn-urgent hover-lift animate-glow"
+
+            <button
+              className="btn btn-lg gap-2 bg-destructive hover:bg-destructive/90 text-destructive-foreground"
               onClick={handleEmergencyConsultation}
               aria-label="Start Emergency Consultation"
             >
@@ -118,26 +117,32 @@ export const Hero: React.FC = () => {
           </div>
 
           {/* Gaza Flag Cultural Accent */}
-          <div 
-            data-testid="gaza-flag-accent" 
-            className="gaza-flag-accent mx-auto max-w-md mb-16"
-          ></div>
+          <div
+            data-testid="gaza-flag-accent"
+            className="gaza-accent mx-auto max-w-md mb-16 h-2 rounded-full"
+          />
 
           {/* Crisis Statistics Cards */}
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
             {CRISIS_STATISTICS.map((stat, index) => (
-              <div 
+              <div
                 key={stat.value}
-                className="card glass-effect hover-lift text-center group"
-                style={{ animationDelay: `${index * 0.2}s` }}
+                className="stat-card animate-slide-up"
+                style={{ animationDelay: `${index * 0.1}s` }}
               >
-                <div className="card-icon mx-auto">
-                  <span className="text-2xl">{stat.icon}</span>
+                <div className="mb-4">
+                  <span className="text-3xl">{stat.icon}</span>
                 </div>
-                <div className={`text-3xl font-black text-${stat.color} mb-2 group-hover:scale-110 transition-transform`}>
+                <div
+                  className={`text-4xl font-bold mb-3 ${
+                    stat.type === "critical"
+                      ? "text-destructive"
+                      : "text-success"
+                  }`}
+                >
                   {stat.value}
                 </div>
-                <div className="text-sm font-medium text-gray-700 uppercase tracking-wide">
+                <div className="text-sm font-medium text-muted-foreground">
                   {stat.label}
                 </div>
               </div>

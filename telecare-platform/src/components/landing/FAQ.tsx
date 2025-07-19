@@ -5,38 +5,45 @@ import React, { useState } from "react";
 const FAQ_ITEMS = [
   {
     id: 1,
-    question: "Is the platform secure and private?",
-    answer: "Yes, our platform uses end-to-end encryption for all communications between Gaza clinicians and UK specialists. All medical data is protected with bank-level security and complies with international privacy standards.",
+    question: "How is my identity as a UK doctor verified?",
+    answer:
+      "We use a secure, automated 3-step process. Your GMC number is validated against the official register, you'll upload a form of ID, and complete a quick facial recognition check. This ensures the highest level of trust and security for everyone on the platform.",
   },
   {
     id: 2,
-    question: "How quickly can I get emergency consultation support?",
-    answer: "Emergency consultations are available 24/7 with typical response times under 15 minutes. Our system instantly matches urgent requests with available UK specialists based on expertise and current availability.",
+    question: "What is the time commitment for volunteers?",
+    answer:
+      "You are in complete control. You can contribute as much or as little as you like, from answering a single question on the forum per week to making yourself available for on-call emergency pings during hours you set.",
   },
   {
     id: 3,
-    question: "How do UK specialists join the platform?",
-    answer: "UK doctors and specialists can register through our verification process. We welcome medical professionals who want to provide humanitarian support during this healthcare crisis in Gaza.",
+    question: "Is the platform secure for sharing patient information?",
+    answer:
+      "Absolutely. Security is our top priority. The platform uses end-to-end encryption for all communications. Patient information is anonymised, and we adhere to strict data privacy standards to protect both clinicians and patients.",
   },
   {
     id: 4,
-    question: "What types of Gaza healthcare scenarios does this support?",
-    answer: "Our platform supports emergency consultations, complex case discussions, surgical guidance, and general medical advice. We focus on bridging the gap during this humanitarian crisis when local resources are severely limited.",
+    question: "Do I need special equipment or a fast internet connection?",
+    answer:
+      "No. Sanad is designed to work on standard laptops, tablets, and mobile phones. All features, including video, are highly optimized to function effectively on low-bandwidth internet connections.",
   },
   {
     id: 5,
-    question: "Is this service free for Gaza healthcare workers?",
-    answer: "Yes, this platform is completely free for Gaza clinicians and healthcare workers. It's funded as a humanitarian initiative to support medical care during this critical time.",
+    question: "How quickly can I get emergency consultation support?",
+    answer:
+      "Emergency consultations are available 24/7 with typical response times under 15 minutes. Our system instantly matches urgent requests with available UK specialists based on expertise and current availability.",
   },
   {
     id: 6,
-    question: "When will the platform be available?",
-    answer: "The platform is currently in development and will launch soon. Gaza healthcare workers can register for early access, and UK specialists can sign up to provide support.",
+    question: "What types of Gaza healthcare scenarios does this support?",
+    answer:
+      "Our platform supports emergency consultations, complex case discussions, surgical guidance, and general medical advice. We focus on bridging the gap during this humanitarian crisis when local resources are severely limited.",
   },
   {
     id: 7,
-    question: "How can I get help or contact support?",
-    answer: "For technical support or questions about the platform, you can contact our humanitarian support team through the contact form or reach out during the beta launch phase.",
+    question: "Is this service free for Gaza healthcare workers?",
+    answer:
+      "Yes, this platform is completely free for Gaza clinicians and healthcare workers. It's funded as a humanitarian initiative to support medical care during this critical time.",
   },
 ] as const;
 
@@ -54,7 +61,7 @@ export const FAQ: React.FC = () => {
   };
 
   return (
-    <section 
+    <section
       className="py-16 bg-gray-50"
       role="region"
       aria-label="frequently asked questions"
@@ -64,15 +71,16 @@ export const FAQ: React.FC = () => {
           <h2 className="text-4xl font-bold text-gray-900 mb-4">
             Frequently Asked Questions
           </h2>
-          
+
           <p className="text-large text-gray-700">
-            Common questions about our humanitarian medical platform for Gaza healthcare crisis
+            Common questions about our humanitarian medical platform for Gaza
+            healthcare crisis
           </p>
         </div>
 
         <div className="max-w-3xl mx-auto space-y-4">
           {FAQ_ITEMS.map((item) => (
-            <div 
+            <div
               key={item.id}
               data-testid={`faq-${item.id}`}
               className="bg-white rounded-lg border border-gray-200 shadow-sm"
@@ -91,10 +99,10 @@ export const FAQ: React.FC = () => {
                   {openItems.has(item.id) ? "−" : "+"}
                 </span>
               </button>
-              
+
               {/* Answer Content */}
               {openItems.has(item.id) && (
-                <div 
+                <div
                   id={`faq-${item.id}-answer`}
                   className="px-6 pb-4 text-gray-700"
                 >
@@ -109,7 +117,8 @@ export const FAQ: React.FC = () => {
         <div className="mt-12 text-center">
           <div className="inline-flex items-center gap-2 px-6 py-3 bg-white rounded-full border border-medical-blue-200">
             <span className="text-medical-blue-700 font-medium">
-              💬 Need more help? Contact our humanitarian support team for assistance
+              💬 Need more help? Contact our humanitarian support team for
+              assistance
             </span>
           </div>
         </div>

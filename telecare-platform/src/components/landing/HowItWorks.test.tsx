@@ -18,7 +18,9 @@ describe("HowItWorks Component", () => {
     render(<HowItWorks />);
 
     // Should have exactly 4 steps
-    const steps = screen.getAllByTestId(/^step-\d+$/).filter(el => !el.getAttribute('data-testid')?.includes('-indicator'));
+    const steps = screen
+      .getAllByTestId(/^step-\d+$/)
+      .filter((el) => !el.getAttribute("data-testid")?.includes("-indicator"));
     expect(steps.length).toBe(4);
   });
 
@@ -84,6 +86,10 @@ describe("HowItWorks Component", () => {
     render(<HowItWorks />);
 
     // Should reference secure communication
-    expect(screen.getByText(/Emergency consultations available 24\/7 with secure encrypted connections/i)).toBeDefined();
+    expect(
+      screen.getByText(
+        /Emergency consultations available 24\/7 with secure encrypted connections/i
+      )
+    ).toBeDefined();
   });
 });

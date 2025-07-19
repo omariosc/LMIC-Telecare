@@ -40,7 +40,7 @@ The primary problem this solves is the lack of access to specialist medical expe
 
 1. **User Registration & Authentication**
    - 1.1 The system must allow UK doctors to register using their GMC number
-   - 1.2 The system must integrate with GMC API to auto-populate and verify doctor profiles
+   - 1.2 The system must integrate with GMC website to auto-populate and verify doctor profiles
    - 1.3 The system must provide a 3-step verification process: GMC retrieval, document upload, facial recognition
    - 1.4 The system must allow Gaza clinicians to register with institutional verification
    - 1.5 The system must support admin accounts with elevated privileges
@@ -132,6 +132,7 @@ The primary problem this solves is the lack of access to specialist medical expe
 ### Security & Privacy
 - End-to-end encryption for all communications
 - GDPR and medical data compliance
+- HIPAA compliant architecture and data handling
 - Pseudonymization system for patient data
 - Regular security audits
 
@@ -142,7 +143,7 @@ The primary problem this solves is the lack of access to specialist medical expe
 - Graceful degradation for poor connections
 
 ### Integrations
-- GMC API for doctor verification
+- GMC website scraping for doctor verification
 - Translation API (medical-specialized)
 - Push notification services
 - Analytics for impact tracking
@@ -174,7 +175,7 @@ The primary problem this solves is the lack of access to specialist medical expe
 
 ## Next Steps
 
-1. Validate technical feasibility of GMC API integration
+1. Validate technical feasibility of GMC website scraping integration
 2. Identify and partner with initial Gaza healthcare institutions
 3. Recruit pilot group of UK specialists
 4. Develop detailed UI/UX mockups

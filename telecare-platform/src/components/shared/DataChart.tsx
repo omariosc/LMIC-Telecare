@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState, useEffect, useMemo } from "react";
+import React, { useState, useMemo } from "react";
 import {
   Chart as ChartJS,
   CategoryScale,
@@ -136,107 +136,133 @@ const REGIONAL_DATA = {
       },
     ],
   },
-} as const;
+};
 
 const STATISTICS = [
-  { label: "Total Signals", value: "730,000", growth: "+14.2%", color: "medical-blue-600" },
-  { label: "Active Regions", value: "156", growth: "+8.7%", color: "medical-green-600" },
-  { label: "Data Points", value: "12.4M", growth: "+22.1%", color: "medical-purple-600" },
-  { label: "Coverage", value: "94.8%", growth: "+3.2%", color: "medical-orange-600" },
-] as const;
+  {
+    label: "Total Signals",
+    value: "730,000",
+    growth: "+14.2%",
+    color: "medical-blue-600",
+  },
+  {
+    label: "Active Regions",
+    value: "156",
+    growth: "+8.7%",
+    color: "medical-green-600",
+  },
+  {
+    label: "Data Points",
+    value: "12.4M",
+    growth: "+22.1%",
+    color: "medical-purple-600",
+  },
+  {
+    label: "Coverage",
+    value: "94.8%",
+    growth: "+3.2%",
+    color: "medical-orange-600",
+  },
+];
 
-export const RegionalDataChart: React.FC = () => {
+export const DataChart: React.FC = () => {
   const [chartType, setChartType] = useState<ChartType>("line");
   const [period, setPeriod] = useState<Period>("monthly");
   const [isLoading, setIsLoading] = useState(false);
 
   const currentData = useMemo(() => REGIONAL_DATA[period], [period]);
 
-  const chartOptions = useMemo(() => ({
-    responsive: true,
-    maintainAspectRatio: false,
-    plugins: {
-      legend: {
-        position: "top" as const,
-        labels: {
-          usePointStyle: true,
-          padding: 20,
+  const chartOptions = useMemo(
+    () => ({
+      responsive: true,
+      maintainAspectRatio: false,
+      plugins: {
+        legend: {
+          position: "top" as const,
+          labels: {
+            usePointStyle: true,
+            padding: 20,
+          },
+        },
+        title: {
+          display: true,
+          text: `Regional Data Analytics - ${period.charAt(0).toUpperCase() + period.slice(1)} View`,
+          font: {
+            size: 16,
+            weight: "bold" as const,
+          },
+        },
+        tooltip: {
+          backgroundColor: "rgba(0, 0, 0, 0.8)",
+          titleColor: "white",
+          bodyColor: "white",
+          borderColor: "rgba(255, 255, 255, 0.1)",
+          borderWidth: 1,
+          cornerRadius: 8,
+          callbacks: {
+            label: function (context: any) {
+              return `${context.dataset.label}: ${context.parsed.y.toLocaleString()}`;
+            },
+          },
         },
       },
-      title: {
-        display: true,
-        text: `Regional Data Analytics - ${period.charAt(0).toUpperCase() + period.slice(1)} View`,
-        font: {
-          size: 16,
-          weight: "bold",
+      scales: {
+        y: {
+          beginAtZero: true,
+          ticks: {
+            callback: function (value: any) {
+              return value.toLocaleString();
+            },
+          },
+          grid: {
+            color: "rgba(0, 0, 0, 0.1)",
+          },
+        },
+        x: {
+          grid: {
+            color: "rgba(0, 0, 0, 0.1)",
+          },
         },
       },
-      tooltip: {
-        backgroundColor: "rgba(0, 0, 0, 0.8)",
-        titleColor: "white",
-        bodyColor: "white",
-        borderColor: "rgba(255, 255, 255, 0.1)",
-        borderWidth: 1,
-        cornerRadius: 8,
-        callbacks: {
-          label: function(context: any) {
-            return `${context.dataset.label}: ${context.parsed.y.toLocaleString()}`;
-          }
-        }
+      animation: {
+        duration: 1000,
+        easing: "easeInOutQuart" as const,
       },
-    },
-    scales: {
-      y: {
-        beginAtZero: true,
-        ticks: {
-          callback: function(value: any) {
-            return value.toLocaleString();
-          }
-        },
-        grid: {
-          color: "rgba(0, 0, 0, 0.1)",
-        },
-      },
-      x: {
-        grid: {
-          color: "rgba(0, 0, 0, 0.1)",
-        },
-      },
-    },
-    animation: {
-      duration: 1000,
-      easing: "easeInOutQuart" as const,
-    },
-  }), [period]);
+    }),
+    [period]
+  );
 
-  const doughnutData = useMemo(() => ({
-    labels: currentData.datasets.map(dataset => dataset.label),
-    datasets: [
-      {
-        data: currentData.datasets.map(dataset => 
-          dataset.data.reduce((sum, value) => sum + value, 0)
-        ),
-        backgroundColor: [
-          "rgba(59, 130, 246, 0.8)",
-          "rgba(16, 185, 129, 0.8)",
-          "rgba(244, 63, 94, 0.8)",
-        ],
-        borderColor: [
-          "rgb(59, 130, 246)",
-          "rgb(16, 185, 129)",
-          "rgb(244, 63, 94)",
-        ],
-        borderWidth: 2,
-      },
-    ],
-  }), [currentData]);
+  const doughnutData = useMemo(
+    () => ({
+      labels: currentData.datasets.map((dataset) => dataset.label),
+      datasets: [
+        {
+          data: currentData.datasets.map((dataset) =>
+            dataset.data.reduce((sum, value) => sum + value, 0)
+          ),
+          backgroundColor: [
+            "rgba(59, 130, 246, 0.8)",
+            "rgba(16, 185, 129, 0.8)",
+            "rgba(244, 63, 94, 0.8)",
+          ],
+          borderColor: [
+            "rgb(59, 130, 246)",
+            "rgb(16, 185, 129)",
+            "rgb(244, 63, 94)",
+          ],
+          borderWidth: 2,
+        },
+      ],
+    }),
+    [currentData]
+  );
 
   const handlePeriodChange = (newPeriod: Period) => {
     if (newPeriod === period) return;
-    
+
     setIsLoading(true);
     setPeriod(newPeriod);
-    
+
     // Simulate data loading
     setTimeout(() => {
       setIsLoading(false);
@@ -244,19 +270,18 @@ export const RegionalDataChart: React.FC = () => {
   };
 
   const handleExportData = () => {
-    const csvData = currentData.datasets.map(dataset => ({
-      region: dataset.label,
-      data: dataset.data,
-    }));
-    
-    console.log("Exporting data:", csvData);
-    // In a real app, this would trigger a download
+    // TODO: Implement actual CSV download
+    // In a real app, this would process currentData.datasets
+    // to create and download a CSV file
   };
 
   const renderChart = () => {
     if (isLoading) {
       return (
-        <div data-testid="chart-loading" className="flex items-center justify-center h-96">
+        <div
+          data-testid="chart-loading"
+          className="flex items-center justify-center h-96"
+        >
           <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-medical-blue-600"></div>
         </div>
       );
@@ -264,21 +289,45 @@ export const RegionalDataChart: React.FC = () => {
 
     switch (chartType) {
       case "line":
-        return <Line data={currentData} options={chartOptions} data-testid="line-chart" />;
+        return (
+          <Line
+            data={currentData}
+            options={chartOptions}
+            data-testid="line-chart"
+          />
+        );
       case "bar":
-        return <Bar data={currentData} options={chartOptions} data-testid="bar-chart" />;
+        return (
+          <Bar
+            data={currentData}
+            options={chartOptions}
+            data-testid="bar-chart"
+          />
+        );
       case "doughnut":
-        return <Doughnut data={doughnutData} options={{
-          ...chartOptions,
-          scales: undefined,
-        }} data-testid="doughnut-chart" />;
+        return (
+          <Doughnut
+            data={doughnutData}
+            options={{
+              ...chartOptions,
+              scales: undefined,
+            }}
+            data-testid="doughnut-chart"
+          />
+        );
       default:
-        return <Line data={currentData} options={chartOptions} data-testid="line-chart" />;
+        return (
+          <Line
+            data={currentData}
+            options={chartOptions}
+            data-testid="line-chart"
+          />
+        );
     }
   };
 
   return (
-    <section 
+    <section
       className="py-24 md:py-32 relative overflow-hidden medical-gradient"
       role="region"
       aria-label="regional data analytics dashboard"
@@ -289,16 +338,19 @@ export const RegionalDataChart: React.FC = () => {
         <div className="absolute bottom-10 right-10 w-40 h-40 bg-medical-blue-400 rounded-full blur-2xl animate-pulse-slow" />
       </div>
 
-      <div data-testid="regional-chart-container" className="container-responsive relative z-10">
+      <div
+        data-testid="regional-chart-container"
+        className="container-responsive relative z-10"
+      >
         <div className="text-center max-w-5xl mx-auto mb-16 animate-fade-in">
           <div className="inline-flex items-center gap-2 px-4 py-2 bg-medical-green-100 rounded-full text-medical-green-700 font-medium text-sm mb-6">
             📊 Data Visualization
           </div>
-          
+
           <h2 className="text-4xl md:text-5xl lg:text-6xl font-black text-gray-900 mb-6">
             <span className="text-gradient">Regional Data Analytics</span>
           </h2>
-          
+
           <p className="text-xl md:text-2xl text-gray-700 leading-relaxed">
             Comprehensive regional performance metrics and data insights
           </p>
@@ -307,13 +359,15 @@ export const RegionalDataChart: React.FC = () => {
         {/* Statistics Cards */}
         <div data-testid="stats-grid" className="grid-mobile-first gap-6 mb-16">
           {STATISTICS.map((stat, index) => (
-            <div 
+            <div
               key={stat.label}
               data-testid={`stat-card-${index}`}
               className="card card-medical hover-lift text-center group"
               style={{ animationDelay: `${index * 0.1}s` }}
             >
-              <div className={`text-3xl font-black text-${stat.color} mb-2 group-hover:scale-110 transition-transform`}>
+              <div
+                className={`text-3xl font-black text-${stat.color} mb-2 group-hover:scale-110 transition-transform`}
+              >
                 {stat.value}
               </div>
               <div className="text-sm font-medium text-gray-700 uppercase tracking-wide mb-2">
@@ -330,11 +384,18 @@ export const RegionalDataChart: React.FC = () => {
         <div className="card-glass p-8 mb-8">
           <div className="flex flex-col lg:flex-row gap-6 justify-between items-center mb-8">
             {/* Chart Type Selector */}
-            <div data-testid="chart-type-selector" className="flex gap-2 bg-gray-100 p-1 rounded-lg">
+            <div
+              data-testid="chart-type-selector"
+              className="flex gap-2 bg-gray-100 p-1 rounded-lg"
+            >
               {[
                 { type: "line" as ChartType, icon: "📈", label: "Line Chart" },
                 { type: "bar" as ChartType, icon: "📊", label: "Bar Chart" },
-                { type: "doughnut" as ChartType, icon: "🍩", label: "Doughnut Chart" },
+                {
+                  type: "doughnut" as ChartType,
+                  icon: "🍩",
+                  label: "Doughnut Chart",
+                },
               ].map(({ type, icon, label }) => (
                 <button
                   key={type}
@@ -353,7 +414,10 @@ export const RegionalDataChart: React.FC = () => {
             </div>
 
             {/* Period Selector */}
-            <div data-testid="period-selector" className="flex gap-2 bg-gray-100 p-1 rounded-lg">
+            <div
+              data-testid="period-selector"
+              className="flex gap-2 bg-gray-100 p-1 rounded-lg"
+            >
               {[
                 { period: "weekly" as Period, label: "Weekly" },
                 { period: "monthly" as Period, label: "Monthly" },
@@ -386,7 +450,7 @@ export const RegionalDataChart: React.FC = () => {
           </div>
 
           {/* Chart Display Area */}
-          <div 
+          <div
             data-testid="chart-display-area"
             aria-label={`${chartType} chart showing regional data for ${period} period`}
             className="h-96 animate-fade-in"
@@ -398,35 +462,37 @@ export const RegionalDataChart: React.FC = () => {
         {/* Regional Performance Summary */}
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
           {[
-            { 
-              region: "North America", 
-              performance: "Leading", 
-              trend: "↗️", 
+            {
+              region: "North America",
+              performance: "Leading",
+              trend: "↗️",
               description: "Consistent growth across all metrics",
-              color: "medical-blue-600"
+              color: "medical-blue-600",
             },
-            { 
-              region: "Europe", 
-              performance: "Strong", 
-              trend: "📈", 
+            {
+              region: "Europe",
+              performance: "Strong",
+              trend: "📈",
               description: "Steady performance with good adoption",
-              color: "medical-green-600"
+              color: "medical-green-600",
             },
-            { 
-              region: "Asia Pacific", 
-              performance: "Growing", 
-              trend: "🚀", 
+            {
+              region: "Asia Pacific",
+              performance: "Growing",
+              trend: "🚀",
               description: "Rapid expansion and market penetration",
-              color: "medical-red-600"
+              color: "medical-red-600",
             },
           ].map((region, index) => (
-            <div 
+            <div
               key={region.region}
               className="card card-medical hover-lift group"
               style={{ animationDelay: `${index * 0.2}s` }}
             >
               <div className="flex items-center justify-between mb-4">
-                <h3 className="text-lg font-bold text-gray-900">{region.region}</h3>
+                <h3 className="text-lg font-bold text-gray-900">
+                  {region.region}
+                </h3>
                 <span className="text-2xl">{region.trend}</span>
               </div>
               <div className={`text-${region.color} font-semibold mb-2`}>

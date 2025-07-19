@@ -45,28 +45,36 @@ describe("Testimonials Component", () => {
   it("should include professional titles and credentials", () => {
     render(<Testimonials />);
 
-    const professionalElements = screen.getAllByText(/dr\.|doctor|consultant|surgeon/i);
+    const professionalElements = screen.getAllByText(
+      /dr\.|doctor|consultant|surgeon/i
+    );
     expect(professionalElements.length).toBeGreaterThan(0);
   });
 
   it("should mention emergency or urgent care benefits", () => {
     render(<Testimonials />);
 
-    const emergencyElements = screen.getAllByText(/emergency|urgent|critical|life.*saving/i);
+    const emergencyElements = screen.getAllByText(
+      /emergency|urgent|critical|life.*saving/i
+    );
     expect(emergencyElements.length).toBeGreaterThan(0);
   });
 
   it("should reference Gaza healthcare crisis", () => {
     render(<Testimonials />);
 
-    const gazaElements = screen.getAllByText(/gaza|palestine|crisis|humanitarian/i);
+    const gazaElements = screen.getAllByText(
+      /gaza|palestine|crisis|humanitarian/i
+    );
     expect(gazaElements.length).toBeGreaterThan(0);
   });
 
   it("should emphasize trust and reliability", () => {
     render(<Testimonials />);
 
-    const trustElements = screen.getAllByText(/trust|reliable|confident|professional/i);
+    const trustElements = screen.getAllByText(
+      /trust|reliable|confident|professional/i
+    );
     expect(trustElements.length).toBeGreaterThan(0);
   });
 
@@ -94,14 +102,18 @@ describe("Testimonials Component", () => {
   it("should mention platform effectiveness", () => {
     render(<Testimonials />);
 
-    const effectivenessElements = screen.getAllByText(/effective|helpful|valuable|impact/i);
+    const effectivenessElements = screen.getAllByText(
+      /effective|helpful|valuable|impact/i
+    );
     expect(effectivenessElements.length).toBeGreaterThan(0);
   });
 
   it("should highlight international collaboration", () => {
     render(<Testimonials />);
 
-    const collaborationElements = screen.getAllByText(/collaboration|support|connect|bridge/i);
+    const collaborationElements = screen.getAllByText(
+      /collaboration|support|connect|bridge/i
+    );
     expect(collaborationElements.length).toBeGreaterThan(0);
   });
 });

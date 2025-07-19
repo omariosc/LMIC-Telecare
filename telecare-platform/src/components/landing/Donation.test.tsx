@@ -25,14 +25,18 @@ describe("Donation Component", () => {
   it("should emphasize humanitarian crisis urgency", () => {
     render(<Donation />);
 
-    const elements = screen.getAllByText(/humanitarian.*crisis|emergency|urgent|critical/i);
+    const elements = screen.getAllByText(
+      /humanitarian.*crisis|emergency|urgent|critical/i
+    );
     expect(elements.length).toBeGreaterThan(0);
   });
 
   it("should mention Gaza healthcare specifically", () => {
     render(<Donation />);
 
-    const elements = screen.getAllByText(/gaza.*healthcare|gaza.*medical|palestine/i);
+    const elements = screen.getAllByText(
+      /gaza.*healthcare|gaza.*medical|palestine/i
+    );
     expect(elements.length).toBeGreaterThan(0);
   });
 
@@ -40,7 +44,7 @@ describe("Donation Component", () => {
     render(<Donation />);
 
     const donateButtons = screen.getAllByRole("button");
-    const donationCTAs = donateButtons.filter(button => 
+    const donationCTAs = donateButtons.filter((button) =>
       /donate|support|contribute|fund/i.test(button.textContent || "")
     );
     expect(donationCTAs.length).toBeGreaterThanOrEqual(1);
@@ -50,8 +54,10 @@ describe("Donation Component", () => {
     const user = userEvent.setup();
     render(<Donation />);
 
-    const donateButton = screen.getByRole("button", { name: /donate|support/i });
-    
+    const donateButton = screen.getByRole("button", {
+      name: /donate|support/i,
+    });
+
     // Should not throw error when clicked
     await user.click(donateButton);
     expect(true).toBe(true); // Placeholder - will be replaced with actual functionality
@@ -60,14 +66,18 @@ describe("Donation Component", () => {
   it("should explain how donations help", () => {
     render(<Donation />);
 
-    const elements = screen.getAllByText(/help|enable|provide|support.*medical/i);
+    const elements = screen.getAllByText(
+      /help|enable|provide|support.*medical/i
+    );
     expect(elements.length).toBeGreaterThan(0);
   });
 
   it("should mention platform sustainability", () => {
     render(<Donation />);
 
-    const elements = screen.getAllByText(/sustain|maintain|operate|fund.*platform/i);
+    const elements = screen.getAllByText(
+      /sustain|maintain|operate|fund.*platform/i
+    );
     expect(elements.length).toBeGreaterThan(0);
   });
 
@@ -95,6 +105,8 @@ describe("Donation Component", () => {
   it("should mention impact of contributions", () => {
     render(<Donation />);
 
-    expect(screen.getByText(/impact|difference|save.*lives|help.*patients/i)).toBeDefined();
+    expect(
+      screen.getByText(/impact|difference|save.*lives|help.*patients/i)
+    ).toBeDefined();
   });
 });

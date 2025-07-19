@@ -54,48 +54,48 @@ describe("Modal", () => {
     it("should call onClose when close button is clicked", () => {
       const onClose = jest.fn();
       render(<Modal {...defaultProps} onClose={onClose} />);
-      
+
       const closeButton = screen.getByLabelText(/close modal/i);
       fireEvent.click(closeButton);
-      
+
       expect(onClose).toHaveBeenCalledTimes(1);
     });
 
     it("should call onClose when backdrop is clicked", () => {
       const onClose = jest.fn();
       render(<Modal {...defaultProps} onClose={onClose} />);
-      
+
       const backdrop = screen.getByTestId("modal-backdrop");
       fireEvent.click(backdrop);
-      
+
       expect(onClose).toHaveBeenCalledTimes(1);
     });
 
     it("should not close when modal content is clicked", () => {
       const onClose = jest.fn();
       render(<Modal {...defaultProps} onClose={onClose} />);
-      
+
       const modalContent = screen.getByTestId("modal-content");
       fireEvent.click(modalContent);
-      
+
       expect(onClose).not.toHaveBeenCalled();
     });
 
     it("should close on Escape key press", () => {
       const onClose = jest.fn();
       render(<Modal {...defaultProps} onClose={onClose} />);
-      
+
       fireEvent.keyDown(document, { key: "Escape", keyCode: 27 });
-      
+
       expect(onClose).toHaveBeenCalledTimes(1);
     });
 
     it("should not close on other key presses", () => {
       const onClose = jest.fn();
       render(<Modal {...defaultProps} onClose={onClose} />);
-      
+
       fireEvent.keyDown(document, { key: "Enter", keyCode: 13 });
-      
+
       expect(onClose).not.toHaveBeenCalled();
     });
   });
@@ -172,11 +172,17 @@ describe("Modal", () => {
 
     it("should allow disabling backdrop click to close", () => {
       const onClose = jest.fn();
-      render(<Modal {...defaultProps} onClose={onClose} closeOnBackdropClick={false} />);
-      
+      render(
+        <Modal
+          {...defaultProps}
+          onClose={onClose}
+          closeOnBackdropClick={false}
+        />
+      );
+
       const backdrop = screen.getByTestId("modal-backdrop");
       fireEvent.click(backdrop);
-      
+
       expect(onClose).not.toHaveBeenCalled();
     });
   });
@@ -199,22 +205,22 @@ describe("Modal", () => {
     it("should focus trap within modal", async () => {
       render(<Modal {...defaultProps} />);
       const closeButton = screen.getByLabelText(/close modal/i);
-      
+
       // Wait for the focus to be applied
       await act(async () => {
-        await new Promise(resolve => setTimeout(resolve, 150));
+        await new Promise((resolve) => setTimeout(resolve, 150));
       });
-      
+
       // Modal should focus the first focusable element
       expect(closeButton).toHaveFocus();
     });
 
     it("should restore focus when modal closes", async () => {
       const { rerender } = render(<Modal {...defaultProps} />);
-      
+
       // Close the modal
       rerender(<Modal {...defaultProps} isOpen={false} />);
-      
+
       // Focus should be restored to the previously focused element
       expect(document.body).toHaveFocus();
     });
@@ -228,10 +234,10 @@ describe("Modal", () => {
 
     it("should restore body scroll when modal closes", () => {
       const { rerender } = render(<Modal {...defaultProps} />);
-      
+
       // Close the modal
       rerender(<Modal {...defaultProps} isOpen={false} />);
-      
+
       expect(document.body.style.overflow).toBe("");
     });
   });

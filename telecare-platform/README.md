@@ -1,45 +1,126 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with
-[`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Telecare Platform for Gaza
 
-## Getting Started
+A Next.js application connecting UK medical specialists with Gaza clinicians for life-saving remote consultations.
 
-First, run the development server:
+## Developer Setup
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+### Prerequisites
+
+- Node.js 18.17 or later
+- npm or yarn package manager
+- Git
+
+### Installation
+
+1. **Clone the repository**
+   ```bash
+   git clone [repository-url]
+   cd telecare-platform
+   ```
+
+2. **Install dependencies**
+   ```bash
+   npm install
+   ```
+
+3. **Run the development server**
+   ```bash
+   npm run dev
+   ```
+
+4. **Open your browser**
+   Navigate to [http://localhost:3000](http://localhost:3000)
+
+### Available Scripts
+
+- `npm run dev` - Start development server
+- `npm run build` - Build for production
+- `npm run start` - Start production server
+- `npm run lint` - Run ESLint
+- `npm run typecheck` - Run TypeScript type checking
+- `npm test` - Run tests
+- `npm run test:watch` - Run tests in watch mode
+
+### Project Structure
+
+```
+telecare-platform/
+├── src/
+│   ├── app/                 # Next.js app router
+│   ├── components/          # React components
+│   │   ├── landing/         # Landing page components
+│   │   ├── layout/          # Layout components
+│   │   └── shared/          # Shared/reusable components
+│   ├── types/               # TypeScript type definitions
+│   └── utils/               # Utility functions
+├── public/                  # Static assets
+└── package.json
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+### Development Guidelines
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the
-file.
+- Follow the TDD approach outlined in CLAUDE.md
+- Use TypeScript strict mode
+- Implement comprehensive test coverage
+- Follow the functional programming patterns specified
+- Ensure accessibility compliance
 
-This project uses
-[`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to
-automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+### Testing
 
-## Learn More
+Run the test suite:
+```bash
+npm test
+```
 
-To learn more about Next.js, take a look at the following resources:
+Run tests in watch mode during development:
+```bash
+npm run test:watch
+```
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+### Building for Production
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback
-and contributions are welcome!
+1. **Build the application**
+   ```bash
+   npm run build
+   ```
 
-## Deploy on Vercel
+2. **Start production server**
+   ```bash
+   npm run start
+   ```
 
-The easiest way to deploy your Next.js app is to use the
-[Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme)
-from the creators of Next.js.
+### Code Quality
 
-Check out our
-[Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying)
-for more details.
+Ensure code quality before committing:
+```bash
+npm run lint
+npm run typecheck
+npm test
+```
+
+### Contributing
+
+1. Follow the development guidelines in CLAUDE.md
+2. Write tests for all new functionality
+3. Ensure all linting and type checking passes
+4. Run the full test suite before submitting changes
+
+### Environment Configuration
+
+The application is configured for development by default. For production deployment, ensure proper environment variables are set according to your hosting platform requirements.
+
+### PWA Features
+
+This application includes Progressive Web App capabilities:
+- Service worker for offline functionality
+- App manifest for installation
+- Optimized for mobile devices
+
+### Architecture Notes
+
+- Built with Next.js 14+ (App Router)
+- TypeScript for type safety
+- Tailwind CSS for styling
+- React Testing Library for component testing
+- Designed for low-bandwidth optimization
+- Multi-language support infrastructure

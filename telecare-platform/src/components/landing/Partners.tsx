@@ -7,7 +7,8 @@ const PARTNER_ORGANIZATIONS = [
     id: 1,
     name: "NHS Foundation Trust",
     type: "medical",
-    description: "UK National Health Service providing specialist medical expertise",
+    description:
+      "UK National Health Service providing specialist medical expertise",
     logoPlaceholder: "🏥",
     category: "Healthcare",
   },
@@ -15,8 +16,9 @@ const PARTNER_ORGANIZATIONS = [
     id: 2,
     name: "Medical Relief International",
     type: "humanitarian",
-    description: "Humanitarian aid organization supporting emergency medical care",
-    logoPlaceholder: "🚑", 
+    description:
+      "Humanitarian aid organization supporting emergency medical care",
+    logoPlaceholder: "🚑",
     category: "Humanitarian",
   },
   {
@@ -38,7 +40,7 @@ const PARTNER_ORGANIZATIONS = [
   {
     id: 5,
     name: "Emergency Response Charity",
-    type: "humanitarian", 
+    type: "humanitarian",
     description: "International charity providing crisis emergency support",
     logoPlaceholder: "🆘",
     category: "Humanitarian",
@@ -47,7 +49,7 @@ const PARTNER_ORGANIZATIONS = [
 
 export const Partners: React.FC = () => {
   return (
-    <section 
+    <section
       className="py-16 bg-white"
       role="region"
       aria-label="partner organizations supporting the mission"
@@ -57,41 +59,40 @@ export const Partners: React.FC = () => {
           <h2 className="text-4xl font-bold text-gray-900 mb-4">
             Partner Organizations
           </h2>
-          
+
           <p className="text-large text-gray-700">
-            Collaboration with medical, humanitarian, and technology organizations supporting Gaza healthcare crisis
+            Collaboration with medical, humanitarian, and technology
+            organizations supporting Gaza healthcare crisis
           </p>
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 mb-12">
           {PARTNER_ORGANIZATIONS.map((partner) => (
-            <div 
+            <div
               key={partner.id}
               data-testid={`partner-${partner.id}`}
               className="bg-gray-50 rounded-lg p-6 text-center border border-gray-200 hover:shadow-md transition-shadow"
             >
               {/* Logo Placeholder */}
-              <div 
+              <div
                 data-testid={`partner-${partner.id}-logo`}
                 className="text-6xl mb-4"
               >
                 {partner.logoPlaceholder}
               </div>
-              
+
               {/* Partner Details */}
               <div className="mb-2">
                 <span className="inline-block px-3 py-1 text-xs font-medium bg-medical-blue-100 text-medical-blue-700 rounded-full">
                   {partner.category}
                 </span>
               </div>
-              
+
               <h3 className="text-lg font-semibold text-gray-900 mb-2">
                 {partner.name}
               </h3>
-              
-              <p className="text-sm text-gray-600">
-                {partner.description}
-              </p>
+
+              <p className="text-sm text-gray-600">{partner.description}</p>
             </div>
           ))}
         </div>
@@ -102,11 +103,10 @@ export const Partners: React.FC = () => {
             Join Our Partner Network
           </h3>
           <p className="text-gray-700 mb-6">
-            Partner with us to support this humanitarian mission providing emergency medical assistance during the Gaza healthcare crisis
+            Partner with us to support this humanitarian mission providing
+            emergency medical assistance during the Gaza healthcare crisis
           </p>
-          <button className="btn-primary">
-            Become a Partner
-          </button>
+          <button className="btn-primary">Become a Partner</button>
         </div>
 
         {/* Coming Soon Notice */}

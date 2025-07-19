@@ -1,15 +1,15 @@
 import { BaseLayout } from "@/components/layout";
-import { 
-  Hero, 
-  Features, 
-  HowItWorks, 
-  ProblemStatement, 
-  ImpactMetrics, 
-  Testimonials, 
-  Partners, 
-  CTA, 
+import {
+  Hero,
+  Features,
+  HowItWorks,
+  ProblemStatement,
+  ImpactMetrics,
+  Testimonials,
+  Partners,
+  CTA,
   Donation,
-  FAQ 
+  FAQ,
 } from "@/components/landing";
 
 export default function Home() {

@@ -52,7 +52,7 @@ describe("Hero Component", () => {
     render(<Hero />);
 
     const ukDoctorCTA = screen.getByRole("button", { name: /uk.*doctor/i });
-    
+
     // Should not throw error when clicked
     await user.click(ukDoctorCTA);
     expect(true).toBe(true); // Placeholder - will be replaced with actual navigation logic

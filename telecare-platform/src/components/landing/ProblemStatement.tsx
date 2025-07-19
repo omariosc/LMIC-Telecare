@@ -15,7 +15,7 @@ const HEALTHCARE_STATISTICS = [
     label: "Hospitals partially functional",
     description: "Out of 70+ medical facilities before the crisis",
     priority: "urgent",
-    testId: "statistic-card-urgent", 
+    testId: "statistic-card-urgent",
   },
   {
     id: "specialists",
@@ -38,15 +38,21 @@ const HEALTHCARE_STATISTICS = [
 export const ProblemStatement: React.FC = () => {
   return (
     <section className="py-16 bg-white">
-      <div data-testid="problem-statement-container" className="container-responsive">
+      <div
+        data-testid="problem-statement-container"
+        className="container-responsive"
+      >
         {/* Section Header */}
         <div className="text-center mb-12">
           <h2 className="heading-section text-gray-900 mb-4">
-            The Healthcare Crisis in Gaza
+            A Healthcare System in Collapse
           </h2>
           <p className="text-large text-gray-600 max-w-3xl mx-auto">
-            Every minute counts. The urgent healthcare crisis demands immediate 
-            international medical support through remote consultations and specialist guidance.
+            In Gaza, hospitals are overwhelmed, operating at over 350% capacity
+            with a critical shortage of specialist doctors. Triage is happening,
+            but without the right expertise to guide complex treatments, lives
+            that could be saved are being lost. When physical aid cannot get in,
+            knowledge is the most powerful resource we can send.
           </p>
         </div>
 
@@ -64,9 +70,7 @@ export const ProblemStatement: React.FC = () => {
               <h3 className="font-semibold text-lg text-gray-900 mb-2">
                 {stat.label}
               </h3>
-              <p className="text-gray-600 text-sm">
-                {stat.description}
-              </p>
+              <p className="text-gray-600 text-sm">{stat.description}</p>
             </div>
           ))}
         </div>
@@ -82,7 +86,7 @@ export const ProblemStatement: React.FC = () => {
                 Remote Consultation Expertise
               </h4>
               <p className="text-gray-600 text-sm">
-                UK doctors provide life-saving specialist guidance when local 
+                UK doctors provide life-saving specialist guidance when local
                 expertise is overwhelmed or unavailable.
               </p>
             </div>
@@ -91,8 +95,8 @@ export const ProblemStatement: React.FC = () => {
                 Immediate Access Breaking Barriers
               </h4>
               <p className="text-gray-600 text-sm">
-                Digital consultations bypass physical restrictions and 
-                blockade limitations to deliver urgent medical support.
+                Digital consultations bypass physical restrictions and blockade
+                limitations to deliver urgent medical support.
               </p>
             </div>
           </div>
@@ -101,7 +105,8 @@ export const ProblemStatement: React.FC = () => {
         {/* Call to Action Context */}
         <div className="text-center mt-12">
           <p className="text-gray-700 mb-6">
-            Your expertise can bridge the gap between critical need and life-saving care.
+            Your expertise can bridge the gap between critical need and
+            life-saving care.
           </p>
           <div className="gaza-flag-accent mx-auto max-w-lg"></div>
         </div>

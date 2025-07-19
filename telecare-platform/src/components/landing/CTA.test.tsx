@@ -19,7 +19,9 @@ describe("CTA Component", () => {
     render(<CTA />);
 
     const buttons = screen.getAllByRole("button");
-    const primaryButton = buttons.find(btn => btn.classList.contains("btn-primary"));
+    const primaryButton = buttons.find((btn) =>
+      btn.classList.contains("btn-primary")
+    );
     expect(primaryButton).toBeDefined();
   });
 
@@ -35,8 +37,10 @@ describe("CTA Component", () => {
     render(<CTA />);
 
     const buttons = screen.getAllByRole("button");
-    const primaryButton = buttons.find(btn => btn.classList.contains("btn-primary"));
-    
+    const primaryButton = buttons.find((btn) =>
+      btn.classList.contains("btn-primary")
+    );
+
     // Should not throw error when clicked
     if (primaryButton) {
       await user.click(primaryButton);
@@ -47,14 +51,18 @@ describe("CTA Component", () => {
   it("should emphasize urgent medical mission", () => {
     render(<CTA />);
 
-    const elements = screen.getAllByText(/urgent|emergency|critical|mission|gaza/i);
+    const elements = screen.getAllByText(
+      /urgent|emergency|critical|mission|gaza/i
+    );
     expect(elements.length).toBeGreaterThan(0);
   });
 
   it("should mention platform purpose clearly", () => {
     render(<CTA />);
 
-    const elements = screen.getAllByText(/medical|healthcare|specialist|consultation/i);
+    const elements = screen.getAllByText(
+      /medical|healthcare|specialist|consultation/i
+    );
     expect(elements.length).toBeGreaterThan(0);
   });
 
@@ -82,14 +90,18 @@ describe("CTA Component", () => {
   it("should include Gaza clinician registration option", () => {
     render(<CTA />);
 
-    const elements = screen.getAllByText(/gaza.*clinician|gaza.*medical|palestinian.*doctor/i);
+    const elements = screen.getAllByText(
+      /gaza.*clinician|gaza.*medical|palestinian.*doctor/i
+    );
     expect(elements.length).toBeGreaterThan(0);
   });
 
   it("should emphasize no-cost participation", () => {
     render(<CTA />);
 
-    const elements = screen.getAllByText(/free|no.*cost|volunteer|donation.*based/i);
+    const elements = screen.getAllByText(
+      /free|no.*cost|volunteer|donation.*based/i
+    );
     expect(elements.length).toBeGreaterThan(0);
   });
 

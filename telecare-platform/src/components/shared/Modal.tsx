@@ -68,17 +68,17 @@ export const Modal: React.FC<ModalProps> = ({
     if (isOpen) {
       // Save the previously focused element
       previousActiveElementRef.current = document.activeElement as HTMLElement;
-      
+
       // Lock body scroll
       document.body.style.overflow = "hidden";
-      
+
       // Focus the modal
       setTimeout(() => {
         if (modalRef.current) {
           const firstFocusableElement = modalRef.current.querySelector(
             'button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])'
           ) as HTMLElement;
-          
+
           if (firstFocusableElement) {
             firstFocusableElement.focus();
           } else {
@@ -89,7 +89,7 @@ export const Modal: React.FC<ModalProps> = ({
     } else {
       // Restore body scroll
       document.body.style.overflow = "";
-      
+
       // Restore focus to the previously focused element
       if (previousActiveElementRef.current) {
         previousActiveElementRef.current.focus();
@@ -168,9 +168,9 @@ export const Modal: React.FC<ModalProps> = ({
             initial="initial"
             animate="animate"
             exit="exit"
-            transition={{ 
+            transition={{
               duration: 0.3,
-              ease: [0.4, 0.0, 0.2, 1]
+              ease: [0.4, 0.0, 0.2, 1],
             }}
             onClick={handleModalContentClick}
           >
@@ -178,35 +178,34 @@ export const Modal: React.FC<ModalProps> = ({
             {(header || title || showCloseButton) && (
               <div className="flex items-center justify-between p-6 border-b border-gray-200">
                 <div className="flex-1">
-                  {header || (
-                    title && (
-                      <h2 
-                        id="modal-title" 
+                  {header ||
+                    (title && (
+                      <h2
+                        id="modal-title"
                         className="text-2xl font-bold text-gray-900"
                       >
                         {title}
                       </h2>
-                    )
-                  )}
+                    ))}
                 </div>
-                
+
                 {showCloseButton && (
                   <button
                     aria-label="Close modal"
                     className="ml-4 w-10 h-10 flex items-center justify-center rounded-full text-gray-400 hover:text-gray-600 hover:bg-gray-100 hover-lift transition-all duration-200"
                     onClick={onClose}
                   >
-                    <svg 
-                      className="w-6 h-6" 
-                      fill="none" 
-                      stroke="currentColor" 
+                    <svg
+                      className="w-6 h-6"
+                      fill="none"
+                      stroke="currentColor"
                       viewBox="0 0 24 24"
                     >
-                      <path 
-                        strokeLinecap="round" 
-                        strokeLinejoin="round" 
-                        strokeWidth={2} 
-                        d="M6 18L18 6M6 6l12 12" 
+                      <path
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        strokeWidth={2}
+                        d="M6 18L18 6M6 6l12 12"
                       />
                     </svg>
                   </button>
@@ -215,11 +214,13 @@ export const Modal: React.FC<ModalProps> = ({
             )}
 
             {/* Body */}
-            <div className={`
+            <div
+              className={`
               ${size === "fullscreen" ? "flex-1 overflow-auto" : ""}
-              ${(!header && !title && !showCloseButton) ? "pt-6" : ""}
+              ${!header && !title && !showCloseButton ? "pt-6" : ""}
               px-6 py-6
-            `}>
+            `}
+            >
               {children}
             </div>
 
@@ -242,7 +243,7 @@ export const useModal = (initialState = false) => {
 
   const openModal = React.useCallback(() => setIsOpen(true), []);
   const closeModal = React.useCallback(() => setIsOpen(false), []);
-  const toggleModal = React.useCallback(() => setIsOpen(prev => !prev), []);
+  const toggleModal = React.useCallback(() => setIsOpen((prev) => !prev), []);
 
   return {
     isOpen,
@@ -285,10 +286,7 @@ export const ConfirmationModal: React.FC<{
 
   const footer = (
     <div className="flex flex-col sm:flex-row gap-3 sm:gap-2 sm:justify-end">
-      <button
-        className="btn-outline order-2 sm:order-1"
-        onClick={onClose}
-      >
+      <button className="btn-outline order-2 sm:order-1" onClick={onClose}>
         {cancelText}
       </button>
       <button
@@ -317,10 +315,7 @@ export const ConfirmationModal: React.FC<{
 export const LoadingModal: React.FC<{
   isOpen: boolean;
   message?: string;
-}> = ({
-  isOpen,
-  message = "Loading...",
-}) => {
+}> = ({ isOpen, message = "Loading..." }) => {
   return (
     <Modal
       isOpen={isOpen}

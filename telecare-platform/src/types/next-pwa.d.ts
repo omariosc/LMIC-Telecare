@@ -23,3 +23,5 @@ declare module "next-pwa" {
 
   export = withPWA;
 }
+
+// Global type declarations can be added here when needed

@@ -45,7 +45,7 @@
   - [x] 1.7 Configure ESLint and Prettier for code consistency
   - [x] 1.8 Create base layout component with semantic HTML structure
 
-- [ ] 2.0 Implement core landing page sections
+- [x] 2.0 Implement core landing page sections
   - [x] 2.1 Build Hero component with crisis headline and surgeon statistic
   - [x] 2.2 Implement ProblemStatement component with Gaza healthcare statistics
   - [x] 2.3 Create HowItWorks component with 3-4 step visual process

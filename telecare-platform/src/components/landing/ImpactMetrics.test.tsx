@@ -17,7 +17,9 @@ describe("ImpactMetrics Component", () => {
   it("should display multiple impact metric cards", () => {
     render(<ImpactMetrics />);
 
-    const metricCards = screen.getAllByTestId(/^metric-\d+$/).filter(el => !el.getAttribute('data-testid')?.includes('-value'));
+    const metricCards = screen
+      .getAllByTestId(/^metric-\d+$/)
+      .filter((el) => !el.getAttribute("data-testid")?.includes("-value"));
     expect(metricCards.length).toBe(4);
   });
 
@@ -44,7 +46,9 @@ describe("ImpactMetrics Component", () => {
   it("should have coming soon placeholder for specialists registered", () => {
     render(<ImpactMetrics />);
 
-    expect(screen.getByText(/specialist.*register|doctor.*register/i)).toBeDefined();
+    expect(
+      screen.getByText(/specialist.*register|doctor.*register/i)
+    ).toBeDefined();
   });
 
   it("should display coming soon badges or indicators", () => {
@@ -71,7 +75,9 @@ describe("ImpactMetrics Component", () => {
   it("should emphasize future data collection", () => {
     render(<ImpactMetrics />);
 
-    expect(screen.getByText(/Live impact data collection begins at platform launch/i)).toBeDefined();
+    expect(
+      screen.getByText(/Live impact data collection begins at platform launch/i)
+    ).toBeDefined();
   });
 
   it("should mention Gaza humanitarian focus", () => {
@@ -91,7 +97,9 @@ describe("ImpactMetrics Component", () => {
   it("should indicate real-time tracking capability", () => {
     render(<ImpactMetrics />);
 
-    const realTimeElements = screen.getAllByText(/real.*time|live.*track|24.*7/i);
+    const realTimeElements = screen.getAllByText(
+      /real.*time|live.*track|24.*7/i
+    );
     expect(realTimeElements.length).toBeGreaterThan(0);
   });
 });
