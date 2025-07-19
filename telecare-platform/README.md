@@ -1,6 +1,7 @@
 # Telecare Platform for Gaza
 
-A Next.js application connecting UK medical specialists with Gaza clinicians for life-saving remote consultations.
+A Next.js application connecting UK medical specialists with Gaza clinicians for life-saving remote
+consultations.
 
 ## Developer Setup
 
@@ -13,23 +14,25 @@ A Next.js application connecting UK medical specialists with Gaza clinicians for
 ### Installation
 
 1. **Clone the repository**
+
    ```bash
    git clone [repository-url]
    cd telecare-platform
    ```
 
 2. **Install dependencies**
+
    ```bash
    npm install
    ```
 
 3. **Run the development server**
+
    ```bash
    npm run dev
    ```
 
-4. **Open your browser**
-   Navigate to [http://localhost:3000](http://localhost:3000)
+4. **Open your browser** Navigate to [http://localhost:3000](http://localhost:3000)
 
 ### Available Scripts
 
@@ -68,11 +71,13 @@ telecare-platform/
 ### Testing
 
 Run the test suite:
+
 ```bash
 npm test
 ```
 
 Run tests in watch mode during development:
+
 ```bash
 npm run test:watch
 ```
@@ -80,6 +85,7 @@ npm run test:watch
 ### Building for Production
 
 1. **Build the application**
+
    ```bash
    npm run build
    ```
@@ -92,6 +98,7 @@ npm run test:watch
 ### Code Quality
 
 Ensure code quality before committing:
+
 ```bash
 npm run lint
 npm run typecheck
@@ -107,11 +114,13 @@ npm test
 
 ### Environment Configuration
 
-The application is configured for development by default. For production deployment, ensure proper environment variables are set according to your hosting platform requirements.
+The application is configured for development by default. For production deployment, ensure proper
+environment variables are set according to your hosting platform requirements.
 
 ### PWA Features
 
 This application includes Progressive Web App capabilities:
+
 - Service worker for offline functionality
 - App manifest for installation
 - Optimized for mobile devices

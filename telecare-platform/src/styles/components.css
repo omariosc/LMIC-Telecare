@@ -49,11 +49,15 @@
   font-size: 1rem;
   line-height: 1.5;
   border-radius: 0.75rem;
-  background: linear-gradient(135deg, var(--color-medical-blue-600) 0%, var(--color-medical-blue-700) 100%);
+  background: linear-gradient(
+    135deg,
+    var(--color-medical-blue-600) 0%,
+    var(--color-medical-blue-700) 100%
+  );
   color: white;
   border: none;
   cursor: pointer;
-  transition: all 0.3s cubic-bezier(0.4, 0.0, 0.2, 1);
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
   text-decoration: none;
   position: relative;
   overflow: hidden;
@@ -61,7 +65,7 @@
 }
 
 .btn-primary:before {
-  content: '';
+  content: "";
   position: absolute;
   top: 0;
   left: -100%;
@@ -76,7 +80,11 @@
 }
 
 .btn-primary:hover {
-  background: linear-gradient(135deg, var(--color-medical-blue-700) 0%, var(--color-medical-blue-800) 100%);
+  background: linear-gradient(
+    135deg,
+    var(--color-medical-blue-700) 0%,
+    var(--color-medical-blue-800) 100%
+  );
   transform: translateY(-2px);
   box-shadow: 0 8px 25px 0 rgba(0, 82, 163, 0.35);
 }
@@ -101,20 +109,24 @@
   color: var(--color-medical-blue-600);
   border: 2px solid var(--color-medical-blue-600);
   cursor: pointer;
-  transition: all 0.3s cubic-bezier(0.4, 0.0, 0.2, 1);
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
   text-decoration: none;
   position: relative;
   overflow: hidden;
 }
 
 .btn-secondary:before {
-  content: '';
+  content: "";
   position: absolute;
   top: 0;
   left: 0;
   width: 0;
   height: 100%;
-  background: linear-gradient(135deg, var(--color-medical-blue-600) 0%, var(--color-medical-blue-700) 100%);
+  background: linear-gradient(
+    135deg,
+    var(--color-medical-blue-600) 0%,
+    var(--color-medical-blue-700) 100%
+  );
   transition: width 0.3s ease;
   z-index: -1;
 }
@@ -141,11 +153,15 @@
   font-size: 1rem;
   line-height: 1.5;
   border-radius: 0.75rem;
-  background: linear-gradient(135deg, var(--color-medical-red-500) 0%, var(--color-medical-red-600) 100%);
+  background: linear-gradient(
+    135deg,
+    var(--color-medical-red-500) 0%,
+    var(--color-medical-red-600) 100%
+  );
   color: white;
   border: none;
   cursor: pointer;
-  transition: all 0.3s cubic-bezier(0.4, 0.0, 0.2, 1);
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
   text-decoration: none;
   position: relative;
   overflow: hidden;
@@ -154,18 +170,25 @@
 }
 
 .btn-urgent:hover {
-  background: linear-gradient(135deg, var(--color-medical-red-600) 0%, var(--color-medical-red-700) 100%);
+  background: linear-gradient(
+    135deg,
+    var(--color-medical-red-600) 0%,
+    var(--color-medical-red-700) 100%
+  );
   transform: translateY(-2px);
   box-shadow: 0 8px 25px 0 rgba(239, 68, 68, 0.35);
   animation: none;
 }
 
 @keyframes pulse-urgent {
-  0%, 100% {
+  0%,
+  100% {
     box-shadow: 0 4px 14px 0 rgba(239, 68, 68, 0.25);
   }
   50% {
-    box-shadow: 0 4px 14px 0 rgba(239, 68, 68, 0.4), 0 0 0 4px rgba(239, 68, 68, 0.1);
+    box-shadow:
+      0 4px 14px 0 rgba(239, 68, 68, 0.4),
+      0 0 0 4px rgba(239, 68, 68, 0.1);
   }
 }
 
@@ -184,7 +207,7 @@
   color: var(--color-gray-700);
   border: 1.5px solid var(--color-gray-300);
   cursor: pointer;
-  transition: all 0.3s cubic-bezier(0.4, 0.0, 0.2, 1);
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
   text-decoration: none;
 }
 
@@ -257,14 +280,16 @@
   border: 1px solid var(--color-gray-200);
   border-radius: 1rem;
   padding: 1.5rem;
-  box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px 0 rgba(0, 0, 0, 0.06);
-  transition: all 0.3s cubic-bezier(0.4, 0.0, 0.2, 1);
+  box-shadow:
+    0 1px 3px 0 rgba(0, 0, 0, 0.1),
+    0 1px 2px 0 rgba(0, 0, 0, 0.06);
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
   position: relative;
   overflow: hidden;
 }
 
 .card:before {
-  content: '';
+  content: "";
   position: absolute;
   top: 0;
   left: 0;
@@ -276,7 +301,9 @@
 }
 
 .card:hover {
-  box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+  box-shadow:
+    0 20px 25px -5px rgba(0, 0, 0, 0.1),
+    0 10px 10px -5px rgba(0, 0, 0, 0.04);
   transform: translateY(-4px);
   border-color: var(--color-gray-300);
 }
@@ -302,11 +329,15 @@
 .card-medical {
   background: linear-gradient(135deg, rgba(255, 255, 255, 0.95) 0%, rgba(248, 250, 252, 0.95) 100%);
   border: 1px solid var(--color-medical-blue-200);
-  box-shadow: 0 4px 6px -1px rgba(0, 82, 163, 0.1), 0 2px 4px -1px rgba(0, 82, 163, 0.06);
+  box-shadow:
+    0 4px 6px -1px rgba(0, 82, 163, 0.1),
+    0 2px 4px -1px rgba(0, 82, 163, 0.06);
 }
 
 .card-medical:hover {
-  box-shadow: 0 20px 25px -5px rgba(0, 82, 163, 0.15), 0 10px 10px -5px rgba(0, 82, 163, 0.1);
+  box-shadow:
+    0 20px 25px -5px rgba(0, 82, 163, 0.15),
+    0 10px 10px -5px rgba(0, 82, 163, 0.1);
   border-color: var(--color-medical-blue-300);
 }
 
@@ -317,7 +348,9 @@
 }
 
 .card-urgent:hover {
-  box-shadow: 0 20px 25px -5px rgba(239, 68, 68, 0.15), 0 10px 10px -5px rgba(239, 68, 68, 0.1);
+  box-shadow:
+    0 20px 25px -5px rgba(239, 68, 68, 0.15),
+    0 10px 10px -5px rgba(239, 68, 68, 0.1);
 }
 
 .card-success {
@@ -368,7 +401,11 @@
   height: 3rem;
   margin-bottom: 1rem;
   padding: 0.75rem;
-  background: linear-gradient(135deg, var(--color-medical-blue-100) 0%, var(--color-medical-green-100) 100%);
+  background: linear-gradient(
+    135deg,
+    var(--color-medical-blue-100) 0%,
+    var(--color-medical-green-100) 100%
+  );
   border-radius: 0.75rem;
   display: flex;
   align-items: center;
@@ -378,7 +415,11 @@
 }
 
 .card:hover .card-icon {
-  background: linear-gradient(135deg, var(--color-medical-blue-600) 0%, var(--color-medical-green-600) 100%);
+  background: linear-gradient(
+    135deg,
+    var(--color-medical-blue-600) 0%,
+    var(--color-medical-green-600) 100%
+  );
   color: white;
   transform: scale(1.1);
 }
