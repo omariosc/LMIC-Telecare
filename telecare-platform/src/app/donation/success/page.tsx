@@ -1,7 +1,35 @@
-import { CheckCircleIcon, HeartIcon } from "@heroicons/react/24/outline";
+"use client";
+
+import { useState } from "react";
+import { CheckCircleIcon, HeartIcon, LinkIcon } from "@heroicons/react/24/outline";
 import Link from "next/link";
 
 export default function DonationSuccess() {
+  const [copied, setCopied] = useState(false);
+
+  const handleShare = async () => {
+    try {
+      const shareUrl = "https://jusur.org.uk";
+      const shareText = "I just donated to Jusur (جسور) - a platform connecting UK medical specialists with Gaza clinicians. Join me in supporting this vital healthcare bridge: ";
+      
+      await navigator.clipboard.writeText(shareText + shareUrl);
+      setCopied(true);
+      
+      // Reset after 3 seconds
+      setTimeout(() => setCopied(false), 3000);
+    } catch (error) {
+      console.error("Failed to copy to clipboard:", error);
+      // Fallback for older browsers
+      const textArea = document.createElement("textarea");
+      textArea.value = "I just donated to Jusur (جسور) - a platform connecting UK medical specialists with Gaza clinicians. Join me in supporting this vital healthcare bridge: https://jusur.org.uk";
+      document.body.appendChild(textArea);
+      textArea.select();
+      document.execCommand("copy");
+      document.body.removeChild(textArea);
+      setCopied(true);
+      setTimeout(() => setCopied(false), 3000);
+    }
+  };
   return (
     <div className="min-h-screen bg-gray-50 flex items-center justify-center px-4">
       <div className="max-w-md w-full bg-white rounded-xl shadow-lg p-8 text-center">
@@ -40,12 +68,17 @@ export default function DonationSuccess() {
             Return to Home
           </Link>
 
-          <Link
-            href="#share"
-            className="w-full bg-gray-100 text-gray-700 py-3 px-6 rounded-full font-bold hover:bg-gray-200 transition-colors inline-block"
+          <button
+            onClick={handleShare}
+            className={`w-full py-3 px-6 rounded-full font-bold transition-colors inline-flex items-center justify-center gap-2 ${
+              copied
+                ? "bg-green-100 text-green-700 border border-green-300"
+                : "bg-gray-100 text-gray-700 hover:bg-gray-200"
+            }`}
           >
-            Share This Cause
-          </Link>
+            <LinkIcon className="h-4 w-4" />
+            {copied ? "Link Copied!" : "Share This Cause"}
+          </button>
         </div>
       </div>
     </div>
