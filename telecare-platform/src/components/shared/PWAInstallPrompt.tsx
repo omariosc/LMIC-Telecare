@@ -1,22 +1,25 @@
-'use client';
+"use client";
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect } from "react";
 
 type BeforeInstallPromptEvent = Event & {
   prompt: () => Promise<void>;
-  userChoice: Promise<{ outcome: 'accepted' | 'dismissed' }>;
+  userChoice: Promise<{ outcome: "accepted" | "dismissed" }>;
 };
 
 export default function PWAInstallPrompt() {
-  const [deferredPrompt, setDeferredPrompt] = useState<BeforeInstallPromptEvent | null>(null);
+  const [deferredPrompt, setDeferredPrompt] =
+    useState<BeforeInstallPromptEvent | null>(null);
   const [showInstallPrompt, setShowInstallPrompt] = useState(false);
   const [isInstalled, setIsInstalled] = useState(false);
 
   useEffect(() => {
     // Check if app is already installed
-    const isStandalone = window.matchMedia('(display-mode: standalone)').matches;
+    const isStandalone = window.matchMedia(
+      "(display-mode: standalone)"
+    ).matches;
     const isInWebAppiOS = (window.navigator as any).standalone === true;
-    
+
     if (isStandalone || isInWebAppiOS) {
       setIsInstalled(true);
       return;
@@ -26,7 +29,7 @@ export default function PWAInstallPrompt() {
     const handleBeforeInstallPrompt = (e: Event) => {
       e.preventDefault();
       setDeferredPrompt(e as BeforeInstallPromptEvent);
-      
+
       // Show install prompt after user has been on the site for 30 seconds
       setTimeout(() => {
         setShowInstallPrompt(true);
@@ -40,12 +43,15 @@ export default function PWAInstallPrompt() {
       setDeferredPrompt(null);
     };
 
-    window.addEventListener('beforeinstallprompt', handleBeforeInstallPrompt);
-    window.addEventListener('appinstalled', handleAppInstalled);
+    window.addEventListener("beforeinstallprompt", handleBeforeInstallPrompt);
+    window.addEventListener("appinstalled", handleAppInstalled);
 
     return () => {
-      window.removeEventListener('beforeinstallprompt', handleBeforeInstallPrompt);
-      window.removeEventListener('appinstalled', handleAppInstalled);
+      window.removeEventListener(
+        "beforeinstallprompt",
+        handleBeforeInstallPrompt
+      );
+      window.removeEventListener("appinstalled", handleAppInstalled);
     };
   }, []);
 
@@ -55,22 +61,22 @@ export default function PWAInstallPrompt() {
     try {
       await deferredPrompt.prompt();
       const { outcome } = await deferredPrompt.userChoice;
-      
-      if (outcome === 'accepted') {
+
+      if (outcome === "accepted") {
         setIsInstalled(true);
       }
-      
+
       setShowInstallPrompt(false);
       setDeferredPrompt(null);
     } catch (error) {
-      console.error('Error during PWA installation:', error);
+      console.error("Error during PWA installation:", error);
     }
   };
 
   const dismissPrompt = () => {
     setShowInstallPrompt(false);
     // Don't show again for this session
-    sessionStorage.setItem('pwa-prompt-dismissed', 'true');
+    sessionStorage.setItem("pwa-prompt-dismissed", "true");
   };
 
   // Don't show if already installed or dismissed
@@ -79,7 +85,7 @@ export default function PWAInstallPrompt() {
   }
 
   // Don't show if user already dismissed it this session
-  if (sessionStorage.getItem('pwa-prompt-dismissed')) {
+  if (sessionStorage.getItem("pwa-prompt-dismissed")) {
     return null;
   }
 
@@ -92,15 +98,16 @@ export default function PWAInstallPrompt() {
               <span className="text-white text-lg">🏥</span>
             </div>
           </div>
-          
+
           <div className="flex-1 min-w-0">
             <h3 className="text-sm font-semibold text-gray-900 dark:text-white">
               Install Telecare Platform
             </h3>
             <p className="text-sm text-gray-600 dark:text-gray-300 mt-1">
-              Access medical consultations instantly, even offline. Perfect for emergency situations.
+              Access medical consultations instantly, even offline. Perfect for
+              emergency situations.
             </p>
-            
+
             <div className="flex space-x-2 mt-3">
               <button
                 onClick={handleInstallClick}
@@ -116,13 +123,12 @@ export default function PWAInstallPrompt() {
               </button>
             </div>
           </div>
-          
+
           <button
             onClick={dismissPrompt}
             className="flex-shrink-0 text-gray-400 hover:text-gray-600 dark:hover:text-gray-200"
           >
-            <span className="sr-only">Close</span>
-            ✕
+            <span className="sr-only">Close</span>✕
           </button>
         </div>
       </div>

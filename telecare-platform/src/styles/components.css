@@ -37,80 +37,163 @@
   }
 }
 
-/* Button Components */
+/* Professional Button Components */
 .btn-primary {
   display: inline-flex;
   align-items: center;
   justify-content: center;
+  gap: 0.5rem;
   min-height: var(--size-touch-min);
-  padding: 0.75rem 1.5rem;
+  padding: 0.875rem 2rem;
   font-weight: 600;
   font-size: 1rem;
   line-height: 1.5;
-  border-radius: var(--border-radius-lg);
-  background-color: var(--color-primary);
-  color: var(--color-primary-foreground);
+  border-radius: 0.75rem;
+  background: linear-gradient(135deg, var(--color-medical-blue-600) 0%, var(--color-medical-blue-700) 100%);
+  color: white;
   border: none;
   cursor: pointer;
-  transition: all 0.2s ease-in-out;
+  transition: all 0.3s cubic-bezier(0.4, 0.0, 0.2, 1);
   text-decoration: none;
+  position: relative;
+  overflow: hidden;
+  box-shadow: 0 4px 14px 0 rgba(0, 82, 163, 0.25);
+}
+
+.btn-primary:before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+  transition: left 0.5s;
+}
+
+.btn-primary:hover:before {
+  left: 100%;
 }
 
 .btn-primary:hover {
-  background-color: var(--color-medical-blue-700);
-  transform: translateY(-1px);
-  box-shadow: var(--shadow-md);
+  background: linear-gradient(135deg, var(--color-medical-blue-700) 0%, var(--color-medical-blue-800) 100%);
+  transform: translateY(-2px);
+  box-shadow: 0 8px 25px 0 rgba(0, 82, 163, 0.35);
 }
 
 .btn-primary:active {
   transform: translateY(0);
+  box-shadow: 0 4px 14px 0 rgba(0, 82, 163, 0.25);
 }
 
 .btn-secondary {
   display: inline-flex;
   align-items: center;
   justify-content: center;
+  gap: 0.5rem;
   min-height: var(--size-touch-min);
-  padding: 0.75rem 1.5rem;
+  padding: 0.875rem 2rem;
   font-weight: 600;
   font-size: 1rem;
   line-height: 1.5;
-  border-radius: var(--border-radius-lg);
+  border-radius: 0.75rem;
   background-color: transparent;
-  color: var(--color-primary);
-  border: 2px solid var(--color-primary);
+  color: var(--color-medical-blue-600);
+  border: 2px solid var(--color-medical-blue-600);
   cursor: pointer;
-  transition: all 0.2s ease-in-out;
+  transition: all 0.3s cubic-bezier(0.4, 0.0, 0.2, 1);
   text-decoration: none;
+  position: relative;
+  overflow: hidden;
+}
+
+.btn-secondary:before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 0;
+  height: 100%;
+  background: linear-gradient(135deg, var(--color-medical-blue-600) 0%, var(--color-medical-blue-700) 100%);
+  transition: width 0.3s ease;
+  z-index: -1;
+}
+
+.btn-secondary:hover:before {
+  width: 100%;
 }
 
 .btn-secondary:hover {
-  background-color: var(--color-primary);
-  color: var(--color-primary-foreground);
+  color: white;
+  border-color: var(--color-medical-blue-700);
+  transform: translateY(-2px);
+  box-shadow: 0 8px 25px 0 rgba(0, 82, 163, 0.25);
 }
 
 .btn-urgent {
   display: inline-flex;
   align-items: center;
   justify-content: center;
+  gap: 0.5rem;
   min-height: var(--size-touch-min);
-  padding: 0.75rem 1.5rem;
+  padding: 0.875rem 2rem;
   font-weight: 600;
   font-size: 1rem;
   line-height: 1.5;
-  border-radius: var(--border-radius-lg);
-  background-color: var(--color-medical-red-500);
+  border-radius: 0.75rem;
+  background: linear-gradient(135deg, var(--color-medical-red-500) 0%, var(--color-medical-red-600) 100%);
   color: white;
   border: none;
   cursor: pointer;
-  transition: all 0.2s ease-in-out;
+  transition: all 0.3s cubic-bezier(0.4, 0.0, 0.2, 1);
   text-decoration: none;
+  position: relative;
+  overflow: hidden;
+  box-shadow: 0 4px 14px 0 rgba(239, 68, 68, 0.25);
+  animation: pulse-urgent 2s infinite;
 }
 
 .btn-urgent:hover {
-  background-color: var(--color-medical-red-600);
+  background: linear-gradient(135deg, var(--color-medical-red-600) 0%, var(--color-medical-red-700) 100%);
+  transform: translateY(-2px);
+  box-shadow: 0 8px 25px 0 rgba(239, 68, 68, 0.35);
+  animation: none;
+}
+
+@keyframes pulse-urgent {
+  0%, 100% {
+    box-shadow: 0 4px 14px 0 rgba(239, 68, 68, 0.25);
+  }
+  50% {
+    box-shadow: 0 4px 14px 0 rgba(239, 68, 68, 0.4), 0 0 0 4px rgba(239, 68, 68, 0.1);
+  }
+}
+
+.btn-outline {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  min-height: var(--size-touch-min);
+  padding: 0.875rem 2rem;
+  font-weight: 500;
+  font-size: 1rem;
+  line-height: 1.5;
+  border-radius: 0.75rem;
+  background-color: transparent;
+  color: var(--color-gray-700);
+  border: 1.5px solid var(--color-gray-300);
+  cursor: pointer;
+  transition: all 0.3s cubic-bezier(0.4, 0.0, 0.2, 1);
+  text-decoration: none;
+}
+
+.btn-outline:hover {
+  background-color: var(--color-gray-50);
+  border-color: var(--color-gray-400);
+  color: var(--color-gray-900);
   transform: translateY(-1px);
-  box-shadow: var(--shadow-md);
+  box-shadow: 0 4px 12px 0 rgba(0, 0, 0, 0.1);
 }
 
 /* Mobile-First Typography */
@@ -168,19 +251,38 @@
   }
 }
 
-/* Card Components */
+/* Professional Card Components */
 .card {
-  background-color: var(--color-card);
-  border: 1px solid var(--color-border);
-  border-radius: var(--border-radius-xl);
+  background: white;
+  border: 1px solid var(--color-gray-200);
+  border-radius: 1rem;
   padding: 1.5rem;
-  box-shadow: var(--shadow-sm);
-  transition: all 0.2s ease-in-out;
+  box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px 0 rgba(0, 0, 0, 0.06);
+  transition: all 0.3s cubic-bezier(0.4, 0.0, 0.2, 1);
+  position: relative;
+  overflow: hidden;
+}
+
+.card:before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 3px;
+  background: linear-gradient(90deg, var(--color-medical-blue-500), var(--color-medical-green-500));
+  opacity: 0;
+  transition: opacity 0.3s ease;
 }
 
 .card:hover {
-  box-shadow: var(--shadow-md);
-  transform: translateY(-2px);
+  box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+  transform: translateY(-4px);
+  border-color: var(--color-gray-300);
+}
+
+.card:hover:before {
+  opacity: 1;
 }
 
 @media (min-width: 768px) {
@@ -189,16 +291,110 @@
   }
 }
 
+.card-interactive {
+  cursor: pointer;
+}
+
+.card-interactive:hover {
+  background: linear-gradient(135deg, rgba(255, 255, 255, 0.9) 0%, rgba(248, 250, 252, 0.9) 100%);
+}
+
+.card-medical {
+  background: linear-gradient(135deg, rgba(255, 255, 255, 0.95) 0%, rgba(248, 250, 252, 0.95) 100%);
+  border: 1px solid var(--color-medical-blue-200);
+  box-shadow: 0 4px 6px -1px rgba(0, 82, 163, 0.1), 0 2px 4px -1px rgba(0, 82, 163, 0.06);
+}
+
+.card-medical:hover {
+  box-shadow: 0 20px 25px -5px rgba(0, 82, 163, 0.15), 0 10px 10px -5px rgba(0, 82, 163, 0.1);
+  border-color: var(--color-medical-blue-300);
+}
+
+.card-urgent {
+  background: linear-gradient(135deg, rgba(255, 255, 255, 0.95) 0%, rgba(254, 242, 242, 0.95) 100%);
+  border: 1px solid var(--color-medical-red-200);
+  border-left: 4px solid var(--color-medical-red-500);
+}
+
+.card-urgent:hover {
+  box-shadow: 0 20px 25px -5px rgba(239, 68, 68, 0.15), 0 10px 10px -5px rgba(239, 68, 68, 0.1);
+}
+
+.card-success {
+  background: linear-gradient(135deg, rgba(255, 255, 255, 0.95) 0%, rgba(240, 253, 244, 0.95) 100%);
+  border: 1px solid var(--color-medical-green-200);
+  border-left: 4px solid var(--color-medical-green-500);
+}
+
+.card-glass {
+  background: rgba(255, 255, 255, 0.85);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.37);
+}
+
+.card-header {
+  margin-bottom: 1rem;
+  padding-bottom: 1rem;
+  border-bottom: 1px solid var(--color-gray-100);
+}
+
+.card-title {
+  font-size: 1.25rem;
+  font-weight: 700;
+  color: var(--color-gray-900);
+  margin-bottom: 0.5rem;
+  line-height: 1.3;
+}
+
+.card-subtitle {
+  font-size: 0.875rem;
+  font-weight: 500;
+  color: var(--color-medical-blue-600);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  margin-bottom: 0.25rem;
+}
+
+.card-description {
+  font-size: 0.875rem;
+  color: var(--color-gray-600);
+  line-height: 1.5;
+}
+
+.card-icon {
+  width: 3rem;
+  height: 3rem;
+  margin-bottom: 1rem;
+  padding: 0.75rem;
+  background: linear-gradient(135deg, var(--color-medical-blue-100) 0%, var(--color-medical-green-100) 100%);
+  border-radius: 0.75rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--color-medical-blue-600);
+  transition: all 0.3s ease;
+}
+
+.card:hover .card-icon {
+  background: linear-gradient(135deg, var(--color-medical-blue-600) 0%, var(--color-medical-green-600) 100%);
+  color: white;
+  transform: scale(1.1);
+}
+
 /* Medical Status Indicators */
 .status-critical {
   display: inline-flex;
   align-items: center;
   padding: 0.25rem 0.75rem;
   border-radius: var(--border-radius-md);
-  background-color: var(--color-medical-red-50);
-  color: var(--color-medical-red-600);
+  background-color: var(--color-critical-bg);
+  color: var(--color-critical);
   font-weight: 600;
   font-size: 0.875rem;
+  border: 1px solid var(--color-medical-red-200);
+  box-shadow: 0 1px 2px rgba(220, 38, 38, 0.1);
 }
 
 .status-urgent {
@@ -206,10 +402,25 @@
   align-items: center;
   padding: 0.25rem 0.75rem;
   border-radius: var(--border-radius-md);
-  background-color: var(--color-medical-orange-50);
-  color: var(--color-medical-orange-600);
+  background-color: var(--color-urgent-bg);
+  color: var(--color-urgent);
   font-weight: 600;
   font-size: 0.875rem;
+  border: 1px solid var(--color-medical-orange-200);
+  box-shadow: 0 1px 2px rgba(234, 88, 12, 0.1);
+}
+
+.status-warning {
+  display: inline-flex;
+  align-items: center;
+  padding: 0.25rem 0.75rem;
+  border-radius: var(--border-radius-md);
+  background-color: var(--color-warning-bg);
+  color: var(--color-warning);
+  font-weight: 600;
+  font-size: 0.875rem;
+  border: 1px solid var(--color-medical-yellow-200);
+  box-shadow: 0 1px 2px rgba(202, 138, 4, 0.1);
 }
 
 .status-success {
@@ -217,10 +428,38 @@
   align-items: center;
   padding: 0.25rem 0.75rem;
   border-radius: var(--border-radius-md);
-  background-color: var(--color-medical-green-50);
-  color: var(--color-medical-green-600);
+  background-color: var(--color-success-bg);
+  color: var(--color-success);
   font-weight: 600;
   font-size: 0.875rem;
+  border: 1px solid var(--color-medical-green-200);
+  box-shadow: 0 1px 2px rgba(5, 150, 105, 0.1);
+}
+
+.status-stable {
+  display: inline-flex;
+  align-items: center;
+  padding: 0.25rem 0.75rem;
+  border-radius: var(--border-radius-md);
+  background-color: var(--color-stable-bg);
+  color: var(--color-stable);
+  font-weight: 600;
+  font-size: 0.875rem;
+  border: 1px solid var(--color-medical-blue-200);
+  box-shadow: 0 1px 2px rgba(0, 82, 163, 0.1);
+}
+
+.status-specialist {
+  display: inline-flex;
+  align-items: center;
+  padding: 0.25rem 0.75rem;
+  border-radius: var(--border-radius-md);
+  background-color: var(--color-specialist-bg);
+  color: var(--color-specialist);
+  font-weight: 600;
+  font-size: 0.875rem;
+  border: 1px solid var(--color-medical-purple-200);
+  box-shadow: 0 1px 2px rgba(147, 51, 234, 0.1);
 }
 
 /* Mobile Grid Layouts */
@@ -276,7 +515,12 @@
 
 /* Loading States */
 .skeleton {
-  background: linear-gradient(90deg, var(--color-gray-200) 25%, var(--color-gray-100) 50%, var(--color-gray-200) 75%);
+  background: linear-gradient(
+    90deg,
+    var(--color-gray-200) 25%,
+    var(--color-gray-100) 50%,
+    var(--color-gray-200) 75%
+  );
   background-size: 200% 100%;
   animation: skeleton-loading 1.5s infinite;
 }
@@ -299,6 +543,281 @@
   direction: rtl;
 }
 
+/* Medical Card Components */
+.medical-card {
+  background: var(--color-background);
+  border: 1px solid var(--color-border);
+  border-radius: var(--border-radius-lg);
+  padding: 1.5rem;
+  box-shadow: var(--shadow-sm);
+  transition: all 0.2s ease-in-out;
+  position: relative;
+}
+
+.medical-card:hover {
+  box-shadow: var(--shadow-md);
+  transform: translateY(-1px);
+}
+
+.medical-card-critical {
+  border-left: 4px solid var(--color-critical);
+  background: linear-gradient(to right, var(--color-critical-bg), var(--color-background));
+}
+
+.medical-card-urgent {
+  border-left: 4px solid var(--color-urgent);
+  background: linear-gradient(to right, var(--color-urgent-bg), var(--color-background));
+}
+
+.medical-card-stable {
+  border-left: 4px solid var(--color-stable);
+  background: linear-gradient(to right, var(--color-stable-bg), var(--color-background));
+}
+
+/* Consultation Priority Headers */
+.consultation-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 1rem;
+  padding-bottom: 0.75rem;
+  border-bottom: 1px solid var(--color-border);
+}
+
+.consultation-priority {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-weight: 600;
+}
+
+.priority-indicator {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  animation: pulse 2s infinite;
+}
+
+.priority-critical .priority-indicator {
+  background-color: var(--color-critical);
+}
+
+.priority-urgent .priority-indicator {
+  background-color: var(--color-urgent);
+}
+
+.priority-warning .priority-indicator {
+  background-color: var(--color-warning);
+}
+
+/* Medical Progress Indicators */
+.medical-progress {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin: 1rem 0;
+}
+
+.progress-step {
+  flex: 1;
+  height: 4px;
+  background-color: var(--color-gray-200);
+  border-radius: 2px;
+  position: relative;
+  overflow: hidden;
+}
+
+.progress-step.completed {
+  background-color: var(--color-success);
+}
+
+.progress-step.active {
+  background-color: var(--color-primary);
+}
+
+.progress-step.active::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.6), transparent);
+  animation: shimmer 2s infinite;
+}
+
+@keyframes shimmer {
+  100% {
+    left: 100%;
+  }
+}
+
+/* Medical Forms */
+.medical-form {
+  background: var(--color-background);
+  border: 1px solid var(--color-border);
+  border-radius: var(--border-radius-lg);
+  padding: 2rem;
+}
+
+.form-section {
+  margin-bottom: 2rem;
+}
+
+.form-section-title {
+  font-weight: 600;
+  font-size: 1.125rem;
+  color: var(--color-primary);
+  margin-bottom: 1rem;
+  padding-bottom: 0.5rem;
+  border-bottom: 2px solid var(--color-primary-100);
+}
+
+.medical-input {
+  width: 100%;
+  padding: 0.75rem;
+  border: 2px solid var(--color-border);
+  border-radius: var(--border-radius-md);
+  font-size: 1rem;
+  transition: all 0.2s ease-in-out;
+  background: var(--color-background);
+}
+
+.medical-input:focus {
+  outline: none;
+  border-color: var(--color-primary);
+  box-shadow: 0 0 0 3px var(--color-primary-100);
+}
+
+.medical-input.error {
+  border-color: var(--color-critical);
+  box-shadow: 0 0 0 3px var(--color-critical-bg);
+}
+
+.medical-textarea {
+  min-height: 120px;
+  resize: vertical;
+}
+
+/* Gaza Cultural Elements */
+.gaza-flag-accent {
+  background: linear-gradient(
+    135deg,
+    var(--color-gaza-red) 0%,
+    var(--color-gaza-white) 33%,
+    var(--color-gaza-white) 66%,
+    var(--color-gaza-green) 100%
+  );
+  height: 4px;
+  width: 100%;
+  margin: 1rem 0;
+}
+
+.cultural-divider {
+  display: flex;
+  align-items: center;
+  margin: 2rem 0;
+  color: var(--color-gray-500);
+}
+
+.cultural-divider::before,
+.cultural-divider::after {
+  content: "";
+  flex: 1;
+  height: 1px;
+  background: var(--color-border);
+}
+
+.cultural-divider span {
+  padding: 0 1rem;
+  font-size: 0.875rem;
+  color: var(--color-gaza-green);
+  font-weight: 500;
+}
+
+/* Specialist Verification Badges */
+.verification-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.25rem;
+  padding: 0.25rem 0.5rem;
+  background: var(--color-success-bg);
+  color: var(--color-success);
+  border: 1px solid var(--color-medical-green-200);
+  border-radius: var(--border-radius-md);
+  font-size: 0.75rem;
+  font-weight: 600;
+}
+
+.verification-badge::before {
+  content: "✓";
+  font-weight: bold;
+}
+
+.gmc-badge {
+  background: var(--color-primary-50);
+  color: var(--color-primary-700);
+  border-color: var(--color-medical-blue-200);
+}
+
+.specialist-badge {
+  background: var(--color-specialist-bg);
+  color: var(--color-specialist);
+  border-color: var(--color-medical-purple-200);
+}
+
+/* Medical Data Tables */
+.medical-table {
+  width: 100%;
+  border-collapse: collapse;
+  background: var(--color-background);
+  border: 1px solid var(--color-border);
+  border-radius: var(--border-radius-lg);
+  overflow: hidden;
+  box-shadow: var(--shadow-sm);
+}
+
+.medical-table th,
+.medical-table td {
+  padding: 0.75rem 1rem;
+  text-align: left;
+  border-bottom: 1px solid var(--color-border);
+}
+
+.medical-table th {
+  background: var(--color-gray-50);
+  font-weight: 600;
+  color: var(--color-gray-700);
+  font-size: 0.875rem;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.medical-table tbody tr:hover {
+  background: var(--color-gray-25);
+}
+
+.medical-table tbody tr:last-child td {
+  border-bottom: none;
+}
+
+/* Emergency Flash Animation */
+.emergency-flash {
+  animation: emergency-pulse 1s infinite alternate;
+}
+
+@keyframes emergency-pulse {
+  0% {
+    background-color: var(--color-critical-bg);
+    border-color: var(--color-critical);
+  }
+  100% {
+    background-color: var(--color-critical);
+    border-color: var(--color-critical);
+    color: white;
+  }
+}
+
 /* High Contrast Mode Support */
 @media (prefers-contrast: high) {
   .btn-primary,
@@ -306,8 +825,24 @@
   .btn-urgent {
     border: 2px solid currentColor;
   }
-  
-  .card {
+
+  .card,
+  .medical-card,
+  .medical-form {
     border: 2px solid var(--color-border);
+  }
+
+  .medical-input {
+    border-width: 2px;
+  }
+
+  .status-critical,
+  .status-urgent,
+  .status-warning,
+  .status-success,
+  .status-stable,
+  .status-specialist {
+    border-width: 2px;
+    font-weight: 700;
   }
 }

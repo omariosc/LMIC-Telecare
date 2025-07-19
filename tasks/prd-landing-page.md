@@ -74,7 +74,7 @@ The landing page must convey that while hospitals in Gaza are far beyond capacit
    - 5.5 The page must include map visualization placeholder for global connections
 
 6. **Trust & Testimonials**
-   - 6.1 The page must prominently display GMC verification badge and process
+   - 6.1 The page must prominently display GMC verification process
    - 6.2 The page must feature UK doctor testimonials with photos and credentials
    - 6.3 The page must show projected success rate statistics
    - 6.4 The page must include security certification badges

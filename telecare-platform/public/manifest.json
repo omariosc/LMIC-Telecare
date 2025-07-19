@@ -20,7 +20,7 @@
       "label": "Landing page showing crisis and solution"
     },
     {
-      "src": "/screenshots/desktop-hero.png", 
+      "src": "/screenshots/desktop-hero.png",
       "sizes": "1280x720",
       "type": "image/png",
       "form_factor": "wide",

@@ -1,0 +1,47 @@
+# Build outputs
+.next/
+out/
+build/
+dist/
+
+# Dependencies
+node_modules/
+
+# Logs
+*.log
+
+# Environment files
+.env*
+
+# Coverage reports
+coverage/
+
+# Cache directories
+.cache/
+.parcel-cache/
+
+# Temporary files
+*.tmp
+*.temp
+
+# Generated files
+*.generated.*
+*.d.ts
+
+# Package manager files
+package-lock.json
+yarn.lock
+pnpm-lock.yaml
+
+# IDE files
+.vscode/
+.idea/
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# PWA files
+public/sw.js
+public/workbox-*.js
+public/fallback-*.html

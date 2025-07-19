@@ -3,44 +3,44 @@ import withPWA from "next-pwa";
 
 const nextConfig: NextConfig = {
   reactStrictMode: true,
-  
+
   // Experimental features disabled temporarily to fix critters dependency
   // experimental: {
   //   optimizeCss: true,
   // },
-  
+
   // Image optimization configuration
   images: {
-    formats: ['image/avif', 'image/webp'],
+    formats: ["image/avif", "image/webp"],
     minimumCacheTTL: 60 * 60 * 24 * 365, // 1 year
   },
-  
+
   // Headers for security and PWA
   async headers() {
     return [
       {
-        source: '/(.*)',
+        source: "/(.*)",
         headers: [
           {
-            key: 'X-Content-Type-Options',
-            value: 'nosniff',
+            key: "X-Content-Type-Options",
+            value: "nosniff",
           },
           {
-            key: 'X-Frame-Options',
-            value: 'DENY',
+            key: "X-Frame-Options",
+            value: "DENY",
           },
           {
-            key: 'X-XSS-Protection',
-            value: '1; mode=block',
+            key: "X-XSS-Protection",
+            value: "1; mode=block",
           },
         ],
       },
       {
-        source: '/sw.js',
+        source: "/sw.js",
         headers: [
           {
-            key: 'Cache-Control',
-            value: 'public, max-age=0, must-revalidate',
+            key: "Cache-Control",
+            value: "public, max-age=0, must-revalidate",
           },
         ],
       },
@@ -49,16 +49,16 @@ const nextConfig: NextConfig = {
 };
 
 export default withPWA({
-  dest: 'public',
+  dest: "public",
   register: true,
   skipWaiting: true,
-  disable: process.env.NODE_ENV === 'development',
+  disable: process.env.NODE_ENV === "development",
   runtimeCaching: [
     {
       urlPattern: /^https?.*/,
-      handler: 'NetworkFirst',
+      handler: "NetworkFirst",
       options: {
-        cacheName: 'offlineCache',
+        cacheName: "offlineCache",
         expiration: {
           maxEntries: 200,
           maxAgeSeconds: 24 * 60 * 60 * 30, // 30 days
@@ -68,9 +68,9 @@ export default withPWA({
     },
     {
       urlPattern: /\.(?:png|jpg|jpeg|svg|gif|webp|avif)$/,
-      handler: 'CacheFirst',
+      handler: "CacheFirst",
       options: {
-        cacheName: 'images',
+        cacheName: "images",
         expiration: {
           maxEntries: 100,
           maxAgeSeconds: 24 * 60 * 60 * 7, // 7 days
@@ -79,9 +79,9 @@ export default withPWA({
     },
     {
       urlPattern: /\.(?:js|css|woff|woff2|ttf|eot)$/,
-      handler: 'CacheFirst',
+      handler: "CacheFirst",
       options: {
-        cacheName: 'static-resources',
+        cacheName: "static-resources",
         expiration: {
           maxEntries: 100,
           maxAgeSeconds: 24 * 60 * 60 * 7, // 7 days

@@ -9,9 +9,18 @@ const inter = Inter({
 });
 
 export const metadata: Metadata = {
-  title: "Telecare Platform for Gaza - Connecting UK Doctors with Gaza Clinicians",
-  description: "Bridge the healthcare gap by connecting verified UK medical specialists with clinicians in Gaza for life-saving remote consultations.",
-  keywords: ["telecare", "telemedicine", "Gaza", "healthcare", "medical consultation", "UK doctors"],
+  title:
+    "Telecare Platform for Gaza - Connecting UK Doctors with Gaza Clinicians",
+  description:
+    "Bridge the healthcare gap by connecting verified UK medical specialists with clinicians in Gaza for life-saving remote consultations.",
+  keywords: [
+    "telecare",
+    "telemedicine",
+    "Gaza",
+    "healthcare",
+    "medical consultation",
+    "UK doctors",
+  ],
   authors: [{ name: "Telecare Platform Team" }],
   manifest: "/manifest.json",
   openGraph: {
@@ -50,16 +59,28 @@ export default function RootLayout({
   return (
     <html lang="en" className={inter.variable}>
       <head>
-        <link rel="apple-touch-icon" sizes="180x180" href="/icons/icon-180x180.png" />
-        <link rel="icon" type="image/png" sizes="32x32" href="/icons/icon-32x32.png" />
-        <link rel="icon" type="image/png" sizes="16x16" href="/icons/icon-16x16.png" />
+        <link
+          rel="apple-touch-icon"
+          sizes="180x180"
+          href="/icons/icon-180x180.png"
+        />
+        <link
+          rel="icon"
+          type="image/png"
+          sizes="32x32"
+          href="/icons/icon-32x32.png"
+        />
+        <link
+          rel="icon"
+          type="image/png"
+          sizes="16x16"
+          href="/icons/icon-16x16.png"
+        />
       </head>
       <body className="font-sans antialiased">
         {/* Future AuthProvider will wrap children here */}
-        <div id="__next">
-          {children}
-        </div>
-        
+        <div id="__next">{children}</div>
+
         {/* PWA Components */}
         <div id="pwa-components">
           {/* These will be imported dynamically in production */}

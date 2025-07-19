@@ -1,0 +1,10 @@
+export { Hero } from "./Hero";
+export { ProblemStatement } from "./ProblemStatement";
+export { HowItWorks } from "./HowItWorks";
+export { Features } from "./Features";
+export { ImpactMetrics } from "./ImpactMetrics";
+export { Testimonials } from "./Testimonials";
+export { FAQ } from "./FAQ";
+export { Partners } from "./Partners";
+export { CTA } from "./CTA";
+export { Donation } from "./Donation";
