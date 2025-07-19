@@ -1,0 +1,118 @@
+{
+  "common": {
+    "loading": "Loading...",
+    "error": "Error",
+    "submit": "Submit",
+    "cancel": "Cancel",
+    "save": "Save",
+    "close": "Close",
+    "yes": "Yes",
+    "no": "No"
+  },
+  "navigation": {
+    "home": "Home",
+    "features": "Features",
+    "howItWorks": "How It Works",
+    "join": "Join",
+    "donate": "Donate",
+    "language": "العربية",
+    "loginGazaClinic": "Login (Gaza Clinician)",
+    "loginUkClinic": "Login (UK Clinician)",
+    "registerUkClinic": "Register (UK Clinician)"
+  },
+  "hero": {
+    "title": "Their Hospitals Are Beyond Capacity.",
+    "subtitle": "Your Expertise is Their Lifeline.",
+    "description": "Jusur (جسور) is the Arabic word for bridges. Just because we cannot get physical aid into Gaza, it does not mean we cannot provide them support, bridging our knowledge to people who need it the most.",
+    "stat1": "2.3 Million",
+    "stat1Desc": "People need urgent healthcare",
+    "stat2": "Only 17/36",
+    "stat2Desc": "Hospitals partially functional",
+    "stat3": "90%",
+    "stat3Desc": "Shortage of specialists",
+    "stat4": "Limited",
+    "stat4Desc": "Medical supply access",
+    "agreementText": "UK Doctors Agree*: Your remote guidance is currently the #1 most impactful intervention.",
+    "descriptionLong": "In Gaza, hospitals are overwhelmed, operating at over 350% capacity with a critical shortage of specialist doctors. Triage is happening, but without the right expertise to guide complex treatments, lives that could be saved are being lost. When physical aid cannot get in, knowledge is the most powerful resource we can send.",
+    "ctaUkDoctor": "Register as UK Doctor",
+    "ctaEmergency": "Emergency Consultation",
+    "disclaimer": "*Based on a limited survey of consultant surgeons and general practitioners across the UK."
+  },
+  "specialists": {
+    "title": "Why UK Medical Specialists Are Critical",
+    "remoteExpertise": "Remote Consultation Expertise",
+    "remoteExpertiseDesc": "UK doctors provide life-saving specialist guidance when local expertise is overwhelmed or unavailable.",
+    "immediateAccess": "Immediate Access, Breaking Barriers",
+    "immediateAccessDesc": "Digital consultations bypass physical restrictions and blockade limitations to deliver urgent medical support."
+  },
+  "challenges": {
+    "title": "Critical Challenges in Gaza Healthcare",
+    "complexTrauma": "Complex Trauma",
+    "complexTraumaDesc": "Limited advanced surgical expertise for complex blast injuries",
+    "trainingDeficit": "Training Deficit",
+    "trainingDeficitDesc": "Limited opportunities for continuing education and skill development",
+    "diagnosticLimitations": "Diagnostic Limitations",
+    "diagnosticLimitationsDesc": "Lack of diagnostic modalities like pathology and advanced imaging",
+    "multidisciplinaryGap": "Multidisciplinary Gap",
+    "multidisciplinaryGapDesc": "Lack of experts in some specialties which hinders the implementation of multidisciplinary coordinated team-based approaches to complex cases",
+    "connectivityIssues": "Connectivity Issues",
+    "connectivityIssuesDesc": "Internet availability limited to few hours daily with low average speeds",
+    "deviceLimitations": "Device Limitations",
+    "deviceLimitationsDesc": "Shortage of computing devices, solutions must work on basic smartphones",
+    "powerRestrictions": "Power Restrictions",
+    "powerRestrictionsDesc": "Electricity available almost only in hospitals or medical points",
+    "dataSecurity": "Data Security Concerns",
+    "dataSecurityDesc": "Patient privacy must be maintained despite infrastructure challenges",
+    "conclusionText": "Your expertise can bridge the gap between critical need and life-saving care."
+  },
+  "features": {
+    "title": "Platform Features",
+    "subtitle": "Humanitarian medical technology designed specifically for Gaza's healthcare crisis.",
+    "emergencyConsultation": "Emergency Consultation",
+    "emergencyConsultationDesc": "24/7 instant access to UK specialists for critical emergencies.",
+    "secureVideoCalls": "Secure Video Calls",
+    "secureVideoCallsDesc": "Encrypted video and chat between Gaza clinicians and UK experts.",
+    "expertMatching": "Expert Matching",
+    "expertMatchingDesc": "Intelligent specialist matching based on medical expertise and availability.",
+    "medicalRecords": "Medical Records",
+    "medicalRecordsDesc": "Secure patient data documentation and medical record management.",
+    "offlineAccess": "Offline Access",
+    "offlineAccessDesc": "Works offline with limited internet - designed for Gaza's connectivity challenges.",
+    "arabicEnglishSupport": "Arabic-English Support",
+    "arabicEnglishSupportDesc": "Full multilingual interface with medical translation capabilities.",
+    "endToEndEncrypted": "End-to-End Encrypted",
+    "hipaaCompliant": "HIPAA Compliant",
+    "globallyAccessible": "Globally Accessible",
+    "realTimeSync": "Real-time Sync"
+  },
+  "howItWorks": {
+    "title": "Simple, Secure, and Built for Impact",
+    "step1Title": "Register & Verify",
+    "step1Desc": "Securely verify your GMC credentials in minutes.",
+    "step2Title": "Connect on Your Terms",
+    "step2Desc": "Set your availability for on-call pings, MDTs, or forum consults.",
+    "step3Title": "Guide and Save Lives",
+    "step3Desc": "Provide life-saving guidance through our secure, low-bandwidth platform."
+  },
+  "joinMission": {
+    "title": "Join the Mission to Save Lives in Gaza",
+    "gazaClinicianTitle": "Gaza Clinicians",
+    "gazaClinicianDesc": "Register for free, immediate access to verified UK specialists for emergency consultations. Requires referral code.",
+    "gazaClinicianCta": "Login Now",
+    "ukSpecialistTitle": "UK Medical Specialists",
+    "ukSpecialistDesc": "Volunteer your expertise to provide critical medical consultations when traditional aid channels are restricted.",
+    "ukSpecialistCta": "Sign Up to Help",
+    "supportTitle": "Support Gaza",
+    "supportDesc": "Can't provide medical expertise? Support our platform and help fund critical medical equipment for Gaza.",
+    "supportCta": "Donate Now"
+  },
+  "footer": {
+    "title": "Jusur (جسور)",
+    "description": "Combining research from the \"Hack for Gaza 2025 Hackathon\" to inform evidence-based innovation.",
+    "winnerText": "Hack for Gaza 2025 Winner (إن شاء الله)",
+    "copyright": "© 2025 Jusur (جسور) Platform. All rights reserved."
+  },
+  "screenWarning": {
+    "message": "Screen width too small. Jusur (جسور) is not supported on your device."
+  }
+}

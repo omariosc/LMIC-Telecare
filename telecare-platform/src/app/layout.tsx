@@ -9,7 +9,7 @@ const inter = Inter({
 });
 
 export const metadata: Metadata = {
-  title: "Jusur (جسور) - Bridging Medical Knowledge to Gaza",
+  title: "Jusur (جسور)",
   description:
     "Jusur (جسور) is a humanitarian platform connecting UK medical specialists with frontline clinicians in Gaza to provide life-saving guidance. Bridging knowledge where physical aid cannot reach.",
   keywords: [

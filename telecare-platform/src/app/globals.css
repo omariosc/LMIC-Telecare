@@ -24,6 +24,162 @@
     font-family: "Noto Sans Arabic", sans-serif;
   }
 
+  /* RTL-specific styles */
+  html[dir="rtl"] {
+    direction: rtl;
+  }
+
+  html[dir="rtl"] .container {
+    text-align: right;
+  }
+
+  /* RTL Text alignment fixes */
+  html[dir="rtl"] .text-center {
+    text-align: center !important;
+  }
+
+  /* RTL Card layout fixes */
+  html[dir="rtl"] .flex.items-center.gap-3 {
+    flex-direction: row-reverse;
+  }
+
+  html[dir="rtl"] .flex.items-center.gap-2 {
+    flex-direction: row-reverse;
+  }
+
+  /* RTL Navigation fixes */
+  html[dir="rtl"] .flex {
+    flex-direction: row-reverse;
+  }
+
+  html[dir="rtl"] .space-x-3 > * + * {
+    margin-left: 0;
+    margin-right: 0.75rem;
+  }
+
+  html[dir="rtl"] .gap-3 {
+    gap: 0.75rem;
+  }
+
+  /* RTL Grid fixes */
+  html[dir="rtl"] .grid {
+    direction: ltr; /* Keep grid items in proper order */
+  }
+
+  html[dir="rtl"] .grid > * {
+    direction: rtl; /* But content inside should be RTL */
+  }
+
+  /* RTL Button and link fixes */
+  html[dir="rtl"] .justify-center {
+    text-align: center;
+  }
+
+  html[dir="rtl"] .text-center {
+    text-align: center;
+  }
+
+  html[dir="rtl"] .text-left {
+    text-align: right;
+  }
+
+  html[dir="rtl"] .text-right {
+    text-align: left;
+  }
+
+  /* RTL Margin and padding fixes */
+  html[dir="rtl"] .ml-1 {
+    margin-left: 0;
+    margin-right: 0.25rem;
+  }
+  html[dir="rtl"] .mr-1 {
+    margin-right: 0;
+    margin-left: 0.25rem;
+  }
+  html[dir="rtl"] .ml-2 {
+    margin-left: 0;
+    margin-right: 0.5rem;
+  }
+  html[dir="rtl"] .mr-2 {
+    margin-right: 0;
+    margin-left: 0.5rem;
+  }
+  html[dir="rtl"] .ml-3 {
+    margin-left: 0;
+    margin-right: 0.75rem;
+  }
+  html[dir="rtl"] .mr-3 {
+    margin-right: 0;
+    margin-left: 0.75rem;
+  }
+  html[dir="rtl"] .ml-4 {
+    margin-left: 0;
+    margin-right: 1rem;
+  }
+  html[dir="rtl"] .mr-4 {
+    margin-right: 0;
+    margin-left: 1rem;
+  }
+
+  html[dir="rtl"] .pl-1 {
+    padding-left: 0;
+    padding-right: 0.25rem;
+  }
+  html[dir="rtl"] .pr-1 {
+    padding-right: 0;
+    padding-left: 0.25rem;
+  }
+  html[dir="rtl"] .pl-2 {
+    padding-left: 0;
+    padding-right: 0.5rem;
+  }
+  html[dir="rtl"] .pr-2 {
+    padding-right: 0;
+    padding-left: 0.5rem;
+  }
+  html[dir="rtl"] .pl-3 {
+    padding-left: 0;
+    padding-right: 0.75rem;
+  }
+  html[dir="rtl"] .pr-3 {
+    padding-right: 0;
+    padding-left: 0.75rem;
+  }
+  html[dir="rtl"] .pl-4 {
+    padding-left: 0;
+    padding-right: 1rem;
+  }
+  html[dir="rtl"] .pr-4 {
+    padding-right: 0;
+    padding-left: 1rem;
+  }
+  html[dir="rtl"] .pl-6 {
+    padding-left: 0;
+    padding-right: 1.5rem;
+  }
+  html[dir="rtl"] .pr-6 {
+    padding-right: 0;
+    padding-left: 1.5rem;
+  }
+
+  /* RTL Position fixes */
+  html[dir="rtl"] .left-0 {
+    left: auto;
+    right: 0;
+  }
+  html[dir="rtl"] .right-0 {
+    right: auto;
+    left: 0;
+  }
+
+  /* RTL Border radius fixes */
+  html[dir="rtl"] .rounded-l {
+    border-radius: 0 0.375rem 0.375rem 0;
+  }
+  html[dir="rtl"] .rounded-r {
+    border-radius: 0.375rem 0 0 0.375rem;
+  }
+
   html {
     scroll-behavior: smooth;
   }
@@ -157,100 +313,4 @@ html[dir="rtl"] .faq-accordion details > summary .plus-minus::before {
 
 .partner-logo-container:hover {
   filter: grayscale(0%) opacity(100%);
-}
-
-/* Animation keyframes */
-@keyframes fadeInUp {
-  from {
-    opacity: 0;
-    transform: translateY(30px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
-}
-
-@keyframes fadeIn {
-  from {
-    opacity: 0;
-  }
-  to {
-    opacity: 1;
-  }
-}
-
-@keyframes slideInLeft {
-  from {
-    opacity: 0;
-    transform: translateX(-30px);
-  }
-  to {
-    opacity: 1;
-    transform: translateX(0);
-  }
-}
-
-@keyframes slideInRight {
-  from {
-    opacity: 0;
-    transform: translateX(30px);
-  }
-  to {
-    opacity: 1;
-    transform: translateX(0);
-  }
-}
-
-/* Animation classes */
-.initial-hidden {
-  opacity: 0;
-}
-
-.animate-fadeInUp {
-  animation: fadeInUp 0.8s ease-out forwards;
-}
-
-.animate-fadeIn {
-  animation: fadeIn 0.8s ease-out forwards;
-}
-
-.animate-slideInLeft {
-  animation: slideInLeft 0.8s ease-out forwards;
-}
-
-.animate-slideInRight {
-  animation: slideInRight 0.8s ease-out forwards;
-}
-
-.animation-delay-200 {
-  animation-delay: 0.2s;
-}
-
-.animation-delay-400 {
-  animation-delay: 0.4s;
-}
-
-.animation-delay-600 {
-  animation-delay: 0.6s;
-}
-
-.animation-delay-800 {
-  animation-delay: 0.8s;
-}
-
-.animation-delay-1000 {
-  animation-delay: 1s;
-}
-
-/* Reduced motion preferences */
-@media (prefers-reduced-motion: reduce) {
-  *,
-  *::before,
-  *::after {
-    animation-duration: 0.01ms !important;
-    animation-iteration-count: 1 !important;
-    transition-duration: 0.01ms !important;
-    scroll-behavior: auto !important;
-  }
 }

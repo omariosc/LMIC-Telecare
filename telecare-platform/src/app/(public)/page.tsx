@@ -26,29 +26,60 @@ import {
   EyeSlashIcon,
   FireIcon,
 } from "@heroicons/react/24/outline";
+import { useEffect, useState } from "react";
+import { useLanguage } from "@/hooks/useLanguage";
+
+// Function to check if screen is too small
+const isScreenTooSmall = () => {
+  if (typeof window === "undefined") return false;
+  return window.innerWidth < 300 || window.innerHeight < 300;
+};
 
 export default function Home() {
-  return (
-    <>
-      {/* Small Device Warning - Shows for screens under 250px */}
-      <div className="fixed inset-0 bg-[#0A2540] text-white items-center justify-center z-[9999] px-4 text-center hidden">
+  const [showSmallScreenWarning, setShowSmallScreenWarning] = useState(false);
+
+  const { language, direction, isLoading, toggleLanguage } = useLanguage();
+
+  useEffect(() => {
+    const checkScreenSize = () => {
+      const isTooSmall = isScreenTooSmall();
+      setShowSmallScreenWarning(isTooSmall);
+    };
+
+    // Check immediately on mount
+    checkScreenSize();
+    
+    // Check on resize
+    window.addEventListener("resize", checkScreenSize);
+
+    // Cleanup
+    return () => window.removeEventListener("resize", checkScreenSize);
+  }, []);
+
+  // If screen is too small, only show the warning - no other content
+  if (showSmallScreenWarning) {
+    return (
+      <div className="fixed inset-0 bg-gradient-to-b from-green-800 to-green-950 text-white flex items-center justify-center z-[9999] px-4 text-center">
         <div>
-          <div className="text-4xl mb-4">📱</div>
-          <h1 className="text-lg font-bold mb-2">
-            Your device is too small for Jusur (جسور)
+          <h1 className="text-lg font-bold text-white">
+            Screen width too small. Jusur (جسور) is not supported on your
+            device.
           </h1>
-          <p className="text-sm text-gray-300">
-            Please use a larger screen or rotate your device
-          </p>
         </div>
       </div>
+    );
+  }
 
+  return (
+    <div data-language={language} data-direction={direction}>
       {/* Header & Navigation - Fixed Top */}
-      <header className="bg-white fixed top-0 left-0 right-0 z-50">
+      <header className="bg-white opacity-95 fixed top-0 left-0 right-0 z-50">
         <nav className="container mx-auto px-4 py-4 flex justify-between items-center min-h-[64px]">
           {/* Logo - Top Left */}
           <div className="font-extrabold text-xl text-[#0A2540] flex items-center gap-2">
-            <span data-lang-en="">Jusur <span className="hide-nav">(جسور)</span></span>
+            <span data-lang-en="">
+              Jusur <span className="hide-nav">(جسور)</span>
+            </span>
             <span data-lang-ar="" className="hidden">
               جسور
             </span>
@@ -60,9 +91,8 @@ export default function Home() {
               Winner (إن شاء الله)
             </span>
             <span
-              className="hide-nav text-yellow-700 text-sm font-semibold"
+              className="hide-nav text-yellow-700 text-sm font-semibold hidden"
               data-lang-ar=""
-              style={{ display: "none" }}
             >
               فائز (إن شاء الله)
             </span>
@@ -87,7 +117,9 @@ export default function Home() {
             {/* Language Toggle */}
             <button
               id="lang-toggle"
-              className="bg-gray-100 text-gray-700 px-3 py-2 rounded-full font-semibold text-sm hover:bg-gray-200 transition-colors"
+              onClick={toggleLanguage}
+              className="bg-gray-100 text-gray-700 px-3 py-2 rounded-full font-semibold text-sm hover:bg-gray-200 transition-colors cursor-pointer"
+              disabled={isLoading}
             >
               <span data-lang-en="">ع</span>
               <span data-lang-ar="" className="hidden">
@@ -156,16 +188,17 @@ export default function Home() {
         {/* Hero Section */}
         <section className="bg-gradient-to-b from-green-800 to-green-950 text-white text-center pt-28 pb-20 px-6">
           <div className="container mx-auto">
-            <h1 className="text-4xl md:text-6xl font-extrabold leading-tight initial-hidden animate-fadeInUp">
+            <h1 className="text-4xl md:text-6xl font-extrabold leading-tight initial-hidden">
               <span data-lang-en="">
-                Their Hospitals Are Beyond Capacity. Your Expertise is Their
-                Lifeline.
+                Their Hospitals Are Beyond Capacity.
+                <br />
+                Your Expertise is Their Lifeline.
               </span>
               <span data-lang-ar="" className="hidden">
                 نظام صحي على وشك الانهيار
               </span>
             </h1>
-            <div className="mt-6 text-lg md:text-xl text-gray-200 max-w-4xl mx-auto initial-hidden animate-fadeInUp animation-delay-200">
+            <div className="mt-6 text-lg md:text-xl text-gray-200 max-w-5xl mx-auto initial-hidden">
               <p>
                 <span data-lang-en="">
                   <strong>Jusur (جسور)</strong> is the Arabic word for bridges.
@@ -174,17 +207,19 @@ export default function Home() {
                   people who need it the <em>most</em>.
                 </span>
                 <span data-lang-ar="" className="hidden">
-                  <strong>جسور</strong> كلمة عربية تعني الجسور. مجرد أننا لا
-                  نستطيع إدخال المساعدات المادية إلى غزة، لا يعني أننا لا نستطيع
-                  تقديم الدعم لهم، وربط معرفتنا بالأشخاص الذين يحتاجونها أكثر من
-                  غيرهم.
+                  مجرد أننا لا نستطيع إدخال المساعدات المادية إلى غزة، لا يعني
+                  أننا لا نستطيع تقديم الدعم لهم، وربط معرفتنا بالأشخاص الذين
+                  يحتاجونها أكثر من غيرهم.
                 </span>
               </p>
             </div>
             <div className="mt-8 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 max-w-7xl mx-auto text-center">
-              <div className="bg-white p-6 rounded-xl shadow-md initial-hidden animate-fadeInUp hover:shadow-xl transition-shadow duration-300">
+              <div className="bg-white p-6 rounded-xl shadow-md initial-hidden hover:shadow-xl transition-shadow duration-300">
                 <h3 className="text-4xl font-extrabold text-red-500">
-                  2.3 Million
+                  <span data-lang-en="">2.3 Million</span>
+                  <span data-lang-ar="" className="hidden">
+                    2.3 مليون
+                  </span>
                 </h3>
                 <p className="mt-2 font-semibold text-gray-600">
                   <span data-lang-en="">People need urgent healthcare</span>
@@ -193,9 +228,12 @@ export default function Home() {
                   </span>
                 </p>
               </div>
-              <div className="bg-white p-6 rounded-xl shadow-md initial-hidden animate-fadeInUp animation-delay-200 hover:shadow-xl transition-shadow duration-300">
+              <div className="bg-white p-6 rounded-xl shadow-md initial-hidden hover:shadow-xl transition-shadow duration-300">
                 <h3 className="text-4xl font-extrabold text-red-500">
-                  Only 17/36
+                  <span data-lang-en="">Only 17</span>
+                  <span data-lang-ar="" className="hidden">
+                    17 فقط
+                  </span>
                 </h3>
                 <p className="mt-2 font-semibold text-gray-600">
                   <span data-lang-en="">
@@ -208,8 +246,13 @@ export default function Home() {
                   </span>
                 </p>
               </div>
-              <div className="bg-white p-6 rounded-xl shadow-md initial-hidden animate-fadeInUp animation-delay-400 hover:shadow-xl transition-shadow duration-300">
-                <h3 className="text-4xl font-extrabold text-red-500">90%</h3>
+              <div className="bg-white p-6 rounded-xl shadow-md initial-hidden hover:shadow-xl transition-shadow duration-300">
+                <h3 className="text-4xl font-extrabold text-red-500">
+                  <span data-lang-en="">90%</span>
+                  <span data-lang-ar="" className="hidden">
+                    90%
+                  </span>
+                </h3>
                 <p className="mt-2 font-semibold text-gray-600">
                   <span data-lang-en="">Shortage of specialists</span>
                   <span data-lang-ar="" className="hidden">
@@ -217,9 +260,12 @@ export default function Home() {
                   </span>
                 </p>
               </div>
-              <div className="bg-white p-6 rounded-xl shadow-md initial-hidden animate-fadeInUp animation-delay-600 hover:shadow-xl transition-shadow duration-300">
+              <div className="bg-white p-6 rounded-xl shadow-md initial-hidden hover:shadow-xl transition-shadow duration-300">
                 <h3 className="text-4xl font-extrabold text-red-500">
-                  Limited
+                  <span data-lang-en="">Limited</span>
+                  <span data-lang-ar="" className="hidden">
+                    محدود
+                  </span>
                 </h3>
                 <p className="mt-2 font-semibold text-gray-600">
                   <span data-lang-en="">Medical supply access</span>
@@ -237,8 +283,8 @@ export default function Home() {
                     currently the #1 most impactful intervention.
                   </span>
                   <span data-lang-ar="" className="hidden">
-                    <strong>100% من جراحي بريطانيا يوافقون:</strong> إرشادك عن
-                    بعد هو التدخل الأكثر تأثيراً.
+                    <strong>أطباء بريطانيا يوافقون*:</strong> إرشادك عن بعد هو
+                    التدخل الأكثر تأثيراً.
                   </span>
                 </p>
               </div>
@@ -264,18 +310,18 @@ export default function Home() {
             </p>
             <div className="mt-10 flex flex-col sm:flex-row justify-center items-center gap-4">
               <a
-                href="#"
-                className="w-full sm:w-auto bg-white text-[#0A2540] px-8 py-3 rounded-full font-bold text-lg hover:bg-gray-200 transition-transform transform hover:scale-105 flex items-center justify-center gap-3 initial-hidden animate-slideInLeft animation-delay-800"
+                href="https://forms.gle/G5JNgJtSJKcNbRRF6"
+                className="w-full sm:w-auto bg-white text-[#0A2540] px-8 py-3 rounded-full font-bold text-lg hover:bg-gray-200 transition-transform transform hover:scale-105 flex items-center justify-center gap-3 initial-hidden"
               >
                 <UserPlusIcon className="h-6 w-6" />
-                <span data-lang-en="">Register as UK Doctor</span>
+                <span data-lang-en="">Register Interest</span>
                 <span data-lang-ar="" className="hidden">
-                  سجل كطبيب بريطاني
+                  تسجيل الاهتمام
                 </span>
               </a>
               <a
                 href="#"
-                className="w-full sm:w-auto bg-red-600 text-white px-8 py-3 rounded-full font-bold text-lg hover:bg-red-700 transition-colors flex items-center justify-center gap-3 initial-hidden animate-slideInRight animation-delay-1000"
+                className="w-full sm:w-auto bg-red-600 text-white px-8 py-3 rounded-full font-bold text-lg hover:bg-red-700 transition-colors flex items-center justify-center gap-3 initial-hidden animate-slideInRight0"
               >
                 <PhoneArrowUpRightIcon className="h-6 w-6" />
                 <span data-lang-en="">Emergency Consultation</span>
@@ -284,6 +330,16 @@ export default function Home() {
                 </span>
               </a>
             </div>
+          </div>
+          <div className="mt-12 -mb-8 text-gray-500 text-xs">
+            <span data-lang-en="">
+              *Based on a limited survey of consultant surgeons and general
+              practitioners across the UK.
+            </span>
+            <span data-lang-ar="" className="hidden">
+              *بناءً على مسح محدود للجراحين الاستشاريين والممارسين العامين في
+              جميع أنحاء المملكة المتحدة.
+            </span>
           </div>
         </section>
 
@@ -303,7 +359,7 @@ export default function Home() {
 
             {/* UK Specialists Benefits - Green Border */}
             <div className="mt-12 grid grid-cols-1 md:grid-cols-2 gap-6 max-w-5xl mx-auto">
-              <div className="bg-gray-50 p-6 rounded-xl border-2 border-green-500">
+              <div className="bg-gray-50 p-6 rounded-xl border-2 border-green-500 initial-hidden hover:shadow-xl transition-shadow duration-300">
                 <div className="flex items-center gap-3 mb-4">
                   <div className="w-10 h-10 bg-green-100 rounded-lg flex items-center justify-center">
                     <VideoCameraIcon className="h-6 w-6 text-green-600" />
@@ -326,7 +382,7 @@ export default function Home() {
                   </span>
                 </p>
               </div>
-              <div className="bg-gray-50 p-6 rounded-xl border-2 border-green-500">
+              <div className="bg-gray-50 p-6 rounded-xl border-2 border-green-500 initial-hidden hover:shadow-xl transition-shadow duration-300">
                 <div className="flex items-center gap-3 mb-4">
                   <div className="w-10 h-10 bg-green-100 rounded-lg flex items-center justify-center">
                     <BoltIcon className="h-6 w-6 text-green-600" />
@@ -366,7 +422,7 @@ export default function Home() {
 
               {/* Medical/Clinical Challenges */}
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 max-w-7xl mx-auto mb-8">
-                <div className="bg-gray-50 p-6 rounded-xl border-2 border-red-500">
+                <div className="bg-gray-50 p-6 rounded-xl border-2 border-red-500 initial-hidden hover:shadow-xl transition-shadow duration-300">
                   <div className="flex items-center gap-3 mb-4">
                     <div className="w-10 h-10 bg-red-100 rounded-lg flex items-center justify-center">
                       <FireIcon className="h-6 w-6 text-red-600" />
@@ -389,7 +445,7 @@ export default function Home() {
                   </p>
                 </div>
 
-                <div className="bg-gray-50 p-6 rounded-xl border-2 border-red-500">
+                <div className="bg-gray-50 p-6 rounded-xl border-2 border-red-500 initial-hidden hover:shadow-xl transition-shadow duration-300">
                   <div className="flex items-center gap-3 mb-4">
                     <div className="w-10 h-10 bg-red-100 rounded-lg flex items-center justify-center">
                       <AcademicCapIcon className="h-6 w-6 text-red-600" />
@@ -412,7 +468,7 @@ export default function Home() {
                   </p>
                 </div>
 
-                <div className="bg-gray-50 p-6 rounded-xl border-2 border-red-500">
+                <div className="bg-gray-50 p-6 rounded-xl border-2 border-red-500 initial-hidden hover:shadow-xl transition-shadow duration-300">
                   <div className="flex items-center gap-3 mb-4">
                     <div className="w-10 h-10 bg-red-100 rounded-lg flex items-center justify-center">
                       <MagnifyingGlassIcon className="h-6 w-6 text-red-600" />
@@ -435,7 +491,7 @@ export default function Home() {
                   </p>
                 </div>
 
-                <div className="bg-gray-50 p-6 rounded-xl border-2 border-red-500">
+                <div className="bg-gray-50 p-6 rounded-xl border-2 border-red-500 initial-hidden hover:shadow-xl transition-shadow duration-300">
                   <div className="flex items-center gap-3 mb-4">
                     <div className="w-10 h-10 bg-red-100 rounded-lg flex items-center justify-center">
                       <UsersIcon className="h-6 w-6 text-red-600" />
@@ -463,7 +519,7 @@ export default function Home() {
 
               {/* Infrastructure Challenges */}
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 max-w-7xl mx-auto">
-                <div className="bg-gray-50 p-6 rounded-xl border-2 border-red-500">
+                <div className="bg-gray-50 p-6 rounded-xl border-2 border-red-500 initial-hidden hover:shadow-xl transition-shadow duration-300">
                   <div className="flex items-center gap-3 mb-4">
                     <div className="w-10 h-10 bg-red-100 rounded-lg flex items-center justify-center">
                       <WifiIcon className="h-6 w-6 text-red-600" />
@@ -486,7 +542,7 @@ export default function Home() {
                   </p>
                 </div>
 
-                <div className="bg-gray-50 p-6 rounded-xl border-2 border-red-500">
+                <div className="bg-gray-50 p-6 rounded-xl border-2 border-red-500 initial-hidden0 hover:shadow-xl transition-shadow">
                   <div className="flex items-center gap-3 mb-4">
                     <div className="w-10 h-10 bg-red-100 rounded-lg flex items-center justify-center">
                       <ComputerDesktopIcon className="h-6 w-6 text-red-600" />
@@ -510,7 +566,7 @@ export default function Home() {
                   </p>
                 </div>
 
-                <div className="bg-gray-50 p-6 rounded-xl border-2 border-red-500">
+                <div className="bg-gray-50 p-6 rounded-xl border-2 border-red-500 initial-hidden hover:shadow-xl transition-shadow duration-300">
                   <div className="flex items-center gap-3 mb-4">
                     <div className="w-10 h-10 bg-red-100 rounded-lg flex items-center justify-center">
                       <PowerIcon className="h-6 w-6 text-red-600" />
@@ -533,7 +589,7 @@ export default function Home() {
                   </p>
                 </div>
 
-                <div className="bg-gray-50 p-6 rounded-xl border-2 border-red-500">
+                <div className="bg-gray-50 p-6 rounded-xl border-2 border-red-500 initial-hidden hover:shadow-xl transition-shadow duration-300">
                   <div className="flex items-center gap-3 mb-4">
                     <div className="w-10 h-10 bg-red-100 rounded-lg flex items-center justify-center">
                       <EyeSlashIcon className="h-6 w-6 text-red-600" />
@@ -595,7 +651,10 @@ export default function Home() {
               </p>
             </div>
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8 max-w-6xl mx-auto">
-              <div className="bg-white p-6 rounded-xl shadow-sm">
+              <div
+                className="bg-white p-6 rounded-xl shadow-sm initial-hidden"
+                style={{ animationDelay: "800ms" }}
+              >
                 <div className="w-12 h-12 bg-red-100 rounded-lg flex items-center justify-center mb-4">
                   <ExclamationTriangleIcon className="h-6 w-6 text-red-600" />
                 </div>
@@ -616,7 +675,10 @@ export default function Home() {
                   </span>
                 </p>
               </div>
-              <div className="bg-white p-6 rounded-xl shadow-sm">
+              <div
+                className="bg-white p-6 rounded-xl shadow-sm initial-hidden"
+                style={{ animationDelay: "1000ms" }}
+              >
                 <div className="w-12 h-12 bg-blue-100 rounded-lg flex items-center justify-center mb-4">
                   <VideoCameraIcon className="h-6 w-6 text-blue-600" />
                 </div>
@@ -636,7 +698,10 @@ export default function Home() {
                   </span>
                 </p>
               </div>
-              <div className="bg-white p-6 rounded-xl shadow-sm">
+              <div
+                className="bg-white p-6 rounded-xl shadow-sm initial-hidden"
+                style={{ animationDelay: "1200ms" }}
+              >
                 <div className="w-12 h-12 bg-green-100 rounded-lg flex items-center justify-center mb-4">
                   <UserGroupIcon className="h-6 w-6 text-green-600" />
                 </div>
@@ -656,7 +721,10 @@ export default function Home() {
                   </span>
                 </p>
               </div>
-              <div className="bg-white p-6 rounded-xl shadow-sm">
+              <div
+                className="bg-white p-6 rounded-xl shadow-sm initial-hidden"
+                style={{ animationDelay: "1400ms" }}
+              >
                 <div className="w-12 h-12 bg-purple-100 rounded-lg flex items-center justify-center mb-4">
                   <DocumentTextIcon className="h-6 w-6 text-purple-600" />
                 </div>
@@ -676,7 +744,10 @@ export default function Home() {
                   </span>
                 </p>
               </div>
-              <div className="bg-white p-6 rounded-xl shadow-sm">
+              <div
+                className="bg-white p-6 rounded-xl shadow-sm initial-hidden"
+                style={{ animationDelay: "1600ms" }}
+              >
                 <div className="w-12 h-12 bg-orange-100 rounded-lg flex items-center justify-center mb-4">
                   <DevicePhoneMobileIcon className="h-6 w-6 text-orange-600" />
                 </div>
@@ -697,7 +768,10 @@ export default function Home() {
                   </span>
                 </p>
               </div>
-              <div className="bg-white p-6 rounded-xl shadow-sm">
+              <div
+                className="bg-white p-6 rounded-xl shadow-sm initial-hidden"
+                style={{ animationDelay: "1800ms" }}
+              >
                 <div className="w-12 h-12 bg-indigo-100 rounded-lg flex items-center justify-center mb-4">
                   <GlobeAltIcon className="h-6 w-6 text-indigo-600" />
                 </div>
@@ -828,7 +902,7 @@ export default function Home() {
         </section>
 
         {/* Join Mission CTA */}
-        <section id="join" className="py-20 md:py-28 bg-white">
+        <section id="join" className="py-20 md:py-28 bg-gray-50">
           <div className="container mx-auto px-6 text-center">
             <h2 className="text-3xl md:text-4xl font-bold text-gray-900">
               <span data-lang-en="">
@@ -839,7 +913,10 @@ export default function Home() {
               </span>
             </h2>
             <div className="mt-12 grid grid-cols-1 lg:grid-cols-3 gap-8 max-w-6xl mx-auto">
-              <div className="bg-gray-50 p-8 rounded-xl border-2 border-blue-600 text-center flex flex-col h-full">
+              <div
+                className="bg-gray-50 p-8 rounded-xl border-2 border-blue-600 text-center flex flex-col h-full initial-hidden"
+                style={{ animationDelay: "200ms" }}
+              >
                 <div className="flex items-center justify-center gap-3 mb-4">
                   <BuildingOffice2Icon className="h-8 w-8 text-blue-600" />
                   <h3 className="text-xl font-bold">
@@ -852,7 +929,8 @@ export default function Home() {
                 <p className="mt-2 text-gray-600 flex-grow">
                   <span data-lang-en="">
                     Register for free, immediate access to verified UK
-                    specialists for emergency consultations.
+                    specialists for emergency consultations. Requires referral
+                    code.
                   </span>
                   <span data-lang-ar="" className="hidden">
                     سجل للحصول على وصول فوري ومجاني إلى أخصائيين بريطانيين
@@ -864,13 +942,16 @@ export default function Home() {
                   className="mt-6 bg-blue-600 text-white px-6 py-3 rounded-full font-bold hover:bg-blue-700 flex items-center justify-center gap-2 mx-auto w-fit"
                 >
                   <UserPlusIcon className="h-5 w-5 flex-shrink-0" />
-                  <span data-lang-en="">Register Now</span>
+                  <span data-lang-en="">Login Now</span>
                   <span data-lang-ar="" className="hidden">
                     سجل الآن
                   </span>
                 </a>
               </div>
-              <div className="bg-gray-50 p-8 rounded-xl border-2 border-red-600 text-center flex flex-col h-full">
+              <div
+                className="bg-gray-50 p-8 rounded-xl border-2 border-red-600 text-center flex flex-col h-full initial-hidden"
+                style={{ animationDelay: "400ms" }}
+              >
                 <div className="flex items-center justify-center gap-3 mb-4">
                   <HeartIcon className="h-8 w-8 text-red-600" />
                   <h3 className="text-xl font-bold">
@@ -901,7 +982,10 @@ export default function Home() {
                   </span>
                 </a>
               </div>
-              <div className="bg-gray-50 p-8 rounded-xl border-2 border-green-600 text-center flex flex-col h-full">
+              <div
+                className="bg-gray-50 p-8 rounded-xl border-2 border-green-600 text-center flex flex-col h-full initial-hidden"
+                style={{ animationDelay: "600ms" }}
+              >
                 <div className="flex items-center justify-center gap-3 mb-4">
                   <CurrencyDollarIcon className="h-8 w-8 text-green-600" />
                   <h3 className="text-xl font-bold">
@@ -974,11 +1058,18 @@ export default function Home() {
             </div>
 
             <div className="mt-6 text-gray-400 text-sm">
-              <p>&copy; 2025 Jusur (جسور) Platform. All rights reserved.</p>
+              <p>
+                <span data-lang-en="">
+                  &copy; 2025 Jusur (جسور) Platform. All rights reserved.
+                </span>
+                <span data-lang-ar="" className="hidden">
+                  &copy; 2025 منصة جسور. جميع الحقوق محفوظة.
+                </span>
+              </p>
             </div>
           </div>
         </div>
       </footer>
-    </>
+    </div>
   );
 }

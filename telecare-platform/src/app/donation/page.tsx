@@ -4,7 +4,7 @@ import { ArrowLeftIcon } from "@heroicons/react/24/outline";
 import DonationForm from "@/components/donation/DonationForm";
 
 export const metadata: Metadata = {
-  title: "Donate to Jusur (جسور) - Support Medical Aid",
+  title: "Donate to Jusur",
   description:
     "Support our mission to provide critical medical consultations and equipment to Gaza. Every donation helps save lives.",
 };
