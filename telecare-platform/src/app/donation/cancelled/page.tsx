@@ -16,8 +16,8 @@ export default function DonationCancelled() {
         </p>
 
         <p className="text-gray-500 text-sm mb-6">
-          We understand that donating is a personal decision. If you change
-          your mind, you can always return to make a donation later.
+          We understand that donating is a personal decision. If you change your
+          mind, you can always return to make a donation later.
         </p>
 
         <div className="space-y-3">
