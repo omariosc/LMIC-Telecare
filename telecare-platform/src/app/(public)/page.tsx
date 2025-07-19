@@ -48,7 +48,7 @@ export default function Home() {
 
     // Check immediately on mount
     checkScreenSize();
-    
+
     // Check on resize
     window.addEventListener("resize", checkScreenSize);
 
