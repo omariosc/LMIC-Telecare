@@ -22,7 +22,7 @@ export default function DonationForm() {
       const donationAmount = isCustom ? parseFloat(customAmount) : amount;
 
       if (!donationAmount || donationAmount < 1) {
-        alert("Please enter a valid donation amount (minimum $1)");
+        alert("Please enter a valid donation amount (minimum £1)");
         return;
       }
 
@@ -40,7 +40,7 @@ export default function DonationForm() {
       const { sessionId, error } = await response.json();
 
       if (error) {
-        alert(`Error: ${error}`);
+        alert(`Error: £{error}`);
         return;
       }
 
@@ -50,7 +50,7 @@ export default function DonationForm() {
       });
 
       if (stripeError) {
-        alert(`Stripe error: ${stripeError.message}`);
+        alert(`Stripe error: £{stripeError.message}`);
       }
     } catch (error) {
       console.error("Error:", error);
@@ -68,8 +68,7 @@ export default function DonationForm() {
           Support Jusur (جسور)
         </h3>
         <p className="text-gray-600">
-          Your donation helps fund critical medical equipment and platform
-          development
+          Your donation helps fund platform development
         </p>
       </div>
 
@@ -90,10 +89,10 @@ export default function DonationForm() {
                 className={`py-2 px-4 rounded-md border font-medium transition-colors ${
                   !isCustom && amount === preset
                     ? "bg-green-600 text-white border-green-600"
-                    : "bg-white text-gray-700 border-gray-300 hover:border-green-600"
+                    : "bg-white text-gray-700 border-gray-300 hover:border-green-600 cursor-pointer"
                 }`}
               >
-                ${preset}
+                £{preset}
               </button>
             ))}
           </div>
@@ -108,7 +107,7 @@ export default function DonationForm() {
             className={`w-full py-2 px-4 rounded-md border font-medium transition-colors ${
               isCustom
                 ? "bg-green-600 text-white border-green-600"
-                : "bg-white text-gray-700 border-gray-300 hover:border-green-600"
+                : "bg-white text-gray-700 border-gray-300 hover:border-green-600 cursor-pointer"
             }`}
           >
             Custom Amount
@@ -125,7 +124,7 @@ export default function DonationForm() {
             </label>
             <div className="relative">
               <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                <span className="text-gray-500 sm:text-sm">$</span>
+                <span className="text-gray-500 sm:text-sm">£</span>
               </div>
               <input
                 type="number"
@@ -144,7 +143,7 @@ export default function DonationForm() {
         <button
           onClick={handleDonate}
           disabled={isLoading}
-          className="w-full bg-green-600 text-white py-3 px-6 rounded-full font-bold hover:bg-green-700 disabled:opacity-50 disabled:cursor-not-allowed transition-colors flex items-center justify-center gap-2"
+          className="w-full bg-green-600 text-white py-3 px-6 rounded-full font-bold hover:bg-green-700 disabled:opacity-50 disabled:cursor-not-allowed cursor-pointer transition-colors flex items-center justify-center gap-2"
         >
           {isLoading ? (
             <>
@@ -154,14 +153,13 @@ export default function DonationForm() {
           ) : (
             <>
               <CurrencyDollarIcon className="h-5 w-5" />
-              Donate ${isCustom ? customAmount || "0" : amount}
+              Donate £{isCustom ? customAmount || "0" : amount}
             </>
           )}
         </button>
 
         <div className="text-xs text-gray-500 text-center">
-          Secure payment powered by Stripe. Your donation supports medical aid
-          and platform development.
+          Secure payment powered by Stripe.
         </div>
       </div>
     </div>

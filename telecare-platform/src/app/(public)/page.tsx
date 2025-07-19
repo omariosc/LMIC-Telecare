@@ -54,6 +54,89 @@ export const metadata: Metadata = {
 export default function Home() {
   return (
     <>
+      <style jsx>{`
+        @keyframes fadeInUp {
+          from {
+            opacity: 0;
+            transform: translateY(30px);
+          }
+          to {
+            opacity: 1;
+            transform: translateY(0);
+          }
+        }
+
+        @keyframes fadeIn {
+          from {
+            opacity: 0;
+          }
+          to {
+            opacity: 1;
+          }
+        }
+
+        @keyframes slideInLeft {
+          from {
+            opacity: 0;
+            transform: translateX(-30px);
+          }
+          to {
+            opacity: 1;
+            transform: translateX(0);
+          }
+        }
+
+        @keyframes slideInRight {
+          from {
+            opacity: 0;
+            transform: translateX(30px);
+          }
+          to {
+            opacity: 1;
+            transform: translateX(0);
+          }
+        }
+
+        .animate-fadeInUp {
+          animation: fadeInUp 0.8s ease-out forwards;
+        }
+
+        .animate-fadeIn {
+          animation: fadeIn 0.8s ease-out forwards;
+        }
+
+        .animate-slideInLeft {
+          animation: slideInLeft 0.8s ease-out forwards;
+        }
+
+        .animate-slideInRight {
+          animation: slideInRight 0.8s ease-out forwards;
+        }
+
+        .animation-delay-200 {
+          animation-delay: 0.2s;
+        }
+
+        .animation-delay-400 {
+          animation-delay: 0.4s;
+        }
+
+        .animation-delay-600 {
+          animation-delay: 0.6s;
+        }
+
+        .animation-delay-800 {
+          animation-delay: 0.8s;
+        }
+
+        .animation-delay-1000 {
+          animation-delay: 1s;
+        }
+
+        .initial-hidden {
+          opacity: 0;
+        }
+      `}</style>
       {/* Small Device Warning - Shows for screens under 250px */}
       <div className="fixed inset-0 bg-[#0A2540] text-white items-center justify-center z-[9999] px-4 text-center hidden">
         <div>
@@ -71,28 +154,12 @@ export default function Home() {
       <header className="bg-white fixed top-0 left-0 right-0 z-50">
         <nav className="container mx-auto px-4 py-4 flex justify-between items-center min-h-[64px]">
           {/* Logo - Top Left */}
-          <div className="font-extrabold text-xl md:text-2xl text-[#0A2540] flex-shrink-0 flex items-center gap-2">
-            <div>
-              <span data-lang-en="" className="hidden min-[550px]:block">
-                Jusur (جسور)
-              </span>
-              <span data-lang-en="" className="min-[550px]:hidden">
-                Jusur
-              </span>
-              <span data-lang-ar="" className="hidden min-[550px]:block">
-                جسور
-              </span>
-              <span data-lang-ar="" className="min-[550px]:hidden">
-                جسور
-              </span>
-            </div>
-            <div className="text-yellow-500 text-sm hidden min-[550px]:flex items-center gap-1">
-              <TrophyIcon className="h-4 w-4" />
-              <span data-lang-en="">Winner (إن شاء الله)</span>
-              <span data-lang-ar="" className="hidden">
-                فائز (إن شاء الله)
-              </span>
-            </div>
+          <div className="font-extrabold text-xl text-[#0A2540] flex items-center gap-2">
+            <span data-lang-en="">Jusur (جسور)</span>
+            <span data-lang-ar="" className="hidden">جسور</span>
+            <TrophyIcon className="h-4 w-4 text-yellow-500" />
+            <span className="text-yellow-500 text-sm font-semibold" data-lang-en="">Winner (إن شاء الله)</span>
+            <span className="text-yellow-500 text-sm font-semibold" data-lang-ar="" style={{ display: 'none' }}>فائز (إن شاء الله)</span>
           </div>
 
           {/* Navigation - Top Right */}
@@ -103,12 +170,8 @@ export default function Home() {
               className="bg-green-600 text-white px-5 py-2 rounded-full font-semibold text-sm hover:bg-green-700 transition-colors flex items-center gap-2"
             >
               <CurrencyDollarIcon className="h-4 w-4" />
-              <span className="hidden min-[550px]:block" data-lang-en="">
-                Donate
-              </span>
-              <span className="hidden min-[550px]:block" data-lang-ar="">
-                تبرع
-              </span>
+              <span data-lang-en="">Donate</span>
+              <span data-lang-ar="" className="hidden">تبرع</span>
             </a>
 
             {/* Language Toggle */}
@@ -117,9 +180,7 @@ export default function Home() {
               className="bg-gray-100 text-gray-700 px-3 py-2 rounded-full font-semibold text-sm hover:bg-gray-200 transition-colors"
             >
               <span data-lang-en="">ع</span>
-              <span data-lang-ar="" className="hidden">
-                EN
-              </span>
+              <span data-lang-ar="" className="hidden">EN</span>
             </button>
 
             {/* User/Login Dropdown */}
@@ -146,45 +207,24 @@ export default function Home() {
                 <div className="py-2">
                   <a
                     href="/login/gaza-clinician"
-                    className="block px-4 py-2 text-sm text-gray-900 hover:bg-gray-50 hover:text-[#0A2540] transition-colors"
+                    className="block px-4 py-2 text-sm text-gray-900 hover:bg-gray-100 hover:text-[#0A2540] transition-colors"
                   >
-                    <span data-lang-en="" className="hidden min-[550px]:block">
-                      Login (Gaza Clinician)
-                    </span>
-                    <span data-lang-en="" className="min-[550px]:hidden">
-                      Login Gaza
-                    </span>
-                    <span data-lang-ar="" className="hidden">
-                      دخول طبيب غزة
-                    </span>
+                    <span data-lang-en="">Login (Gaza Clinician)</span>
+                    <span data-lang-ar="" className="hidden">دخول طبيب غزة</span>
                   </a>
                   <a
                     href="/login/uk-clinician"
-                    className="block px-4 py-2 text-sm text-gray-900 hover:bg-gray-50 hover:text-[#0A2540] transition-colors"
+                    className="block px-4 py-2 text-sm text-gray-900 hover:bg-gray-100 hover:text-[#0A2540] transition-colors"
                   >
-                    <span data-lang-en="" className="hidden min-[550px]:block">
-                      Login (UK Clinician)
-                    </span>
-                    <span data-lang-en="" className="min-[550px]:hidden">
-                      Login UK
-                    </span>
-                    <span data-lang-ar="" className="hidden">
-                      دخول طبيب بريطاني
-                    </span>
+                    <span data-lang-en="">Login (UK Clinician)</span>
+                    <span data-lang-ar="" className="hidden">دخول طبيب بريطاني</span>
                   </a>
                   <a
                     href="/register/uk-clinician"
-                    className="block px-4 py-2 text-sm text-gray-900 hover:bg-gray-50 hover:text-[#0A2540] transition-colors"
+                    className="block px-4 py-2 text-sm text-gray-900 hover:bg-gray-100 hover:text-[#0A2540] transition-colors"
                   >
-                    <span data-lang-en="" className="hidden min-[550px]:block">
-                      Register (UK Clinician)
-                    </span>
-                    <span data-lang-en="" className="min-[550px]:hidden">
-                      Register UK
-                    </span>
-                    <span data-lang-ar="" className="hidden">
-                      تسجيل طبيب بريطاني
-                    </span>
+                    <span data-lang-en="">Register (UK Clinician)</span>
+                    <span data-lang-ar="" className="hidden">تسجيل طبيب بريطاني</span>
                   </a>
                 </div>
               </div>
@@ -198,7 +238,7 @@ export default function Home() {
         {/* Hero Section */}
         <section className="bg-gradient-to-b from-green-800 to-green-950 text-white text-center pt-28 pb-20 px-6">
           <div className="container mx-auto">
-            <h1 className="text-4xl md:text-6xl font-extrabold leading-tight">
+            <h1 className="text-4xl md:text-6xl font-extrabold leading-tight initial-hidden animate-fadeInUp">
               <span data-lang-en="">
                 Their Hospitals Are Beyond Capacity. Your Expertise is Their
                 Lifeline.
@@ -207,7 +247,7 @@ export default function Home() {
                 نظام صحي على وشك الانهيار
               </span>
             </h1>
-            <div className="mt-6 text-lg md:text-xl text-gray-200 max-w-4xl mx-auto">
+            <div className="mt-6 text-lg md:text-xl text-gray-200 max-w-4xl mx-auto initial-hidden animate-fadeInUp animation-delay-200">
               <p>
                 <span data-lang-en="">
                   <strong>Jusur (جسور)</strong> is the Arabic word for bridges.
@@ -224,7 +264,7 @@ export default function Home() {
               </p>
             </div>
             <div className="mt-8 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 max-w-7xl mx-auto text-center">
-              <div className="bg-white p-6 rounded-xl shadow-md">
+              <div className="bg-white p-6 rounded-xl shadow-md initial-hidden animate-fadeInUp hover:shadow-xl transition-shadow duration-300">
                 <h3 className="text-4xl font-extrabold text-red-500">
                   2.3 Million
                 </h3>
@@ -235,7 +275,7 @@ export default function Home() {
                   </span>
                 </p>
               </div>
-              <div className="bg-white p-6 rounded-xl shadow-md">
+              <div className="bg-white p-6 rounded-xl shadow-md initial-hidden animate-fadeInUp animation-delay-200 hover:shadow-xl transition-shadow duration-300">
                 <h3 className="text-4xl font-extrabold text-red-500">
                   Only 17/36
                 </h3>
@@ -250,7 +290,7 @@ export default function Home() {
                   </span>
                 </p>
               </div>
-              <div className="bg-white p-6 rounded-xl shadow-md">
+              <div className="bg-white p-6 rounded-xl shadow-md initial-hidden animate-fadeInUp animation-delay-400 hover:shadow-xl transition-shadow duration-300">
                 <h3 className="text-4xl font-extrabold text-red-500">90%</h3>
                 <p className="mt-2 font-semibold text-gray-600">
                   <span data-lang-en="">Shortage of specialists</span>
@@ -259,7 +299,7 @@ export default function Home() {
                   </span>
                 </p>
               </div>
-              <div className="bg-white p-6 rounded-xl shadow-md">
+              <div className="bg-white p-6 rounded-xl shadow-md initial-hidden animate-fadeInUp animation-delay-600 hover:shadow-xl transition-shadow duration-300">
                 <h3 className="text-4xl font-extrabold text-red-500">
                   Limited
                 </h3>
@@ -307,7 +347,7 @@ export default function Home() {
             <div className="mt-10 flex flex-col sm:flex-row justify-center items-center gap-4">
               <a
                 href="#"
-                className="w-full sm:w-auto bg-white text-[#0A2540] px-8 py-3 rounded-full font-bold text-lg hover:bg-gray-200 transition-transform transform hover:scale-105 flex items-center justify-center gap-3"
+                className="w-full sm:w-auto bg-white text-[#0A2540] px-8 py-3 rounded-full font-bold text-lg hover:bg-gray-200 transition-transform transform hover:scale-105 flex items-center justify-center gap-3 initial-hidden animate-slideInLeft animation-delay-800"
               >
                 <UserPlusIcon className="h-6 w-6" />
                 <span data-lang-en="">Register as UK Doctor</span>
@@ -317,7 +357,7 @@ export default function Home() {
               </a>
               <a
                 href="#"
-                className="w-full sm:w-auto bg-red-600 text-white px-8 py-3 rounded-full font-bold text-lg hover:bg-red-700 transition-colors flex items-center justify-center gap-3"
+                className="w-full sm:w-auto bg-red-600 text-white px-8 py-3 rounded-full font-bold text-lg hover:bg-red-700 transition-colors flex items-center justify-center gap-3 initial-hidden animate-slideInRight animation-delay-1000"
               >
                 <PhoneArrowUpRightIcon className="h-6 w-6" />
                 <span data-lang-en="">Emergency Consultation</span>
