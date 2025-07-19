@@ -127,10 +127,35 @@ export default function DonationForm() {
                 <span className="text-gray-500 sm:text-sm">£</span>
               </div>
               <input
-                type="number"
+                type="text"
+                inputMode="decimal"
                 id="customAmount"
                 value={customAmount}
-                onChange={(e) => setCustomAmount(e.target.value)}
+                onChange={(e) => {
+                  const value = e.target.value;
+                  
+                  // Allow empty input
+                  if (value === '') {
+                    setCustomAmount('');
+                    return;
+                  }
+                  
+                  // Check if the input is a valid number with max 2 decimal places
+                  // Allows: 123, 123.4, 123.45, .45, but not 123.456
+                  if (!/^(\d+\.?\d{0,2}|\.\d{1,2})$/.test(value)) {
+                    return; // Don't update if it doesn't match the pattern
+                  }
+                  
+                  setCustomAmount(value);
+                }}
+                onBlur={(e) => {
+                  const value = e.target.value;
+                  if (value && !isNaN(parseFloat(value))) {
+                    // Format to 2 decimal places on blur
+                    const formatted = parseFloat(value).toFixed(2);
+                    setCustomAmount(formatted);
+                  }
+                }}
                 className="block w-full pl-7 pr-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-green-500 focus:border-green-500"
                 placeholder="0.00"
                 min="1"
