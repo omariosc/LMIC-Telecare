@@ -1,7 +1,11 @@
 "use client";
 
 import { useState } from "react";
-import { CheckCircleIcon, HeartIcon, LinkIcon } from "@heroicons/react/24/outline";
+import {
+  CheckCircleIcon,
+  HeartIcon,
+  LinkIcon,
+} from "@heroicons/react/24/outline";
 import Link from "next/link";
 
 export default function DonationSuccess() {
@@ -10,18 +14,20 @@ export default function DonationSuccess() {
   const handleShare = async () => {
     try {
       const shareUrl = "https://jusur.org.uk";
-      const shareText = "I just donated to Jusur (جسور) - a platform connecting UK medical specialists with Gaza clinicians. Join me in supporting this vital healthcare bridge: ";
-      
+      const shareText =
+        "I just donated to Jusur (جسور) - a platform connecting UK medical specialists with Gaza clinicians. Join me in supporting this vital healthcare bridge: ";
+
       await navigator.clipboard.writeText(shareText + shareUrl);
       setCopied(true);
-      
+
       // Reset after 3 seconds
       setTimeout(() => setCopied(false), 3000);
     } catch (error) {
       console.error("Failed to copy to clipboard:", error);
       // Fallback for older browsers
       const textArea = document.createElement("textarea");
-      textArea.value = "I just donated to Jusur (جسور) - a platform connecting UK medical specialists with Gaza clinicians. Join me in supporting this vital healthcare bridge: https://jusur.org.uk";
+      textArea.value =
+        "I just donated to Jusur (جسور) - a platform connecting UK medical specialists with Gaza clinicians. Join me in supporting this vital healthcare bridge: https://jusur.org.uk";
       document.body.appendChild(textArea);
       textArea.select();
       document.execCommand("copy");

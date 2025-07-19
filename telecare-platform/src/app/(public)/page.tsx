@@ -1,4 +1,5 @@
-import { Metadata } from "next";
+"use client";
+
 import {
   ExclamationTriangleIcon,
   UserPlusIcon,
@@ -15,7 +16,6 @@ import {
   PhoneArrowUpRightIcon,
   HeartIcon,
   CurrencyDollarIcon,
-  Bars3Icon,
   UserIcon,
   MagnifyingGlassIcon,
   AcademicCapIcon,
@@ -27,116 +27,9 @@ import {
   FireIcon,
 } from "@heroicons/react/24/outline";
 
-export const metadata: Metadata = {
-  title: "Jusur (جسور) - Bridging Medical Knowledge to Gaza",
-  description:
-    "Jusur (جسور) is a humanitarian platform connecting UK medical specialists with frontline clinicians in Gaza to provide life-saving guidance. Bridging knowledge where physical aid cannot reach.",
-  keywords:
-    "jusur, gaza, healthcare, volunteer, doctor, surgeon, remote consultation, medical aid, humanitarian, bridges",
-  openGraph: {
-    title: "Jusur (جسور) - Bridging Medical Knowledge to Gaza",
-    description:
-      "When physical aid can't get in, expertise is the most powerful resource. Join UK specialists providing life-saving guidance to clinicians in Gaza.",
-    images: [
-      {
-        url: "https://placehold.co/1200x630/0A2540/FFFFFF?text=Jusur",
-        width: 1200,
-        height: 630,
-        alt: "Jusur Platform",
-      },
-    ],
-  },
-  twitter: {
-    card: "summary_large_image",
-  },
-};
-
 export default function Home() {
   return (
     <>
-      <style jsx>{`
-        @keyframes fadeInUp {
-          from {
-            opacity: 0;
-            transform: translateY(30px);
-          }
-          to {
-            opacity: 1;
-            transform: translateY(0);
-          }
-        }
-
-        @keyframes fadeIn {
-          from {
-            opacity: 0;
-          }
-          to {
-            opacity: 1;
-          }
-        }
-
-        @keyframes slideInLeft {
-          from {
-            opacity: 0;
-            transform: translateX(-30px);
-          }
-          to {
-            opacity: 1;
-            transform: translateX(0);
-          }
-        }
-
-        @keyframes slideInRight {
-          from {
-            opacity: 0;
-            transform: translateX(30px);
-          }
-          to {
-            opacity: 1;
-            transform: translateX(0);
-          }
-        }
-
-        .animate-fadeInUp {
-          animation: fadeInUp 0.8s ease-out forwards;
-        }
-
-        .animate-fadeIn {
-          animation: fadeIn 0.8s ease-out forwards;
-        }
-
-        .animate-slideInLeft {
-          animation: slideInLeft 0.8s ease-out forwards;
-        }
-
-        .animate-slideInRight {
-          animation: slideInRight 0.8s ease-out forwards;
-        }
-
-        .animation-delay-200 {
-          animation-delay: 0.2s;
-        }
-
-        .animation-delay-400 {
-          animation-delay: 0.4s;
-        }
-
-        .animation-delay-600 {
-          animation-delay: 0.6s;
-        }
-
-        .animation-delay-800 {
-          animation-delay: 0.8s;
-        }
-
-        .animation-delay-1000 {
-          animation-delay: 1s;
-        }
-
-        .initial-hidden {
-          opacity: 0;
-        }
-      `}</style>
       {/* Small Device Warning - Shows for screens under 250px */}
       <div className="fixed inset-0 bg-[#0A2540] text-white items-center justify-center z-[9999] px-4 text-center hidden">
         <div>
@@ -156,10 +49,23 @@ export default function Home() {
           {/* Logo - Top Left */}
           <div className="font-extrabold text-xl text-[#0A2540] flex items-center gap-2">
             <span data-lang-en="">Jusur (جسور)</span>
-            <span data-lang-ar="" className="hidden">جسور</span>
-            <TrophyIcon className="h-4 w-4 text-yellow-500" />
-            <span className="text-yellow-500 text-sm font-semibold" data-lang-en="">Winner (إن شاء الله)</span>
-            <span className="text-yellow-500 text-sm font-semibold" data-lang-ar="" style={{ display: 'none' }}>فائز (إن شاء الله)</span>
+            <span data-lang-ar="" className="hidden">
+              جسور
+            </span>
+            <TrophyIcon className="h-4 w-4 text-yellow-700" />
+            <span
+              className="text-yellow-700 text-sm font-semibold"
+              data-lang-en=""
+            >
+              Winner (إن شاء الله)
+            </span>
+            <span
+              className="text-yellow-700 text-sm font-semibold"
+              data-lang-ar=""
+              style={{ display: "none" }}
+            >
+              فائز (إن شاء الله)
+            </span>
           </div>
 
           {/* Navigation - Top Right */}
@@ -170,8 +76,10 @@ export default function Home() {
               className="bg-green-600 text-white px-5 py-2 rounded-full font-semibold text-sm hover:bg-green-700 transition-colors flex items-center gap-2"
             >
               <CurrencyDollarIcon className="h-4 w-4" />
-              <span data-lang-en="">Donate</span>
-              <span data-lang-ar="" className="hidden">تبرع</span>
+              <span className="hidden min-[590px]:block" data-lang-en="">Donate</span>
+              <span data-lang-ar="" className="hidden">
+                تبرع
+              </span>
             </a>
 
             {/* Language Toggle */}
@@ -180,7 +88,9 @@ export default function Home() {
               className="bg-gray-100 text-gray-700 px-3 py-2 rounded-full font-semibold text-sm hover:bg-gray-200 transition-colors"
             >
               <span data-lang-en="">ع</span>
-              <span data-lang-ar="" className="hidden">EN</span>
+              <span data-lang-ar="" className="hidden">
+                EN
+              </span>
             </button>
 
             {/* User/Login Dropdown */}
@@ -210,21 +120,27 @@ export default function Home() {
                     className="block px-4 py-2 text-sm text-gray-900 hover:bg-gray-100 hover:text-[#0A2540] transition-colors"
                   >
                     <span data-lang-en="">Login (Gaza Clinician)</span>
-                    <span data-lang-ar="" className="hidden">دخول طبيب غزة</span>
+                    <span data-lang-ar="" className="hidden">
+                      دخول طبيب غزة
+                    </span>
                   </a>
                   <a
                     href="/login/uk-clinician"
                     className="block px-4 py-2 text-sm text-gray-900 hover:bg-gray-100 hover:text-[#0A2540] transition-colors"
                   >
                     <span data-lang-en="">Login (UK Clinician)</span>
-                    <span data-lang-ar="" className="hidden">دخول طبيب بريطاني</span>
+                    <span data-lang-ar="" className="hidden">
+                      دخول طبيب بريطاني
+                    </span>
                   </a>
                   <a
                     href="/register/uk-clinician"
                     className="block px-4 py-2 text-sm text-gray-900 hover:bg-gray-100 hover:text-[#0A2540] transition-colors"
                   >
                     <span data-lang-en="">Register (UK Clinician)</span>
-                    <span data-lang-ar="" className="hidden">تسجيل طبيب بريطاني</span>
+                    <span data-lang-ar="" className="hidden">
+                      تسجيل طبيب بريطاني
+                    </span>
                   </a>
                 </div>
               </div>

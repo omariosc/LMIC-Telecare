@@ -133,19 +133,19 @@ export default function DonationForm() {
                 value={customAmount}
                 onChange={(e) => {
                   const value = e.target.value;
-                  
+
                   // Allow empty input
-                  if (value === '') {
-                    setCustomAmount('');
+                  if (value === "") {
+                    setCustomAmount("");
                     return;
                   }
-                  
+
                   // Check if the input is a valid number with max 2 decimal places
                   // Allows: 123, 123.4, 123.45, .45, but not 123.456
                   if (!/^(\d+\.?\d{0,2}|\.\d{1,2})$/.test(value)) {
                     return; // Don't update if it doesn't match the pattern
                   }
-                  
+
                   setCustomAmount(value);
                 }}
                 onBlur={(e) => {

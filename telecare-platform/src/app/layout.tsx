@@ -9,37 +9,51 @@ const inter = Inter({
 });
 
 export const metadata: Metadata = {
-  title:
-    "Telecare Platform for Gaza - Connecting UK Doctors with Gaza Clinicians",
+  title: "Jusur (جسور) - Bridging Medical Knowledge to Gaza",
   description:
-    "Bridge the healthcare gap by connecting verified UK medical specialists with clinicians in Gaza for life-saving remote consultations.",
+    "Jusur (جسور) is a humanitarian platform connecting UK medical specialists with frontline clinicians in Gaza to provide life-saving guidance. Bridging knowledge where physical aid cannot reach.",
   keywords: [
-    "telecare",
-    "telemedicine",
-    "Gaza",
+    "jusur",
+    "gaza",
     "healthcare",
-    "medical consultation",
-    "UK doctors",
+    "volunteer",
+    "doctor",
+    "surgeon",
+    "remote consultation",
+    "medical aid",
+    "humanitarian",
+    "telecare",
+    "bridges",
   ],
-  authors: [{ name: "Telecare Platform Team" }],
+  authors: [{ name: "Jusur Platform Team" }],
   manifest: "/manifest.json",
   openGraph: {
-    title: "Telecare Platform for Gaza",
-    description: "Connecting UK medical specialists with Gaza clinicians",
+    title: "Jusur (جسور) - Bridging Medical Knowledge to Gaza",
+    description:
+      "When physical aid can't get in, expertise is the most powerful resource. Join UK specialists providing life-saving guidance to clinicians in Gaza.",
     type: "website",
     locale: "en_GB",
     alternateLocale: "ar",
+    images: [
+      {
+        url: "https://placehold.co/1200x630/2e7d32/FFFFFF?text=Jusur",
+        width: 1200,
+        height: 630,
+        alt: "Jusur Platform",
+      },
+    ],
   },
   twitter: {
     card: "summary_large_image",
-    title: "Telecare Platform for Gaza",
-    description: "Connecting UK medical specialists with Gaza clinicians",
+    title: "Jusur (جسور) - Bridging Medical Knowledge to Gaza",
+    description:
+      "When physical aid can't get in, expertise is the most powerful resource. Join UK specialists providing life-saving guidance to clinicians in Gaza.",
   },
   other: {
     "mobile-web-app-capable": "yes",
     "apple-mobile-web-app-capable": "yes",
     "apple-mobile-web-app-status-bar-style": "default",
-    "apple-mobile-web-app-title": "Telecare Gaza",
+    "apple-mobile-web-app-title": "Jusur",
   },
 };
 
