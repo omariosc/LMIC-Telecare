@@ -1,19 +1,37 @@
 // TypeScript interfaces for database models
 // Generated from database schema
 
-export type UserRole = 'gaza_clinician' | 'uk_specialist' | 'admin';
-export type UserStatus = 'pending' | 'verified' | 'suspended' | 'inactive';
-export type AvailabilityStatus = 'available' | 'busy' | 'offline';
-export type Language = 'en' | 'ar';
-export type Gender = 'male' | 'female' | 'other' | 'not_specified';
-export type CaseUrgency = 'low' | 'medium' | 'high' | 'critical';
-export type CaseStatus = 'open' | 'in_progress' | 'resolved' | 'closed';
-export type ResponseType = 'consultation' | 'question' | 'clarification' | 'follow_up';
-export type AssignmentType = 'primary' | 'secondary' | 'observer';
-export type AssignmentStatus = 'active' | 'completed' | 'declined';
-export type UploadPurpose = 'case_attachment' | 'response_attachment' | 'profile_image' | 'verification_document';
-export type NotificationType = 'new_case' | 'case_response' | 'case_assignment' | 'system_message' | 'achievement';
-export type AchievementType = 'first_response' | 'helpful_response' | 'quick_response' | 'specialist_of_month' | 'volunteer_hours';
+export type UserRole = "gaza_clinician" | "uk_specialist" | "admin";
+export type UserStatus = "pending" | "verified" | "suspended" | "inactive";
+export type AvailabilityStatus = "available" | "busy" | "offline";
+export type Language = "en" | "ar";
+export type Gender = "male" | "female" | "other" | "not_specified";
+export type CaseUrgency = "low" | "medium" | "high" | "critical";
+export type CaseStatus = "open" | "in_progress" | "resolved" | "closed";
+export type ResponseType =
+  | "consultation"
+  | "question"
+  | "clarification"
+  | "follow_up";
+export type AssignmentType = "primary" | "secondary" | "observer";
+export type AssignmentStatus = "active" | "completed" | "declined";
+export type UploadPurpose =
+  | "case_attachment"
+  | "response_attachment"
+  | "profile_image"
+  | "verification_document";
+export type NotificationType =
+  | "new_case"
+  | "case_response"
+  | "case_assignment"
+  | "system_message"
+  | "achievement";
+export type AchievementType =
+  | "first_response"
+  | "helpful_response"
+  | "quick_response"
+  | "specialist_of_month"
+  | "volunteer_hours";
 
 export interface User {
   id: string;
@@ -178,19 +196,28 @@ export interface AuditLog {
 
 // Joined/Extended types for complex queries
 export interface CaseWithUser extends MedicalCase {
-  created_by_user: Pick<User, 'id' | 'first_name' | 'last_name' | 'role' | 'specialties'>;
-  assigned_to_user?: Pick<User, 'id' | 'first_name' | 'last_name' | 'role' | 'specialties'>;
+  created_by_user: Pick<
+    User,
+    "id" | "first_name" | "last_name" | "role" | "specialties"
+  >;
+  assigned_to_user?: Pick<
+    User,
+    "id" | "first_name" | "last_name" | "role" | "specialties"
+  >;
   response_count: number;
   latest_response_at?: Date;
 }
 
 export interface ResponseWithUser extends CaseResponse {
-  created_by_user: Pick<User, 'id' | 'first_name' | 'last_name' | 'role' | 'profile_image_url'>;
+  created_by_user: Pick<
+    User,
+    "id" | "first_name" | "last_name" | "role" | "profile_image_url"
+  >;
   reply_count: number;
 }
 
 export interface NotificationWithCase extends Notification {
-  case?: Pick<MedicalCase, 'id' | 'title' | 'specialty' | 'urgency'>;
+  case?: Pick<MedicalCase, "id" | "title" | "specialty" | "urgency">;
 }
 
 export interface UserWithStats extends User {
@@ -273,8 +300,8 @@ export interface CaseFilters {
   tags?: string[];
   page?: number;
   limit?: number;
-  sort_by?: 'created_at' | 'updated_at' | 'urgency' | 'title';
-  sort_order?: 'asc' | 'desc';
+  sort_by?: "created_at" | "updated_at" | "urgency" | "title";
+  sort_order?: "asc" | "desc";
 }
 
 export interface UserFilters {
@@ -285,8 +312,8 @@ export interface UserFilters {
   search?: string;
   page?: number;
   limit?: number;
-  sort_by?: 'created_at' | 'last_login_at' | 'points' | 'volunteer_hours';
-  sort_order?: 'asc' | 'desc';
+  sort_by?: "created_at" | "last_login_at" | "points" | "volunteer_hours";
+  sort_order?: "asc" | "desc";
 }
 
 export interface NotificationFilters {

@@ -112,9 +112,11 @@ export const useLanguage = (): UseLanguageReturn => {
 
     // Update existing content visibility
     updateContentVisibility(lang);
-    
+
     // Dispatch custom event for components that need to know about language changes
-    window.dispatchEvent(new CustomEvent("languageChanged", { detail: { language: lang } }));
+    window.dispatchEvent(
+      new CustomEvent("languageChanged", { detail: { language: lang } })
+    );
   };
 
   const toggleLanguage = () => {

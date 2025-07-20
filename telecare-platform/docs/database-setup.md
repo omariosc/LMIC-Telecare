@@ -11,21 +11,24 @@ This guide explains how to set up the Cloudflare D1 database for the Telecare Pl
 ## Quick Setup
 
 ### 1. Install Dependencies
+
 ```bash
 npm install
 ```
 
 ### 2. Login to Cloudflare
+
 ```bash
 npm run cf:login
 ```
 
 ### 3. Setup Database (Automated)
+
 ```bash
 # For development environment
 node scripts/setup-database.js dev
 
-# For staging environment  
+# For staging environment
 node scripts/setup-database.js staging
 
 # For production environment
@@ -33,6 +36,7 @@ node scripts/setup-database.js prod
 ```
 
 This script will:
+
 - Create the D1 database
 - Update `wrangler.toml` with the database ID
 - Run all migrations
@@ -44,6 +48,7 @@ This script will:
 If you prefer to set up manually:
 
 ### 1. Create Database
+
 ```bash
 # Development
 npm run db:create
@@ -56,9 +61,12 @@ npm run db:create:prod
 ```
 
 ### 2. Update Configuration
-After creating the database, update the `database_id` in `wrangler.toml` with the ID returned by the create command.
+
+After creating the database, update the `database_id` in `wrangler.toml` with the ID returned by the
+create command.
 
 ### 3. Run Migrations
+
 ```bash
 # Development
 npm run db:migrate
@@ -80,6 +88,7 @@ npm run db:migrate:prod
 The database includes the following main tables:
 
 ### Core Tables
+
 - **users**: User accounts and profiles
 - **user_sessions**: Authentication sessions
 - **medical_cases**: Medical cases/consultations
@@ -87,6 +96,7 @@ The database includes the following main tables:
 - **case_assignments**: Specialist assignments to cases
 
 ### Supporting Tables
+
 - **file_uploads**: File attachment management
 - **notifications**: User notifications
 - **user_achievements**: Gamification and recognition
@@ -97,14 +107,17 @@ The database includes the following main tables:
 ## Sample Data
 
 The seed data includes:
+
 - 9 dummy users (3 Gaza clinicians, 5 UK specialists, 1 admin)
 - 5 sample medical cases across different specialties
 - Case responses and assignments
 - Notifications and achievements
 
 ### Sample Users
+
 - **Gaza Clinicians**: ahmad@gaza-health.ps, fatima@gaza-health.ps, omar@gaza-health.ps
-- **UK Specialists**: dr.smith@nhs.uk, dr.johnson@nhs.uk, dr.patel@nhs.uk, dr.wilson@nhs.uk, dr.brown@nhs.uk
+- **UK Specialists**: dr.smith@nhs.uk, dr.johnson@nhs.uk, dr.patel@nhs.uk, dr.wilson@nhs.uk,
+  dr.brown@nhs.uk
 - **Admin**: admin@telecare-platform.org
 
 ## Development Commands
@@ -128,31 +141,31 @@ npx wrangler d1 execute telecare-platform-dev --file=./custom-migration.sql
 The project includes a TypeScript database helper class:
 
 ```typescript
-import { DatabaseHelper } from '@/lib/database';
+import { DatabaseHelper } from "@/lib/database";
 
 // In your Cloudflare Worker or API route
 export default {
   async fetch(request: Request, env: Env): Promise<Response> {
     const db = new DatabaseHelper(env.DB);
-    
+
     // Create a user
     const user = await db.createUser({
-      email: 'doctor@example.com',
-      first_name: 'Dr.',
-      last_name: 'Example',
-      role: 'uk_specialist',
-      specialties: ['cardiology']
+      email: "doctor@example.com",
+      first_name: "Dr.",
+      last_name: "Example",
+      role: "uk_specialist",
+      specialties: ["cardiology"],
     });
-    
+
     // Get cases
     const { cases } = await db.getCases({
-      specialty: 'cardiology',
-      status: ['open'],
-      limit: 10
+      specialty: "cardiology",
+      status: ["open"],
+      limit: 10,
     });
-    
+
     return Response.json({ user, cases });
-  }
+  },
 };
 ```
 
@@ -163,13 +176,14 @@ Make sure these are set in your Cloudflare environment:
 ```bash
 # In wrangler.toml
 DB = "your-database-binding"
-STORAGE = "your-r2-bucket-binding"  
+STORAGE = "your-r2-bucket-binding"
 CACHE = "your-kv-namespace-binding"
 ```
 
 ## Troubleshooting
 
 ### Authentication Issues
+
 ```bash
 # Re-authenticate
 npm run cf:login
@@ -179,6 +193,7 @@ npx wrangler auth whoami
 ```
 
 ### Database Issues
+
 ```bash
 # List databases
 npx wrangler d1 list
@@ -191,6 +206,7 @@ npx wrangler d1 execute telecare-platform-dev --command="SELECT * FROM audit_log
 ```
 
 ### Migration Issues
+
 - Ensure migration files are valid SQL
 - Check for syntax errors in schema
 - Verify foreign key constraints
@@ -202,7 +218,8 @@ npx wrangler d1 execute telecare-platform-dev --command="SELECT * FROM audit_log
 2. **Access Control**: Limit database access to necessary environments
 3. **Audit Logging**: All database changes are logged in `audit_log`
 4. **Data Validation**: Use the TypeScript interfaces for type safety
-5. **Backup**: Cloudflare handles backups, but consider additional backup strategies for critical data
+5. **Backup**: Cloudflare handles backups, but consider additional backup strategies for critical
+   data
 
 ## Next Steps
 
@@ -215,6 +232,7 @@ After database setup:
 5. Test database connectivity
 
 For more information, see:
+
 - [Cloudflare D1 Documentation](https://developers.cloudflare.com/d1/)
 - [Wrangler CLI Reference](https://developers.cloudflare.com/workers/wrangler/)
 - [Project API Documentation](./api-reference.md)

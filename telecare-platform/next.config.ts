@@ -3,6 +3,9 @@ import withPWA from "next-pwa";
 
 const nextConfig: NextConfig = {
   reactStrictMode: true,
+  output: "export",
+  trailingSlash: true,
+  distDir: "out",
 
   // Experimental features disabled temporarily to fix critters dependency
   // experimental: {

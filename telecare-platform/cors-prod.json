@@ -1,0 +1,24 @@
+[
+  {
+    "AllowedOrigins": [
+      "https://telecare-platform.pages.dev",
+      "https://*.telecare-platform.pages.dev",
+      "http://localhost:3000",
+      "http://127.0.0.1:3000"
+    ],
+    "AllowedMethods": [
+      "GET",
+      "PUT",
+      "POST",
+      "DELETE",
+      "HEAD"
+    ],
+    "AllowedHeaders": [
+      "*"
+    ],
+    "ExposeHeaders": [
+      "ETag"
+    ],
+    "MaxAgeSeconds": 3600
+  }
+]

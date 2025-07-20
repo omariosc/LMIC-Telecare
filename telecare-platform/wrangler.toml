@@ -24,7 +24,7 @@ NODE_ENV = "development"
 [[env.production.d1_databases]]
 binding = "DB"
 database_name = "telecare-platform-prod"
-database_id = ""  # Will be set after creating the database
+database_id = "251c7686-fe80-462d-8244-2e85d9fcaa73"
 
 [[env.staging.d1_databases]]
 binding = "DB"
@@ -34,7 +34,7 @@ database_id = ""  # Will be set after creating the database
 [[env.development.d1_databases]]
 binding = "DB"
 database_name = "telecare-platform-dev"
-database_id = ""  # Will be set after creating the database
+database_id = "d47f16e2-ac9e-4854-8b77-0a8621c1f194"  # Will be set after creating the database
 
 # R2 Storage bindings (for file uploads)
 [[env.production.r2_buckets]]
@@ -52,7 +52,7 @@ bucket_name = "telecare-platform-storage-dev"
 # KV bindings (for caching and session storage)
 [[env.production.kv_namespaces]]
 binding = "CACHE"
-id = ""  # Will be set after creating the namespace
+id = "fc83186cc3374443b02c8f7a7876291c"
 
 [[env.staging.kv_namespaces]]
 binding = "CACHE"
@@ -60,7 +60,7 @@ id = ""  # Will be set after creating the namespace
 
 [[env.development.kv_namespaces]]
 binding = "CACHE"
-id = ""  # Will be set after creating the namespace
+id = "2272c3615cb14deaa2dad88b665f1173"
 
 # Worker configuration
 [build]

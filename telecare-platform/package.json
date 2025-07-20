@@ -20,9 +20,9 @@
     "validate": "npm run code-quality && npm run test:ci",
     "wrangler": "wrangler",
     "cf:login": "wrangler auth login",
-    "cf:deploy": "wrangler pages deploy out",
-    "cf:deploy:staging": "wrangler pages deploy out --env staging",
-    "cf:deploy:prod": "wrangler pages deploy out --env production",
+    "cf:deploy": "wrangler pages deploy out --project-name telecare-platform",
+    "cf:deploy:staging": "wrangler pages deploy out --project-name telecare-platform --branch staging",
+    "cf:deploy:prod": "wrangler pages deploy out --project-name telecare-platform --branch main",
     "db:create": "wrangler d1 create telecare-platform-dev",
     "db:create:staging": "wrangler d1 create telecare-platform-staging",
     "db:create:prod": "wrangler d1 create telecare-platform-prod",
@@ -33,15 +33,24 @@
     "db:seed:staging": "wrangler d1 execute telecare-platform-staging --file=./migrations/0002_seed_data.sql",
     "db:reset": "npm run db:migrate && npm run db:seed",
     "db:console": "wrangler d1 execute telecare-platform-dev --command=\"SELECT name FROM sqlite_master WHERE type='table';\"",
+    "r2:setup": "node scripts/setup-r2-storage.js",
+    "r2:setup:dev": "node scripts/setup-r2-storage.js dev",
+    "r2:setup:staging": "node scripts/setup-r2-storage.js staging", 
+    "r2:setup:prod": "node scripts/setup-r2-storage.js prod",
     "storage:create": "wrangler r2 bucket create telecare-platform-storage-dev",
-    "storage:create:staging": "wrangler r2 bucket create telecare-platform-storage-staging", 
+    "storage:create:staging": "wrangler r2 bucket create telecare-platform-storage-staging",
     "storage:create:prod": "wrangler r2 bucket create telecare-platform-storage-prod",
     "kv:create": "wrangler kv:namespace create CACHE",
     "kv:create:staging": "wrangler kv:namespace create CACHE --env staging",
     "kv:create:prod": "wrangler kv:namespace create CACHE --env production",
     "cf:setup": "npm run db:create && npm run storage:create && npm run kv:create && npm run db:reset",
     "cf:setup:staging": "npm run db:create:staging && npm run storage:create:staging && npm run kv:create:staging",
-    "cf:setup:prod": "npm run db:create:prod && npm run storage:create:prod && npm run kv:create:prod"
+    "cf:setup:prod": "npm run db:create:prod && npm run storage:create:prod && npm run kv:create:prod",
+    "api:dev": "cd workers/api && npm run dev",
+    "api:deploy": "cd workers/api && npm run deploy",
+    "api:deploy:staging": "cd workers/api && npm run deploy:staging",
+    "api:deploy:prod": "cd workers/api && npm run deploy:prod",
+    "api:logs": "cd workers/api && wrangler tail --env production"
   },
   "dependencies": {
     "@headlessui/react": "^2.2.4",
@@ -76,6 +85,6 @@
     "prettier": "^3.6.2",
     "tailwindcss": "^4",
     "typescript": "^5",
-    "wrangler": "^3.91.0"
+    "wrangler": "^4.25.0"
   }
 }

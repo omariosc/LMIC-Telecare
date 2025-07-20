@@ -74,7 +74,10 @@ export default function Home() {
 
     // Click outside handler for dropdown
     const handleClickOutside = (event: MouseEvent) => {
-      if (dropdownRef.current && !dropdownRef.current.contains(event.target as Node)) {
+      if (
+        dropdownRef.current &&
+        !dropdownRef.current.contains(event.target as Node)
+      ) {
         setShowDropdown(false);
       }
     };
@@ -687,7 +690,7 @@ export default function Home() {
                   ميزات المنصة
                 </span>
               </h2>
-              <p className="mt-4 max-w-2xl mx-auto text-gray-600 text-zinc-400">
+              <p className="mt-4 max-w-2xl mx-auto text-gray-600 dark:text-zinc-400">
                 <span data-lang-en="">
                   Humanitarian medical technology designed specifically for
                   Gaza&apos;s healthcare crisis.
@@ -840,7 +843,7 @@ export default function Home() {
                 </p>
               </div>
             </div>
-            <div className="mt-12 text-center text-sm font-semibold text-gray-600 text-zinc-400 flex flex-wrap justify-center items-center gap-x-6 gap-y-2">
+            <div className="mt-12 text-center text-sm font-semibold text-gray-600 dark:text-zinc-400 flex flex-wrap justify-center items-center gap-x-6 gap-y-2">
               <span className="flex items-center gap-2">
                 <LockClosedIcon className="h-4 w-4" />
                 <span data-lang-en="">End-to-End Encrypted</span>

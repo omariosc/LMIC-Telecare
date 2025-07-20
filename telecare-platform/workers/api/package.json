@@ -1,0 +1,41 @@
+{
+  "name": "telecare-platform-api",
+  "version": "1.0.0",
+  "description": "Cloudflare Worker API for Telecare Platform",
+  "main": "src/index.ts",
+  "scripts": {
+    "dev": "wrangler dev",
+    "deploy": "wrangler deploy",
+    "deploy:staging": "wrangler deploy --env staging",
+    "deploy:prod": "wrangler deploy --env production",
+    "test": "vitest",
+    "test:coverage": "vitest run --coverage",
+    "type-check": "tsc --noEmit",
+    "lint": "eslint src --ext .ts",
+    "lint:fix": "eslint src --ext .ts --fix"
+  },
+  "dependencies": {
+    "hono": "^4.2.0",
+    "zod": "^3.23.8",
+    "@hono/zod-validator": "^0.2.1"
+  },
+  "devDependencies": {
+    "@cloudflare/workers-types": "^4.20241218.0",
+    "@types/node": "^20.0.0",
+    "typescript": "^5.3.0",
+    "vitest": "^1.6.0",
+    "eslint": "^8.57.0",
+    "@typescript-eslint/eslint-plugin": "^6.0.0",
+    "@typescript-eslint/parser": "^6.0.0",
+    "wrangler": "^3.78.0"
+  },
+  "keywords": [
+    "cloudflare",
+    "workers",
+    "api",
+    "telecare",
+    "medical"
+  ],
+  "author": "Telecare Platform Team",
+  "license": "MIT"
+}

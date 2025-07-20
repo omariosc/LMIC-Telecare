@@ -1,0 +1,24 @@
+# Cloudflare Pages configuration for Telecare Platform
+name = "telecare-platform"
+compatibility_date = "2024-07-20"
+
+# D1 Database bindings
+[[d1_databases]]
+binding = "DB"
+database_name = "telecare-platform-prod"
+database_id = "251c7686-fe80-462d-8244-2e85d9fcaa73"
+
+# KV bindings (for caching and session storage)
+[[kv_namespaces]]
+binding = "CACHE"
+id = "fc83186cc3374443b02c8f7a7876291c"
+
+# R2 Storage bindings (for file uploads)
+[[r2_buckets]]
+binding = "STORAGE"
+bucket_name = "telecare-platform-storage-prod"
+
+# Environment variables
+[vars]
+ENVIRONMENT = "production"
+NODE_ENV = "production"

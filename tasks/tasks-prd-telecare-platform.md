@@ -39,12 +39,12 @@ prd-telecare-platform.md
 - [x] 1.0 Set up project foundation and infrastructure
   - [x] 1.1 Initialize Next.js project with TypeScript and Tailwind CSS
   - [x] 1.2 Configure Cloudflare Pages deployment and environment variables
-  - [ ] 1.3 Set up Cloudflare D1 database and create initial schema
-  - [ ] 1.4 Configure Cloudflare R2 storage for file uploads
-  - [ ] 1.5 Set up Cloudflare Workers for API endpoints
+  - [x] 1.3 Set up Cloudflare D1 database and create initial schema
+  - [x] 1.4 Configure Cloudflare R2 storage for file uploads
+  - [x] 1.5 Set up Cloudflare Workers for API endpoints
   - [x] 1.6 Create basic project structure with folders and routing
-  - [ ] 1.7 Set up development environment with Wrangler CLI
-  - [ ] 1.8 Create TypeScript interfaces for core data models
+  - [x] 1.7 Set up development environment with Wrangler CLI
+  - [x] 1.8 Create TypeScript interfaces for core data models
 
 - [ ] 2.0 Build asynchronous forum with case management (with dummy users)
   - [ ] 2.1 Create dummy user data with different roles (UK specialist, Gaza clinician, admin)
