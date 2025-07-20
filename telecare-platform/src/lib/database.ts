@@ -3,12 +3,7 @@ import type {
   User,
   MedicalCase,
   CaseResponse,
-  CaseAssignment,
-  FileUpload,
   Notification,
-  UserAchievement,
-  TranslationCache,
-  AuditLog,
   CaseWithUser,
   ResponseWithUser,
   UserWithStats,
@@ -18,7 +13,6 @@ import type {
   CreateUserInput,
   UpdateUserInput,
   CreateCaseInput,
-  UpdateCaseInput,
   CreateResponseInput,
 } from '@/types/database';
 
