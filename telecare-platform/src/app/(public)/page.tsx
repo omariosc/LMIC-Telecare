@@ -29,7 +29,6 @@ import {
 import { useEffect, useState, useRef } from "react";
 import { useLanguage } from "@/hooks/useLanguage";
 import AuthModal from "@/components/AuthModal";
-import { DarkModeToggle } from "@/components/DarkModeToggle";
 
 // Function to check if screen is too small
 const isScreenTooSmall = () => {
@@ -161,13 +160,13 @@ export default function Home() {
 
             {/* User/Login Dropdown */}
             <div className="relative" ref={dropdownRef}>
-              <button 
+              <button
                 onClick={() => setShowDropdown(!showDropdown)}
-                className="text-black dark:text-white dark:hover:text-zinc-400 hover:text-zinc-600 px-3 py-2 rounded-md font-medium text-sm flex items-center gap-2 transition-colors"
+                className="text-black dark:text-white dark:hover:text-zinc-400 hover:text-zinc-600 px-3 py-2 rounded-md font-medium text-sm flex items-center gap-2 transition-colors  cursor-pointer"
               >
                 <UserIcon className="h-4 w-4" />
                 <svg
-                  className={`w-4 h-4 ml-1 transition-transform duration-200 ${showDropdown ? 'rotate-180' : ''}`}
+                  className={`w-4 h-4 ml-1 transition-transform duration-200 ${showDropdown ? "rotate-180" : ""}`}
                   fill="none"
                   stroke="currentColor"
                   viewBox="0 0 24 24"
@@ -182,7 +181,9 @@ export default function Home() {
               </button>
 
               {/* Dropdown Menu */}
-              <div className={`absolute right-0 mt-2 w-56 bg-white dark:bg-zinc-800 rounded-md shadow-lg border border-gray-200 dark:border-zinc-700 transition-all duration-200 z-50 ${showDropdown ? 'opacity-100 visible' : 'opacity-0 invisible'}`}>
+              <div
+                className={`absolute right-0 mt-2 w-56 bg-white dark:bg-zinc-800 rounded-md shadow-lg border border-gray-200 dark:border-zinc-700 transition-all duration-200 z-50 ${showDropdown ? "opacity-100 visible" : "opacity-0 invisible"}`}
+              >
                 <div className="py-2">
                   <button
                     onClick={() => {
@@ -478,7 +479,7 @@ export default function Home() {
                       </span>
                     </h4>
                   </div>
-                  <p className="text-gray-600 text-sm text-zinc-300 text-zinc-300">
+                  <p className="text-gray-600 text-sm dark:text-zinc-300 dark:text-zinc-300">
                     <span data-lang-en="">
                       Limited advanced surgical expertise for complex blast
                       injuries
@@ -501,7 +502,7 @@ export default function Home() {
                       </span>
                     </h4>
                   </div>
-                  <p className="text-gray-600 text-sm text-zinc-300">
+                  <p className="text-gray-600 text-sm dark:text-zinc-300">
                     <span data-lang-en="">
                       Limited opportunities for continuing education and skill
                       development
@@ -524,7 +525,7 @@ export default function Home() {
                       </span>
                     </h4>
                   </div>
-                  <p className="text-gray-600 text-sm text-zinc-300">
+                  <p className="text-gray-600 text-sm dark:text-zinc-300">
                     <span data-lang-en="">
                       Lack of diagnostic modalities like pathology and advanced
                       imaging
@@ -547,7 +548,7 @@ export default function Home() {
                       </span>
                     </h4>
                   </div>
-                  <p className="text-gray-600 text-sm text-zinc-300">
+                  <p className="text-gray-600 text-sm dark:text-zinc-300">
                     <span data-lang-en="">
                       Lack of experts in some specialties which hinders the
                       implementation of multidisciplinary coordinated team-based
@@ -575,7 +576,7 @@ export default function Home() {
                       </span>
                     </h4>
                   </div>
-                  <p className="text-gray-600 text-sm text-zinc-300">
+                  <p className="text-gray-600 text-sm dark:text-zinc-300">
                     <span data-lang-en="">
                       Internet availability limited to few hours daily with low
                       average speeds
@@ -598,7 +599,7 @@ export default function Home() {
                       </span>
                     </h4>
                   </div>
-                  <p className="text-gray-600 text-sm text-zinc-300">
+                  <p className="text-gray-600 text-sm dark:text-zinc-300">
                     <span data-lang-en="">
                       Shortage of computing devices, solutions must work on
                       basic smartphones
@@ -622,7 +623,7 @@ export default function Home() {
                       </span>
                     </h4>
                   </div>
-                  <p className="text-gray-600 text-sm text-zinc-300">
+                  <p className="text-gray-600 text-sm dark:text-zinc-300">
                     <span data-lang-en="">
                       Electricity available almost only in hospitals or medical
                       points
@@ -645,7 +646,7 @@ export default function Home() {
                       </span>
                     </h4>
                   </div>
-                  <p className="text-gray-600 text-sm text-zinc-300">
+                  <p className="text-gray-600 text-sm dark:text-zinc-300">
                     <span data-lang-en="">
                       Patient privacy must be maintained despite infrastructure
                       challenges
@@ -699,7 +700,7 @@ export default function Home() {
             </div>
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8 max-w-6xl mx-auto">
               <div
-                className="bg-white bg-zinc-900 p-6 rounded-xl shadow-sm initial-hidden"
+                className="bg-white dark:bg-zinc-900 p-6 rounded-xl shadow-sm initial-hidden"
                 style={{ animationDelay: "800ms" }}
               >
                 <div className="w-12 h-12 bg-red-100 dark:bg-red-950 rounded-lg flex items-center justify-center mb-4">
@@ -711,7 +712,7 @@ export default function Home() {
                     استشارة طارئة
                   </span>
                 </h3>
-                <p className="mt-1 text-gray-600 text-zinc-300 text-zinc-300">
+                <p className="mt-1 text-gray-600 dark:text-zinc-300">
                   <span data-lang-en="">
                     24/7 instant access to UK specialists for critical
                     emergencies.
@@ -723,7 +724,7 @@ export default function Home() {
                 </p>
               </div>
               <div
-                className="bg-white bg-zinc-900 p-6 rounded-xl shadow-sm initial-hidden"
+                className="bg-white dark:bg-zinc-900 p-6 rounded-xl shadow-sm initial-hidden"
                 style={{ animationDelay: "1000ms" }}
               >
                 <div className="w-12 h-12 bg-blue-100 dark:bg-blue-950 rounded-lg flex items-center justify-center mb-4">
@@ -735,7 +736,7 @@ export default function Home() {
                     مكالمات فيديو آمنة
                   </span>
                 </h3>
-                <p className="mt-1 text-gray-600 text-zinc-300">
+                <p className="mt-1 text-gray-600 dark:text-zinc-300">
                   <span data-lang-en="">
                     Encrypted video and chat between Gaza clinicians and UK
                     experts.
@@ -746,7 +747,7 @@ export default function Home() {
                 </p>
               </div>
               <div
-                className="bg-white bg-zinc-900 p-6 rounded-xl shadow-sm initial-hidden"
+                className="bg-white dark:bg-zinc-900 p-6 rounded-xl shadow-sm initial-hidden"
                 style={{ animationDelay: "1200ms" }}
               >
                 <div className="w-12 h-12 bg-green-100 dark:bg-green-950 rounded-lg flex items-center justify-center mb-4">
@@ -758,7 +759,7 @@ export default function Home() {
                     مطابقة الخبراء
                   </span>
                 </h3>
-                <p className="mt-1 text-gray-600 text-zinc-300">
+                <p className="mt-1 text-gray-600 dark:text-zinc-300">
                   <span data-lang-en="">
                     Intelligent specialist matching based on medical expertise
                     and availability.
@@ -769,7 +770,7 @@ export default function Home() {
                 </p>
               </div>
               <div
-                className="bg-white bg-zinc-900 p-6 rounded-xl shadow-sm initial-hidden"
+                className="bg-white dark:bg-zinc-900 p-6 rounded-xl shadow-sm initial-hidden"
                 style={{ animationDelay: "1400ms" }}
               >
                 <div className="w-12 h-12 bg-purple-100 dark:bg-purple-950 rounded-lg flex items-center justify-center mb-4">
@@ -781,7 +782,7 @@ export default function Home() {
                     السجلات الطبية
                   </span>
                 </h3>
-                <p className="mt-1 text-gray-600 text-zinc-300">
+                <p className="mt-1 text-gray-600 dark:text-zinc-300">
                   <span data-lang-en="">
                     Secure patient data documentation and medical record
                     management.
@@ -792,7 +793,7 @@ export default function Home() {
                 </p>
               </div>
               <div
-                className="bg-white bg-zinc-900 p-6 rounded-xl shadow-sm initial-hidden"
+                className="bg-white dark:bg-zinc-900 p-6 rounded-xl shadow-sm initial-hidden"
                 style={{ animationDelay: "1600ms" }}
               >
                 <div className="w-12 h-12 bg-orange-100 dark:bg-orange-950 rounded-lg flex items-center justify-center mb-4">
@@ -804,7 +805,7 @@ export default function Home() {
                     الوصول دون اتصال
                   </span>
                 </h3>
-                <p className="mt-1 text-gray-600 text-zinc-300">
+                <p className="mt-1 text-gray-600 dark:text-zinc-300">
                   <span data-lang-en="">
                     Works offline with limited internet - designed for
                     Gaza&apos;s connectivity challenges.
@@ -816,7 +817,7 @@ export default function Home() {
                 </p>
               </div>
               <div
-                className="bg-white bg-zinc-900 p-6 rounded-xl shadow-sm initial-hidden"
+                className="bg-white dark:bg-zinc-900 p-6 rounded-xl shadow-sm initial-hidden"
                 style={{ animationDelay: "1800ms" }}
               >
                 <div className="w-12 h-12 bg-indigo-100 dark:bg-indigo-950 rounded-lg flex items-center justify-center mb-4">
@@ -828,7 +829,7 @@ export default function Home() {
                     دعم عربي-إنجليزي
                   </span>
                 </h3>
-                <p className="mt-1 text-gray-600 text-zinc-300">
+                <p className="mt-1 text-gray-600 dark:text-zinc-300">
                   <span data-lang-en="">
                     Full multilingual interface with medical translation
                     capabilities.
@@ -952,7 +953,10 @@ export default function Home() {
         </section>
 
         {/* Join Mission CTA */}
-        <section id="join" className="py-20 md:py-28 bg-gray-50 dark:bg-zinc-950">
+        <section
+          id="join"
+          className="py-20 md:py-28 bg-gray-50 dark:bg-zinc-950"
+        >
           <div className="container mx-auto px-6 text-center">
             <h2 className="text-3xl md:text-4xl font-bold text-gray-900 dark:text-white">
               <span data-lang-en="">
@@ -1120,9 +1124,6 @@ export default function Home() {
           </div>
         </div>
       </footer>
-
-      {/* Floating Dark Mode Toggle */}
-      <DarkModeToggle />
 
       {/* Authentication Modal */}
       <AuthModal

@@ -90,25 +90,6 @@ export default function RootLayout({
           sizes="512x512"
           href="/icons/icon-512x512.png"
         />
-        <script
-          dangerouslySetInnerHTML={{
-            __html: `
-              (function() {
-                function getCookie(name) {
-                  const value = '; ' + document.cookie;
-                  const parts = value.split('; ' + name + '=');
-                  if (parts.length === 2) return parts.pop().split(';').shift();
-                  return null;
-                }
-                
-                const darkMode = getCookie('darkMode');
-                if (darkMode === 'true' || (darkMode === null && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
-                  document.documentElement.classList.add('dark');
-                }
-              })();
-            `,
-          }}
-        />
       </head>
       <body className="font-sans antialiased">
         {/* Future AuthProvider will wrap children here */}
