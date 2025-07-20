@@ -19,7 +19,7 @@
     "test:debug": "jest --no-cache --verbose",
     "validate": "npm run code-quality && npm run test:ci",
     "wrangler": "wrangler",
-    "cf:login": "wrangler auth login",
+    "cf:login": "wrangler login",
     "cf:deploy": "wrangler pages deploy out --project-name telecare-platform",
     "cf:deploy:staging": "wrangler pages deploy out --project-name telecare-platform --branch staging",
     "cf:deploy:prod": "wrangler pages deploy out --project-name telecare-platform --branch main",

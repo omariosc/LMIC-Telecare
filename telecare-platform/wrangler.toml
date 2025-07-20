@@ -1,71 +1,69 @@
-# Cloudflare configuration for Telecare Platform
-name = "telecare-platform"
-main = "src/worker.ts"
+# Cloudflare Worker configuration for Telecare Platform API
+name = "telecare-platform-api"
+main = "src/index.ts"
 compatibility_date = "2024-07-20"
 compatibility_flags = ["nodejs_compat"]
 
-# Cloudflare Pages configuration
-pages_build_output_dir = "out"
-
 # Environment variables
-[env.production.vars]
-ENVIRONMENT = "production"
-NODE_ENV = "production"
+[vars]
+ENVIRONMENT = "development"
+API_VERSION = "v1"
+ALLOWED_ORIGINS = "http://localhost:3000,https://telecare-platform.pages.dev,https://*.telecare-platform.pages.dev"
+
+# D1 Database bindings
+[[d1_databases]]
+binding = "DB"
+database_name = "telecare-platform-dev"
+database_id = "b9c9854d-4a1e-42a2-b546-12f40dcc22b8"
+
+# KV bindings (for caching and session storage)
+[[kv_namespaces]]
+binding = "CACHE"
+id = "d68c98c45b0e436db3cb78a308660c82"
+
+# R2 Storage bindings (for file uploads)
+[[r2_buckets]]
+binding = "STORAGE"
+bucket_name = "telecare-platform-storage-dev"
+
+# Environment-specific configurations
+[env.staging]
+name = "telecare-platform-api-staging"
 
 [env.staging.vars]
 ENVIRONMENT = "staging"
-NODE_ENV = "development"
-
-[env.development.vars]
-ENVIRONMENT = "development"
-NODE_ENV = "development"
-
-# D1 Database bindings
-[[env.production.d1_databases]]
-binding = "DB"
-database_name = "telecare-platform-prod"
-database_id = "251c7686-fe80-462d-8244-2e85d9fcaa73"
+ALLOWED_ORIGINS = "https://staging.telecare-platform.pages.dev,https://*.telecare-platform.pages.dev"
 
 [[env.staging.d1_databases]]
 binding = "DB"
 database_name = "telecare-platform-staging"
-database_id = ""  # Will be set after creating the database
+database_id = ""  # Will be set when staging database is created
 
-[[env.development.d1_databases]]
-binding = "DB"
-database_name = "telecare-platform-dev"
-database_id = "d47f16e2-ac9e-4854-8b77-0a8621c1f194"  # Will be set after creating the database
-
-# R2 Storage bindings (for file uploads)
-[[env.production.r2_buckets]]
-binding = "STORAGE"
-bucket_name = "telecare-platform-storage-prod"
+[[env.staging.kv_namespaces]]
+binding = "CACHE"
+id = ""  # Will be set when staging KV is created
 
 [[env.staging.r2_buckets]]
 binding = "STORAGE"
 bucket_name = "telecare-platform-storage-staging"
 
-[[env.development.r2_buckets]]
-binding = "STORAGE"
-bucket_name = "telecare-platform-storage-dev"
+[env.production]
+name = "telecare-platform-api-prod"
 
-# KV bindings (for caching and session storage)
+[env.production.vars]
+ENVIRONMENT = "production"
+API_VERSION = "v1"
+ALLOWED_ORIGINS = "https://telecare-platform.pages.dev,https://6f806039.telecare-platform.pages.dev"
+
+[[env.production.d1_databases]]
+binding = "DB"
+database_name = "telecare-platform-prod"
+database_id = "251c7686-fe80-462d-8244-2e85d9fcaa73"
+
 [[env.production.kv_namespaces]]
 binding = "CACHE"
 id = "fc83186cc3374443b02c8f7a7876291c"
 
-[[env.staging.kv_namespaces]]
-binding = "CACHE"
-id = ""  # Will be set after creating the namespace
-
-[[env.development.kv_namespaces]]
-binding = "CACHE"
-id = "2272c3615cb14deaa2dad88b665f1173"
-
-# Worker configuration
-[build]
-command = "npm run build"
-
-# Deployment configuration
-[triggers]
-crons = ["0 0 * * *"]  # Daily cleanup tasks
+[[env.production.r2_buckets]]
+binding = "STORAGE"
+bucket_name = "telecare-platform-storage-prod"
