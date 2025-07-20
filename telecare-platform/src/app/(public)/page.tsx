@@ -28,7 +28,7 @@ import {
 } from "@heroicons/react/24/outline";
 import { useEffect, useState, useRef } from "react";
 import { useLanguage } from "@/hooks/useLanguage";
-import AuthModal from "@/components/AuthModal";
+import LoginModal from "@/components/LoginModal";
 
 export default function Home() {
   const [showSmallScreenWarning, setShowSmallScreenWarning] = useState(false);
@@ -1163,7 +1163,7 @@ export default function Home() {
       </footer>
 
       {/* Authentication Modal */}
-      <AuthModal
+      <LoginModal
         isOpen={authModal.isOpen}
         onClose={closeAuthModal}
         userType={authModal.userType}

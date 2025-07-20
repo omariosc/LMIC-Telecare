@@ -30,12 +30,40 @@ app.use('*', async (c, next) => {
         'https://6f806039.telecare-platform.pages.dev'
       ];
       
-      if (!origin) return true; // Allow requests with no origin (Postman, curl, etc.)
-      return allowedOrigins.some(allowed => 
-        allowed === '*' || 
-        origin === allowed || 
-        (allowed.includes('*') && origin.includes(allowed.replace('*', '')))
-      );
+      // Debug logging
+      console.log('CORS Debug:', {
+        origin,
+        allowedOrigins,
+        envValue: c.env.ALLOWED_ORIGINS
+      });
+      
+      if (!origin) return '*'; // Allow requests with no origin (Postman, curl, etc.)
+      
+      // Normalize origins by removing trailing slashes for comparison
+      const normalizeOrigin = (url: string) => url.replace(/\/$/, '');
+      const normalizedOrigin = normalizeOrigin(origin);
+      
+      const isAllowed = allowedOrigins.some(allowed => {
+        if (allowed === '*') return true;
+        
+        const normalizedAllowed = normalizeOrigin(allowed);
+        
+        // Exact match after normalization
+        if (normalizedOrigin === normalizedAllowed) return true;
+        
+        // Wildcard matching for subdomains
+        if (allowed.includes('*')) {
+          const pattern = allowed.replace('*', '');
+          return normalizedOrigin.includes(pattern);
+        }
+        
+        return false;
+      });
+      
+      console.log('CORS Result:', { origin, normalizedOrigin, isAllowed });
+      
+      // Return the actual origin if allowed, or false if not
+      return isAllowed ? origin : false;
     },
     allowHeaders: [
       'Content-Type',

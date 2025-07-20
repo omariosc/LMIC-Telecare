@@ -3,12 +3,7 @@ name = "telecare-platform-api"
 main = "src/index.ts"
 compatibility_date = "2024-07-20"
 compatibility_flags = ["nodejs_compat"]
-
-# Environment variables
-[vars]
-ENVIRONMENT = "development"
-API_VERSION = "v1"
-ALLOWED_ORIGINS = "http://localhost:3000,https://telecare-platform.pages.dev,https://*.telecare-platform.pages.dev"
+account_id = "504b6f29747547b23c30c25e669f8af9"
 
 # D1 Database bindings
 [[d1_databases]]
@@ -32,7 +27,7 @@ name = "telecare-platform-api-staging"
 
 [env.staging.vars]
 ENVIRONMENT = "staging"
-ALLOWED_ORIGINS = "https://staging.telecare-platform.pages.dev,https://*.telecare-platform.pages.dev"
+ALLOWED_ORIGINS = "http://localhost:3000,https://jusur.org.uk,https://telecare-platform.pages.dev,https://6f806039.telecare-platform.pages.dev"
 
 [[env.staging.d1_databases]]
 binding = "DB"
@@ -53,7 +48,7 @@ name = "telecare-platform-api-prod"
 [env.production.vars]
 ENVIRONMENT = "production"
 API_VERSION = "v1"
-ALLOWED_ORIGINS = "https://telecare-platform.pages.dev,https://6f806039.telecare-platform.pages.dev"
+ALLOWED_ORIGINS = "http://localhost:3000,https://jusur.org.uk,https://telecare-platform.pages.dev,https://6f806039.telecare-platform.pages.dev"
 
 [[env.production.d1_databases]]
 binding = "DB"
