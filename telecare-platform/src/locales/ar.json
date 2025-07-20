@@ -158,5 +158,79 @@
     "note": "نحن نفهم أن التبرع قرار شخصي. إذا غيرت رأيك، يمكنك دائماً العودة لاحقاً لتقديم تبرع.",
     "tryAgain": "حاول مرة أخرى",
     "returnHome": "العودة إلى الصفحة الرئيسية"
+  },
+  "medical": {
+    "specialties": {
+      "cardiology": "أمراض القلب",
+      "pediatrics": "طب الأطفال",
+      "surgery": "الجراحة",
+      "emergency": "طب الطوارئ",
+      "emergency_medicine": "طب الطوارئ",
+      "internal_medicine": "الطب الباطني",
+      "orthopedics": "جراحة العظام",
+      "neurology": "طب الأعصاب",
+      "dermatology": "الأمراض الجلدية",
+      "general_medicine": "الطب العام",
+      "trauma": "جراحة الإصابات",
+      "stroke_care": "رعاية السكتة الدماغية"
+    },
+    "urgencyLevels": {
+      "low": "منخفض",
+      "medium": "متوسط",
+      "high": "عالي",
+      "critical": "حرج"
+    },
+    "patientInfo": {
+      "age": "العمر",
+      "gender": "الجنس",
+      "male": "ذكر",
+      "female": "أنثى",
+      "other": "آخر",
+      "medicalHistory": "التاريخ الطبي",
+      "currentMedications": "الأدوية الحالية",
+      "allergies": "الحساسية",
+      "vitalSigns": "العلامات الحيوية",
+      "bloodPressure": "ضغط الدم",
+      "heartRate": "معدل ضربات القلب",
+      "temperature": "درجة الحرارة",
+      "oxygenSaturation": "تشبع الأكسجين"
+    },
+    "caseStatus": {
+      "active": "نشط",
+      "resolved": "محلول",
+      "pending": "معلق",
+      "inProgress": "قيد المعالجة",
+      "closed": "مغلق"
+    },
+    "actions": {
+      "newCase": "حالة جديدة",
+      "viewCase": "عرض الحالة",
+      "updateCase": "تحديث الحالة",
+      "addResponse": "إضافة رد",
+      "requestConsultation": "طلب استشارة",
+      "viewResponses": "عرض الردود",
+      "uploadImage": "رفع صورة",
+      "downloadReport": "تحميل التقرير"
+    },
+    "common": {
+      "diagnosis": "التشخيص",
+      "treatment": "العلاج",
+      "symptoms": "الأعراض",
+      "examination": "الفحص",
+      "labResults": "نتائج المختبر",
+      "testResults": "نتائج الفحوصات",
+      "prescription": "الوصفة الطبية",
+      "followUp": "المتابعة",
+      "referral": "الإحالة",
+      "consultation": "الاستشارة",
+      "emergency": "طوارئ",
+      "specialist": "أخصائي",
+      "clinician": "طبيب",
+      "patient": "مريض",
+      "medicalRecord": "السجل الطبي",
+      "caseTitle": "عنوان الحالة",
+      "caseDescription": "وصف الحالة",
+      "additionalNotes": "ملاحظات إضافية"
+    }
   }
 }

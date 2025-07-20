@@ -6,6 +6,8 @@ import {
   CameraIcon,
   ArrowLeftIcon,
   ArrowRightIcon,
+  UserIcon,
+  UserPlusIcon,
 } from "@heroicons/react/24/outline";
 import Tesseract from "tesseract.js";
 
@@ -39,6 +41,9 @@ export default function EnhancedRegistrationModal({
 }: EnhancedRegistrationModalProps) {
   // Main flow state
   const [currentPage, setCurrentPage] = useState<
+    | "choice"
+    | "login"
+    | "forgot_password"
     | "role"
     | "gmc"
     | "id"
@@ -50,7 +55,7 @@ export default function EnhancedRegistrationModal({
     | "gaza_email"
     | "gaza_password"
     | "complete"
-  >("role");
+  >("choice");
   const [registrationData, setRegistrationData] = useState<RegistrationData>({
     gmcNumber: "",
     firstName: "",
@@ -94,10 +99,15 @@ export default function EnhancedRegistrationModal({
   // Completion countdown state
   const [completionCountdown, setCompletionCountdown] = useState(3);
 
+  // Login state
+  const [loginEmail, setLoginEmail] = useState("");
+  const [loginPassword, setLoginPassword] = useState("");
+  const [forgotPasswordEmail, setForgotPasswordEmail] = useState("");
+
   // Reset form when modal opens/closes
   useEffect(() => {
     if (isOpen) {
-      setCurrentPage("role");
+      setCurrentPage("choice");
       setError("");
       resetAllStates();
     } else {
@@ -152,6 +162,9 @@ export default function EnhancedRegistrationModal({
     setResendCountdown(0);
     setIsResendDisabled(false);
     setCompletionCountdown(3);
+    setLoginEmail("");
+    setLoginPassword("");
+    setForgotPasswordEmail("");
   };
 
   // GMC Verification
@@ -401,6 +414,78 @@ export default function EnhancedRegistrationModal({
     }
   };
 
+  // Login handler
+  const handleLogin = () => {
+    if (!loginEmail.trim()) {
+      setError(
+        language === "ar" ? "يرجى إدخال البريد الإلكتروني" : "Please enter email"
+      );
+      return;
+    }
+
+    if (!loginPassword.trim()) {
+      setError(
+        language === "ar" ? "يرجى إدخال كلمة المرور" : "Please enter password"
+      );
+      return;
+    }
+
+    // For demo purposes, accept any email/password
+    setError("");
+    setCurrentPage("complete");
+    console.log('Login successful:', { email: loginEmail });
+  };
+
+  // Forgot password handler
+  const handleForgotPassword = async () => {
+    if (!forgotPasswordEmail.trim() || !forgotPasswordEmail.includes("@")) {
+      setError(
+        language === "ar" 
+          ? "يرجى إدخال بريد إلكتروني صحيح" 
+          : "Please enter a valid email address"
+      );
+      return;
+    }
+
+    setError("");
+    
+    try {
+      // Call the send-email API
+      const response = await fetch("/api/send-email", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          type: "password_reset",
+          email: forgotPasswordEmail,
+          resetLink: `${window.location.origin}/reset-password?token=demo-token`,
+        }),
+      });
+
+      if (response.ok) {
+        setError("");
+        alert(
+          language === "ar"
+            ? "تم إرسال رابط إعادة تعيين كلمة المرور إلى بريدك الإلكتروني"
+            : "Password reset link has been sent to your email"
+        );
+        setCurrentPage("login");
+        setForgotPasswordEmail("");
+      } else {
+        setError(
+          language === "ar"
+            ? "فشل إرسال البريد الإلكتروني"
+            : "Failed to send email"
+        );
+      }
+    } catch (error) {
+      setError(
+        language === "ar"
+          ? "حدث خطأ في إرسال البريد الإلكتروني"
+          : "Error sending email"
+      );
+    }
+  };
+
   // Password validation and final registration
   const handleFinalRegistration = () => {
     if (registrationData.password !== registrationData.confirmPassword) {
@@ -435,11 +520,19 @@ export default function EnhancedRegistrationModal({
         {/* Header */}
         <div className="flex items-center justify-between p-6 border-b border-gray-200 dark:border-zinc-700">
           <div className="flex items-center space-x-3">
-            {currentPage !== "role" && (
+            {currentPage !== "choice" && (
               <button
                 onClick={() => {
                   setError(""); // Clear error when navigating back
-                  if (registrationData.role === "uk_specialist") {
+                  
+                  // Handle navigation for login/forgot password flow
+                  if (currentPage === "login") {
+                    setCurrentPage("choice");
+                  } else if (currentPage === "forgot_password") {
+                    setCurrentPage("login");
+                  } else if (currentPage === "role") {
+                    setCurrentPage("choice");
+                  } else if (registrationData.role === "uk_specialist") {
                     const ukPages = [
                       "role",
                       "gmc",
@@ -473,7 +566,13 @@ export default function EnhancedRegistrationModal({
               </button>
             )}
             <h2 className="text-xl font-bold text-gray-900 dark:text-white">
-              {language === "ar" ? "تسجيل حساب جديد" : "Create Account"}
+              {currentPage === "login"
+                ? (language === "ar" ? "تسجيل الدخول" : "Login")
+                : currentPage === "forgot_password"
+                  ? (language === "ar" ? "استرجاع كلمة المرور" : "Forgot Password")
+                  : currentPage === "choice"
+                    ? (language === "ar" ? "مرحباً بك" : "Welcome")
+                    : (language === "ar" ? "إنشاء حساب جديد" : "Create Account")}
             </h2>
           </div>
           <button
@@ -516,6 +615,136 @@ export default function EnhancedRegistrationModal({
           {error && (
             <div className="mb-4 p-3 bg-red-50 dark:bg-red-950 border border-red-200 dark:border-red-800 rounded-lg">
               <p className="text-sm text-red-600 dark:text-red-400">{error}</p>
+            </div>
+          )}
+
+          {/* Choice Page - Login or Register */}
+          {currentPage === "choice" && (
+            <div className="space-y-6">
+              <div className="text-center">
+                <p className="text-gray-600 dark:text-gray-300">
+                  {language === "ar"
+                    ? "مرحباً بك في منصة جسور الطبية"
+                    : "Welcome to Jusur Medical Platform"}
+                </p>
+              </div>
+
+              <div className="space-y-4">
+                <button
+                  onClick={() => setCurrentPage("login")}
+                  className="w-full bg-green-600 text-white py-3 rounded-lg hover:bg-green-700 transition-colors font-medium flex items-center justify-center gap-2"
+                >
+                  <UserIcon className="h-5 w-5" />
+                  {language === "ar" ? "تسجيل الدخول" : "Login"}
+                </button>
+
+                <button
+                  onClick={() => setCurrentPage("role")}
+                  className="w-full bg-green-950 text-white py-3 rounded-lg hover:bg-green-900 transition-colors font-medium flex items-center justify-center gap-2"
+                >
+                  <UserPlusIcon className="h-5 w-5" />
+                  {language === "ar" ? "إنشاء حساب جديد" : "Create New Account"}
+                </button>
+              </div>
+            </div>
+          )}
+
+          {/* Login Page */}
+          {currentPage === "login" && (
+            <div className="space-y-4">
+              <div>
+                <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                  {language === "ar" ? "البريد الإلكتروني" : "Email"}
+                </label>
+                <input
+                  type="email"
+                  value={loginEmail}
+                  onChange={(e) => setLoginEmail(e.target.value)}
+                  className="w-full px-3 py-2 border border-gray-300 dark:border-zinc-600 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent dark:bg-zinc-800 dark:text-white"
+                  placeholder={language === "ar" ? "your.email@example.com" : "your.email@example.com"}
+                />
+              </div>
+
+              <div>
+                <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                  {language === "ar" ? "كلمة المرور" : "Password"}
+                </label>
+                <input
+                  type="password"
+                  value={loginPassword}
+                  onChange={(e) => setLoginPassword(e.target.value)}
+                  className="w-full px-3 py-2 border border-gray-300 dark:border-zinc-600 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent dark:bg-zinc-800 dark:text-white"
+                  placeholder={language === "ar" ? "أدخل كلمة المرور" : "Enter password"}
+                />
+              </div>
+
+              <div className="text-right">
+                <button
+                  onClick={() => setCurrentPage("forgot_password")}
+                  className="text-sm text-green-600 hover:text-green-700 dark:text-green-400 dark:hover:text-green-300"
+                >
+                  {language === "ar" ? "نسيت كلمة المرور؟" : "Forgot password?"}
+                </button>
+              </div>
+
+              <button
+                onClick={handleLogin}
+                className="w-full bg-green-600 text-white py-3 rounded-lg hover:bg-green-700 transition-colors font-medium"
+              >
+                {language === "ar" ? "تسجيل الدخول" : "Login"}
+              </button>
+
+              <div className="text-center">
+                <span className="text-sm text-gray-600 dark:text-gray-300">
+                  {language === "ar" ? "ليس لديك حساب؟ " : "Don't have an account? "}
+                </span>
+                <button
+                  onClick={() => setCurrentPage("role")}
+                  className="text-sm text-green-600 hover:text-green-700 dark:text-green-400 dark:hover:text-green-300"
+                >
+                  {language === "ar" ? "إنشاء حساب جديد" : "Create one"}
+                </button>
+              </div>
+            </div>
+          )}
+
+          {/* Forgot Password Page */}
+          {currentPage === "forgot_password" && (
+            <div className="space-y-4">
+              <p className="text-sm text-gray-600 dark:text-gray-300">
+                {language === "ar"
+                  ? "أدخل بريدك الإلكتروني وسنرسل لك رابط لإعادة تعيين كلمة المرور"
+                  : "Enter your email and we'll send you a link to reset your password"}
+              </p>
+
+              <div>
+                <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                  {language === "ar" ? "البريد الإلكتروني" : "Email"}
+                </label>
+                <input
+                  type="email"
+                  value={forgotPasswordEmail}
+                  onChange={(e) => setForgotPasswordEmail(e.target.value)}
+                  className="w-full px-3 py-2 border border-gray-300 dark:border-zinc-600 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent dark:bg-zinc-800 dark:text-white"
+                  placeholder={language === "ar" ? "your.email@example.com" : "your.email@example.com"}
+                />
+              </div>
+
+              <button
+                onClick={handleForgotPassword}
+                className="w-full bg-green-600 text-white py-3 rounded-lg hover:bg-green-700 transition-colors font-medium"
+              >
+                {language === "ar" ? "إرسال رابط إعادة التعيين" : "Send Reset Link"}
+              </button>
+
+              <div className="text-center">
+                <button
+                  onClick={() => setCurrentPage("login")}
+                  className="text-sm text-green-600 hover:text-green-700 dark:text-green-400 dark:hover:text-green-300"
+                >
+                  {language === "ar" ? "العودة لتسجيل الدخول" : "Back to login"}
+                </button>
+              </div>
             </div>
           )}
 
@@ -895,33 +1124,46 @@ export default function EnhancedRegistrationModal({
               </p>
 
               {!capturedPhoto && (
-                <div className="relative">
-                  {isCameraActive ? (
-                    <div className="relative">
-                      <video
-                        ref={videoRef}
-                        autoPlay
-                        className="w-full rounded-lg"
-                        style={{ maxHeight: "300px" }}
-                      />
+                <div className="space-y-3">
+                  <div className="relative">
+                    {isCameraActive ? (
+                      <div className="relative">
+                        <video
+                          ref={videoRef}
+                          autoPlay
+                          className="w-full rounded-lg"
+                          style={{ maxHeight: "300px" }}
+                        />
+                        <button
+                          onClick={capturePhoto}
+                          className="absolute bottom-4 left-1/2 transform -translate-x-1/2 bg-green-600 text-white p-4 rounded-full hover:bg-green-700 transition-colors"
+                        >
+                          <CameraIcon className="h-6 w-6" />
+                        </button>
+                      </div>
+                    ) : (
                       <button
-                        onClick={capturePhoto}
-                        className="absolute bottom-4 left-1/2 transform -translate-x-1/2 bg-green-600 text-white p-4 rounded-full hover:bg-green-700 transition-colors"
+                        onClick={startCamera}
+                        className="w-full bg-green-600 text-white py-3 rounded-lg hover:bg-green-700 transition-colors font-medium flex items-center justify-center space-x-2"
                       >
-                        <CameraIcon className="h-6 w-6" />
+                        <CameraIcon className="h-5 w-5" />
+                        <span>
+                          {language === "ar" ? "تشغيل الكاميرا" : "Start Camera"}
+                        </span>
                       </button>
-                    </div>
-                  ) : (
-                    <button
-                      onClick={startCamera}
-                      className="w-full bg-green-600 text-white py-3 rounded-lg hover:bg-green-700 transition-colors font-medium flex items-center justify-center space-x-2"
-                    >
-                      <CameraIcon className="h-5 w-5" />
-                      <span>
-                        {language === "ar" ? "تشغيل الكاميرا" : "Start Camera"}
-                      </span>
-                    </button>
-                  )}
+                    )}
+                  </div>
+                  
+                  {/* Skip button for camera */}
+                  <button
+                    onClick={() => {
+                      setError("");
+                      setCurrentPage("nhs_email");
+                    }}
+                    className="w-full bg-gray-600 text-white py-3 rounded-lg hover:bg-gray-700 transition-colors font-medium"
+                  >
+                    {language === "ar" ? "تخطي التحقق من الصورة" : "Skip Photo Verification"}
+                  </button>
                 </div>
               )}
 
@@ -975,15 +1217,27 @@ export default function EnhancedRegistrationModal({
                         </p>
                       </div>
                       
-                      <button
-                        onClick={() => {
-                          setError("");
-                          setCurrentPage("nhs_email");
-                        }}
-                        className="w-full bg-green-600 text-white py-3 rounded-lg hover:bg-green-700 transition-colors font-medium"
-                      >
-                        {language === "ar" ? "متابعة" : "Continue"}
-                      </button>
+                      <div className="grid grid-cols-2 gap-3">
+                        <button
+                          onClick={() => {
+                            setError("");
+                            setCurrentPage("nhs_email");
+                          }}
+                          className="bg-green-600 text-white py-2 px-4 rounded-lg hover:bg-green-700 transition-colors font-medium"
+                        >
+                          {language === "ar" ? "متابعة" : "Continue"}
+                        </button>
+                        
+                        <button
+                          onClick={() => {
+                            setError("");
+                            setCurrentPage("nhs_email");
+                          }}
+                          className="bg-gray-600 text-white py-2 px-4 rounded-lg hover:bg-gray-700 transition-colors font-medium"
+                        >
+                          {language === "ar" ? "تخطي التحقق" : "Skip Verification"}
+                        </button>
+                      </div>
                     </div>
                   )}
                 </div>

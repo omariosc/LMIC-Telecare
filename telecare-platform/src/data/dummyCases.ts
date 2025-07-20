@@ -69,7 +69,10 @@ export const dummyCases: MedicalCase[] = [
     ],
     
     // Files and attachments
-    images: ["ecg_001.jpg", "chest_xray_001.jpg"],
+    images: [
+      "https://upload.wikimedia.org/wikipedia/commons/thumb/f/fc/Chest_X-ray.jpg/1920px-Chest_X-ray.jpg",
+      "https://radiologybusiness.com/sites/default/files/styles/top_stories/public/assets/articles/4996132.jpg.webp?itok=sR1hg4KS"
+    ],
     documents: ["lab_results_001.pdf"],
     
     // Language and translation

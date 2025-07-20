@@ -59,6 +59,7 @@ import type {
 } from "@/types";
 import EnhancedRegistrationModal from "./EnhancedRegistrationModal";
 import AdminRegistrationModal from "./AdminRegistrationModal";
+import { uploadToCloudflare, getOptimizedImageUrl } from "@/utils/imageUpload";
 
 // Dummy data for pending registrations
 const dummyPendingRegistrations: Array<Partial<User> & { id: string }> = [
@@ -178,7 +179,7 @@ const dummyIncidents = [
 ];
 
 export default function MobileDemoApp() {
-  const { language } = useLanguage();
+  const { language, toggleLanguage } = useLanguage();
 
   // Prevent hydration mismatch by not rendering until client is ready
   const [isClientReady, setIsClientReady] = useState(false);
@@ -291,6 +292,9 @@ export default function MobileDemoApp() {
   >([]);
   const [newTestName, setNewTestName] = useState("");
   const [newTestResult, setNewTestResult] = useState("");
+  const [caseLikes, setCaseLikes] = useState<Record<string, { likes: number; userLiked: boolean }>>({});
+  const [aiSummaryLikes, setAiSummaryLikes] = useState<Record<string, { liked: boolean }>>({});
+  const [aiSummaries, setAiSummaries] = useState<Record<string, string>>({});
 
   const currentUser = getUserById(currentUserId) || dummyPublicUsers[0];
   const currentUserType = currentUser.role;
@@ -716,13 +720,20 @@ export default function MobileDemoApp() {
   const BottomNavItem: React.FC<{
     icon: React.ReactNode;
     label: string;
-    view: string;
-    isActive: boolean;
+    view?: string;
+    isActive?: boolean;
     disabled?: boolean;
     badgeCount?: number;
-  }> = ({ icon, label, view, isActive, disabled = false, badgeCount }) => (
+    href?: string;
+  }> = ({ icon, label, view, isActive = false, disabled = false, badgeCount, href }) => (
     <button
-      onClick={() => !disabled && setActiveView(view as any)}
+      onClick={() => {
+        if (href) {
+          window.location.href = href;
+        } else if (!disabled && view) {
+          setActiveView(view as any);
+        }
+      }}
       disabled={disabled}
       className={`flex flex-col items-center py-2 px-3 rounded-lg transition-colors min-w-0 relative ${
         disabled
@@ -1390,8 +1401,8 @@ export default function MobileDemoApp() {
     const [newResponse, setNewResponse] = useState("");
     const [showResponseForm, setShowResponseForm] = useState(false);
     const [uploadedImages, setUploadedImages] = useState<string[]>([]);
-    const [aiSummary, setAiSummary] = useState<string>("");
     const [isLoadingSummary, setIsLoadingSummary] = useState(false);
+    const aiSummary = aiSummaries[selectedCase?.id || ""] || "";
     const [editingResponse, setEditingResponse] = useState<string | null>(null);
     const [editingContent, setEditingContent] = useState("");
     const [responseDiagnosis, setResponseDiagnosis] = useState("");
@@ -1402,6 +1413,14 @@ export default function MobileDemoApp() {
     const [isSubmittingResponse, setIsSubmittingResponse] = useState(false);
     const [isChangingStatus, setIsChangingStatus] = useState(false);
     const [statusChangeReason, setStatusChangeReason] = useState("");
+    const [replyingTo, setReplyingTo] = useState<string | null>(null);
+    const [replyContent, setReplyContent] = useState("");
+    const [responseReplies, setResponseReplies] = useState<Record<string, Array<{
+      id: string;
+      content: string;
+      createdBy: string;
+      createdAt: string;
+    }>>>({});
 
     // Status change functionality
     const changeStatus = async (
@@ -1567,6 +1586,8 @@ export default function MobileDemoApp() {
 
     // Generate AI summary
     const generateAISummary = async () => {
+      if (!selectedCase) return;
+      
       setIsLoadingSummary(true);
       try {
         const response = await fetch("/api/generate-summary", {
@@ -1575,20 +1596,26 @@ export default function MobileDemoApp() {
           body: JSON.stringify(selectedCase),
         });
         const data = await response.json();
-        setAiSummary(data.summary);
+        setAiSummaries(prev => ({
+          ...prev,
+          [selectedCase.id]: data.summary
+        }));
       } catch (error) {
         console.error("Failed to generate summary:", error);
-        setAiSummary("Unable to generate summary at this time.");
+        setAiSummaries(prev => ({
+          ...prev,
+          [selectedCase.id]: "Unable to generate summary at this time."
+        }));
       }
       setIsLoadingSummary(false);
     };
 
-    // Load AI summary on mount
+    // Load AI summary on mount if not already cached
     React.useEffect(() => {
-      if (selectedCase && !aiSummary) {
+      if (selectedCase && !aiSummaries[selectedCase.id]) {
         generateAISummary();
       }
-    }, [selectedCase]);
+    }, [selectedCase?.id]);
 
     // Create new response
     const createResponse = async () => {
@@ -1712,23 +1739,51 @@ export default function MobileDemoApp() {
     };
 
     // Handle image upload
-    const handleImageUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const handleImageUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
       const files = e.target.files;
       if (files) {
-        const newImages: string[] = [];
-        Array.from(files).forEach((file) => {
-          const reader = new FileReader();
-          reader.onload = (event) => {
-            if (event.target?.result) {
-              newImages.push(event.target.result as string);
-              if (newImages.length === files.length) {
-                setUploadedImages([...uploadedImages, ...newImages]);
-              }
-            }
-          };
-          reader.readAsDataURL(file);
+        const uploadPromises = Array.from(files).map(async (file) => {
+          try {
+            const uploadedImage = await uploadToCloudflare(file);
+            return uploadedImage.url;
+          } catch (error) {
+            console.error('Failed to upload image:', error);
+            // Fallback to data URL
+            return new Promise<string>((resolve) => {
+              const reader = new FileReader();
+              reader.onload = (event) => {
+                if (event.target?.result) {
+                  resolve(event.target.result as string);
+                }
+              };
+              reader.readAsDataURL(file);
+            });
+          }
         });
+        
+        const newImages = await Promise.all(uploadPromises);
+        setUploadedImages([...uploadedImages, ...newImages]);
       }
+    };
+
+    // Handle reply submission
+    const submitReply = (responseId: string) => {
+      if (!replyContent.trim()) return;
+      
+      const newReply = {
+        id: `reply_${Date.now()}`,
+        content: replyContent,
+        createdBy: currentUser.id,
+        createdAt: new Date().toISOString()
+      };
+      
+      setResponseReplies(prev => ({
+        ...prev,
+        [responseId]: [...(prev[responseId] || []), newReply]
+      }));
+      
+      setReplyContent("");
+      setReplyingTo(null);
     };
 
     // Handle reaction toggles
@@ -1944,13 +1999,35 @@ export default function MobileDemoApp() {
             {selectedCase.description}
           </p>
 
+          {/* Case Images */}
+          {selectedCase.images && selectedCase.images.length > 0 && (
+            <div className="mb-4">
+              <h4 className="text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                {language === "ar" ? "الصور المرفقة:" : "Attached Images:"}
+              </h4>
+              <div className="grid grid-cols-2 gap-2">
+                {selectedCase.images.map((img, idx) => (
+                  <img
+                    key={idx}
+                    src={img}
+                    alt={`Case image ${idx + 1}`}
+                    className="w-full h-32 object-cover rounded-lg border border-gray-200 dark:border-zinc-700 cursor-pointer hover:opacity-90"
+                    onClick={() => window.open(img, "_blank")}
+                  />
+                ))}
+              </div>
+            </div>
+          )}
+
           {/* AI Summary Section */}
           <div className="border-t border-gray-200 dark:border-zinc-700 pt-4 mb-4">
-            <div className="flex items-center space-x-2 mb-2">
-              <SparklesIcon className="h-5 w-5 text-purple-600" />
-              <h3 className="text-sm font-medium text-gray-900 dark:text-white">
-                {language === "ar" ? "ملخص الذكاء الاصطناعي" : "AI Summary"}
-              </h3>
+            <div className="flex items-center justify-between mb-2">
+              <div className="flex items-center space-x-2">
+                <SparklesIcon className="h-5 w-5 text-purple-600" />
+                <h3 className="text-sm font-medium text-gray-900 dark:text-white">
+                  {language === "ar" ? "ملخص الذكاء الاصطناعي" : "AI Summary"}
+                </h3>
+              </div>
             </div>
             {isLoadingSummary ? (
               <div className="flex items-center space-x-2">
@@ -2485,6 +2562,16 @@ export default function MobileDemoApp() {
                             response.thanksCount}
                         </span>
                       </button>
+                      <button
+                        onClick={() => setReplyingTo(replyingTo === response.id ? null : response.id)}
+                        className="flex items-center space-x-1 text-gray-600 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400 transition-colors cursor-pointer"
+                      >
+                        <ChatBubbleOvalLeftIcon className="h-3.5 w-3.5" />
+                        <span className="text-sm">
+                          {language === "ar" ? "رد" : "Reply"} 
+                          {responseReplies[response.id]?.length ? ` (${responseReplies[response.id].length})` : ""}
+                        </span>
+                      </button>
                     </div>
                     <div className="flex items-center space-x-2 text-sm text-gray-600 dark:text-gray-300">
                       <span>
@@ -2493,6 +2580,71 @@ export default function MobileDemoApp() {
                       </span>
                     </div>
                   </div>
+
+                  {/* Reply Form */}
+                  {replyingTo === response.id && (
+                    <div className="mt-4 pt-4 border-t border-gray-200 dark:border-zinc-700">
+                      <div className="flex items-start space-x-3">
+                        <div className="w-8 h-8 bg-green-950 rounded-full flex items-center justify-center text-white text-xs font-bold">
+                          {currentUser.displayName.charAt(0)}
+                        </div>
+                        <div className="flex-1">
+                          <textarea
+                            value={replyContent}
+                            onChange={(e) => setReplyContent(e.target.value)}
+                            placeholder={language === "ar" ? "اكتب ردك..." : "Write a reply..."}
+                            className="w-full px-3 py-2 border border-gray-300 dark:border-zinc-600 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent dark:bg-zinc-800 dark:text-white resize-none"
+                            rows={2}
+                          />
+                          <div className="mt-2 flex justify-end space-x-2">
+                            <button
+                              onClick={() => {
+                                setReplyingTo(null);
+                                setReplyContent("");
+                              }}
+                              className="px-3 py-1 text-sm text-gray-600 dark:text-gray-300 hover:text-gray-800 dark:hover:text-gray-100 cursor-pointer"
+                            >
+                              {language === "ar" ? "إلغاء" : "Cancel"}
+                            </button>
+                            <button
+                              onClick={() => submitReply(response.id)}
+                              disabled={!replyContent.trim()}
+                              className="px-3 py-1 text-sm bg-green-950 text-white rounded hover:bg-green-900 disabled:opacity-50 disabled:cursor-not-allowed cursor-pointer"
+                            >
+                              {language === "ar" ? "إرسال الرد" : "Submit Reply"}
+                            </button>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  )}
+
+                  {/* Display Replies */}
+                  {responseReplies[response.id] && responseReplies[response.id].length > 0 && (
+                    <div className="mt-4 pt-4 border-t border-gray-200 dark:border-zinc-700 space-y-3">
+                      {responseReplies[response.id].map((reply) => {
+                        const replyUser = getUserById(reply.createdBy);
+                        return (
+                          <div key={reply.id} className="flex items-start space-x-3">
+                            <div className="w-6 h-6 bg-gray-400 rounded-full flex items-center justify-center text-white text-xs font-bold flex-shrink-0">
+                              {replyUser?.displayName.charAt(0) || "U"}
+                            </div>
+                            <div className="flex-1">
+                              <div className="flex items-center space-x-2 mb-1">
+                                <span className="text-sm font-medium text-gray-900 dark:text-white">
+                                  {replyUser?.displayName || "Unknown"}
+                                </span>
+                                <span className="text-xs text-gray-500 dark:text-gray-400">
+                                  {new Date(reply.createdAt).toLocaleTimeString()}
+                                </span>
+                              </div>
+                              <p className="text-sm text-gray-700 dark:text-gray-300">{reply.content}</p>
+                            </div>
+                          </div>
+                        );
+                      })}
+                    </div>
+                  )}
                 </div>
               );
             })}
@@ -2615,7 +2767,10 @@ export default function MobileDemoApp() {
 
     const handleLanguageChange = (newLanguage: "en" | "ar") => {
       setTempLanguage(newLanguage);
-      // In a real app, this would update the user's language preference
+      // Update the actual language using the toggleLanguage function
+      if (newLanguage !== language) {
+        toggleLanguage();
+      }
     };
 
     return (
@@ -2683,7 +2838,7 @@ export default function MobileDemoApp() {
             <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-3">
               {language === "ar" ? "اللغة المفضلة:" : "Preferred Language:"}
             </label>
-            <div className="flex space-x-3 max-w-md">
+            <div className="flex gap-3 max-w-md">
               <button
                 onClick={() => handleLanguageChange("en")}
                 className={`flex-1 py-3 px-4 rounded-lg border-2 font-medium transition-all cursor-pointer ${
@@ -3150,10 +3305,14 @@ export default function MobileDemoApp() {
       {/* Case Creation Modal */}
       {showCaseForm && (
         <div
-          className={`fixed inset-0 flex items-center justify-center p-2 sm:p-4 z-50 ${viewMode === "mobile" ? "" : "bg-black bg-opacity-50"}`}
+          className="fixed inset-0 flex items-center justify-center p-2 sm:p-4 z-50 bg-zinc-900/50"
         >
           <div
-            className="bg-white dark:bg-zinc-900 rounded-lg shadow-xl p-4 sm:p-6 w-full max-w-md mx-auto overflow-y-auto max-h-[90vh]"
+            className={`bg-white dark:bg-zinc-900 rounded-lg shadow-xl p-4 sm:p-6 overflow-y-auto ${
+              viewMode === "mobile" 
+                ? "w-[340px] h-[780px] max-w-[calc(100vw-1.5rem)] max-h-[calc(100vh-1rem)]" 
+                : "w-full max-w-2xl h-[90vh] max-h-[800px]"
+            }`}
           >
             <div className="flex justify-between items-center mb-6">
               <h2 className="text-xl font-bold text-gray-900 dark:text-white">
@@ -3455,25 +3614,30 @@ export default function MobileDemoApp() {
                     type="file"
                     accept="image/*"
                     multiple
-                    onChange={(e) => {
+                    onChange={async (e) => {
                       const files = e.target.files;
                       if (files) {
-                        const newImages: string[] = [];
-                        Array.from(files).forEach((file) => {
-                          const reader = new FileReader();
-                          reader.onload = (event) => {
-                            if (event.target?.result) {
-                              newImages.push(event.target.result as string);
-                              if (newImages.length === files.length) {
-                                setNewCaseImages([
-                                  ...newCaseImages,
-                                  ...newImages,
-                                ]);
-                              }
-                            }
-                          };
-                          reader.readAsDataURL(file);
+                        const uploadPromises = Array.from(files).map(async (file) => {
+                          try {
+                            const uploadedImage = await uploadToCloudflare(file);
+                            return uploadedImage.url;
+                          } catch (error) {
+                            console.error('Failed to upload image:', error);
+                            // Fallback to data URL
+                            return new Promise<string>((resolve) => {
+                              const reader = new FileReader();
+                              reader.onload = (event) => {
+                                if (event.target?.result) {
+                                  resolve(event.target.result as string);
+                                }
+                              };
+                              reader.readAsDataURL(file);
+                            });
+                          }
                         });
+                        
+                        const newImages = await Promise.all(uploadPromises);
+                        setNewCaseImages([...newCaseImages, ...newImages]);
                       }
                     }}
                     className="hidden"

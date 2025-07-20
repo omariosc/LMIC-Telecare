@@ -118,14 +118,9 @@ export default function AuthModal({
             >
               <Dialog.Panel
                 id="auth-modal-content"
-                className={`w-full max-w-md transform overflow-hidden rounded-2xl bg-white dark:bg-zinc-900 p-6 align-middle shadow-xl transition-all ${
-                  currentLanguage === "ar" ? "text-right" : "text-left"
-                }`}
-                dir={currentLanguage === "ar" ? "rtl" : "ltr"}
+                className="w-full max-w-md transform overflow-hidden rounded-2xl bg-white dark:bg-zinc-900 p-6 text-left align-middle shadow-xl transition-all"
               >
-                <div className={`flex justify-between items-center mb-4 ${
-                  currentLanguage === "ar" ? "flex-row-reverse" : ""
-                }`}>
+                <div className="flex justify-between items-center mb-4">
                   <Dialog.Title
                     as="h3"
                     className="text-lg font-bold leading-6 text-gray-900 dark:text-white"
@@ -166,9 +161,7 @@ export default function AuthModal({
                         : "For Smartphones (Android/iPhone)"}
                     </h4>
                     <ol className="space-y-3 text-sm text-gray-700 dark:text-gray-300">
-                      <li className={`flex items-start gap-3 ${
-                        currentLanguage === "ar" ? "flex-row-reverse" : ""
-                      }`}>
+                      <li className="flex items-start gap-3">
                         <span className="flex-shrink-0 w-6 h-6 bg-green-100 dark:bg-green-900 text-green-600 dark:text-green-300 rounded-full flex items-center justify-center text-xs font-bold">
                           1
                         </span>
@@ -178,9 +171,7 @@ export default function AuthModal({
                             : "Open this website in your mobile browser"}
                         </span>
                       </li>
-                      <li className={`flex items-start gap-3 ${
-                        currentLanguage === "ar" ? "flex-row-reverse" : ""
-                      }`}>
+                      <li className="flex items-start gap-3">
                         <span className="flex-shrink-0 w-6 h-6 bg-green-100 dark:bg-green-900 text-green-600 dark:text-green-300 rounded-full flex items-center justify-center text-xs font-bold">
                           2
                         </span>
@@ -191,7 +182,7 @@ export default function AuthModal({
                               : "Tap the share button:"}
                           </span>
                           <div className={`flex gap-4 mt-2 ${
-                            currentLanguage === "ar" ? "flex-row-reverse" : ""
+                            currentLanguage === "ar" ? "" : ""
                           }`}>
                             <div className="text-center">
                               <ShareIcon className="h-6 w-6 mx-auto text-green-600" />
@@ -210,9 +201,7 @@ export default function AuthModal({
                           </div>
                         </div>
                       </li>
-                      <li className={`flex items-start gap-3 ${
-                        currentLanguage === "ar" ? "flex-row-reverse" : ""
-                      }`}>
+                      <li className="flex items-start gap-3">
                         <span className="flex-shrink-0 w-6 h-6 bg-green-100 dark:bg-green-900 text-green-600 dark:text-green-300 rounded-full flex items-center justify-center text-xs font-bold">
                           3
                         </span>
@@ -223,7 +212,7 @@ export default function AuthModal({
                               : 'Select "Add to Home Screen" or "Install App"'}
                           </span>
                           <div className={`mt-1 flex items-center gap-2 text-xs text-gray-500 dark:text-gray-400 ${
-                            currentLanguage === "ar" ? "flex-row-reverse" : ""
+                            currentLanguage === "ar" ? "" : ""
                           }`}>
                             <PlusIcon className="h-4 w-4" />
                             <span>
@@ -234,9 +223,7 @@ export default function AuthModal({
                           </div>
                         </div>
                       </li>
-                      <li className={`flex items-start gap-3 ${
-                        currentLanguage === "ar" ? "flex-row-reverse" : ""
-                      }`}>
+                      <li className="flex items-start gap-3">
                         <span className="flex-shrink-0 w-6 h-6 bg-green-100 dark:bg-green-900 text-green-600 dark:text-green-300 rounded-full flex items-center justify-center text-xs font-bold">
                           4
                         </span>
@@ -258,7 +245,7 @@ export default function AuthModal({
                     </h4>
                     <ul className="text-sm text-green-700 dark:text-green-300 space-y-1">
                       <li className={`flex items-center gap-2 ${
-                        currentLanguage === "ar" ? "flex-row-reverse" : ""
+                        currentLanguage === "ar" ? "" : ""
                       }`}>
                         <div className="w-2 h-2 bg-green-500 dark:bg-green-400 rounded-full"></div>
                         {currentLanguage === "ar"
@@ -266,7 +253,7 @@ export default function AuthModal({
                           : "Works offline"}
                       </li>
                       <li className={`flex items-center gap-2 ${
-                        currentLanguage === "ar" ? "flex-row-reverse" : ""
+                        currentLanguage === "ar" ? "" : ""
                       }`}>
                         <div className="w-2 h-2 bg-green-500 dark:bg-green-400 rounded-full"></div>
                         {currentLanguage === "ar"
@@ -274,7 +261,7 @@ export default function AuthModal({
                           : "Optimized for limited connectivity"}
                       </li>
                       <li className={`flex items-center gap-2 ${
-                        currentLanguage === "ar" ? "flex-row-reverse" : ""
+                        currentLanguage === "ar" ? "" : ""
                       }`}>
                         <div className="w-2 h-2 bg-green-500 dark:bg-green-400 rounded-full"></div>
                         {currentLanguage === "ar"
@@ -291,16 +278,19 @@ export default function AuthModal({
                         ? "تريد تجربة المنصة أولاً؟"
                         : "Want to try the platform first?"}
                     </p>
-                    <a
-                      href="/demo/mobile"
+                    <button
+                      onClick={() => {
+                        // Navigate to demo page with login options
+                        window.location.href = "/demo";
+                        onClose();
+                      }}
                       className="inline-flex items-center gap-2 bg-green-600 text-white px-4 py-2 rounded-md text-sm font-medium hover:bg-green-700 transition-colors mb-2"
-                      onClick={onClose}
                     >
                       <DevicePhoneMobileIcon className="h-4 w-4" />
                       {currentLanguage === "ar"
                         ? "تجربة المنصة (بدون تحميل)"
                         : "Try Demo (No Install Required)"}
-                    </a>
+                    </button>
                     <div className="mt-2">
                       <a
                         href="mailto:support@jusur.org.uk"
@@ -324,34 +314,26 @@ export default function AuthModal({
                           ? "ما ستحتاجه للتسجيل:"
                           : "What you'll need for registration:"}
                       </h4>
-                      <ul className="text-sm text-green-700 dark:text-green-300 space-y-2">
-                        <li className={`flex items-center gap-2 ${
-                          currentLanguage === "ar" ? "flex-row-reverse" : ""
-                        }`}>
+                      <ul className="text-sm text-green-700 dark:text-green-300 space-y-2 text-left">
+                        <li className="flex items-center gap-2">
                           <div className="w-2 h-2 bg-green-500 dark:bg-green-400 rounded-full"></div>
                           {currentLanguage === "ar"
                             ? "رقم GMC الخاص بك (رقم التسجيل الطبي العام)"
                             : "Your GMC number (General Medical Council registration)"}
                         </li>
-                        <li className={`flex items-center gap-2 ${
-                          currentLanguage === "ar" ? "flex-row-reverse" : ""
-                        }`}>
+                        <li className="flex items-center gap-2">
                           <div className="w-2 h-2 bg-green-500 dark:bg-green-400 rounded-full"></div>
                           {currentLanguage === "ar"
                             ? "صورة واضحة من صفحة الصورة في جواز السفر"
                             : "Clear photo of your passport photo page"}
                         </li>
-                        <li className={`flex items-center gap-2 ${
-                          currentLanguage === "ar" ? "flex-row-reverse" : ""
-                        }`}>
+                        <li className="flex items-center gap-2">
                           <div className="w-2 h-2 bg-green-500 dark:bg-green-400 rounded-full"></div>
                           {currentLanguage === "ar"
                             ? "كاميرا للتحقق من الهوية (صورة حية)"
                             : "Camera for live identity verification"}
                         </li>
-                        <li className={`flex items-center gap-2 ${
-                          currentLanguage === "ar" ? "flex-row-reverse" : ""
-                        }`}>
+                        <li className="flex items-center gap-2">
                           <div className="w-2 h-2 bg-green-500 dark:bg-green-400 rounded-full"></div>
                           {currentLanguage === "ar"
                             ? "عنوان بريد إلكتروني صالح للتحقق"
@@ -368,7 +350,7 @@ export default function AuthModal({
                       </h4>
                       <ol className="text-sm text-green-700 dark:text-green-300 space-y-1">
                         <li className={`flex items-start gap-2 ${
-                          currentLanguage === "ar" ? "flex-row-reverse" : ""
+                          currentLanguage === "ar" ? "" : ""
                         }`}>
                           <span className="text-xs bg-green-200 dark:bg-green-800 text-green-800 dark:text-green-200 rounded-full w-5 h-5 flex items-center justify-center font-bold">1</span>
                           {currentLanguage === "ar"
@@ -376,7 +358,7 @@ export default function AuthModal({
                             : "GMC Number Verification"}
                         </li>
                         <li className={`flex items-start gap-2 ${
-                          currentLanguage === "ar" ? "flex-row-reverse" : ""
+                          currentLanguage === "ar" ? "" : ""
                         }`}>
                           <span className="text-xs bg-green-200 dark:bg-green-800 text-green-800 dark:text-green-200 rounded-full w-5 h-5 flex items-center justify-center font-bold">2</span>
                           {currentLanguage === "ar"
@@ -384,7 +366,7 @@ export default function AuthModal({
                             : "Passport Photo Upload"}
                         </li>
                         <li className={`flex items-start gap-2 ${
-                          currentLanguage === "ar" ? "flex-row-reverse" : ""
+                          currentLanguage === "ar" ? "" : ""
                         }`}>
                           <span className="text-xs bg-green-200 dark:bg-green-800 text-green-800 dark:text-green-200 rounded-full w-5 h-5 flex items-center justify-center font-bold">3</span>
                           {currentLanguage === "ar"
@@ -392,7 +374,7 @@ export default function AuthModal({
                             : "Live Face Verification"}
                         </li>
                         <li className={`flex items-start gap-2 ${
-                          currentLanguage === "ar" ? "flex-row-reverse" : ""
+                          currentLanguage === "ar" ? "" : ""
                         }`}>
                           <span className="text-xs bg-green-200 dark:bg-green-800 text-green-800 dark:text-green-200 rounded-full w-5 h-5 flex items-center justify-center font-bold">4</span>
                           {currentLanguage === "ar"
@@ -400,7 +382,7 @@ export default function AuthModal({
                             : "Email Verification"}
                         </li>
                         <li className={`flex items-start gap-2 ${
-                          currentLanguage === "ar" ? "flex-row-reverse" : ""
+                          currentLanguage === "ar" ? "" : ""
                         }`}>
                           <span className="text-xs bg-green-200 dark:bg-green-800 text-green-800 dark:text-green-200 rounded-full w-5 h-5 flex items-center justify-center font-bold">5</span>
                           {currentLanguage === "ar"
@@ -444,8 +426,12 @@ export default function AuthModal({
                         return;
                       }
                       
-                      // For other user types, redirect to demo page instead of reloading
-                      window.location.href = "/demo/mobile";
+                      // For other user types, use the login success callback or go to demo
+                      if (onLoginSuccess) {
+                        onLoginSuccess();
+                      } else {
+                        window.location.href = "/demo";
+                      }
                       onClose();
                     }}
                   >

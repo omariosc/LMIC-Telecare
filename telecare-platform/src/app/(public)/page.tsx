@@ -60,8 +60,8 @@ export default function Home() {
   };
 
   const handleLoginSuccess = () => {
-    // Auto-redirect to demo page after successful login/registration
-    window.location.href = "/demo/mobile";
+    // Redirect to full app after successful login/registration
+    window.location.href = "/app";
   };
 
   useEffect(() => {
@@ -202,16 +202,18 @@ export default function Home() {
                 className={`absolute right-0 mt-2 w-56 bg-white dark:bg-zinc-800 rounded-md shadow-lg border border-gray-200 dark:border-zinc-700 transition-all duration-200 z-50 ${showDropdown ? "opacity-100 visible" : "opacity-0 invisible"}`}
               >
                 <div className="py-2">
-                  <a
-                    href="/demo/mobile"
+                  <button
+                    onClick={() => {
+                      window.location.href = "/demo";
+                      setShowDropdown(false);
+                    }}
                     className="block w-full text-left px-4 py-2 text-sm text-gray-900 dark:text-gray-100 hover:bg-gray-100 dark:hover:bg-zinc-700 hover:text-[#0A2540] dark:hover:text-white transition-colors cursor-pointer"
-                    onClick={() => setShowDropdown(false)}
                   >
                     <span data-lang-en="">Quick Demo</span>
                     <span data-lang-ar="" className="hidden">
                       تجربة سريعة
                     </span>
-                  </a>
+                  </button>
                   <div className="border-t border-gray-200 dark:border-zinc-700 my-1"></div>
                   <button
                     onClick={() => {
