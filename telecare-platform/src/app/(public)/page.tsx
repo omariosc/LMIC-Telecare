@@ -38,7 +38,7 @@ const isScreenTooSmall = () => {
 export default function Home() {
   const [showSmallScreenWarning, setShowSmallScreenWarning] = useState(false);
 
-  const { language, direction, isLoading, toggleLanguage } = useLanguage();
+  const { language, direction, toggleLanguage } = useLanguage();
 
   useEffect(() => {
     const checkScreenSize = () => {
@@ -119,7 +119,6 @@ export default function Home() {
               id="lang-toggle"
               onClick={toggleLanguage}
               className="bg-gray-100 text-gray-700 px-3 py-2 rounded-full font-semibold text-sm hover:bg-gray-200 transition-colors cursor-pointer"
-              disabled={isLoading}
             >
               <span data-lang-en="">ع</span>
               <span data-lang-ar="" className="hidden">
