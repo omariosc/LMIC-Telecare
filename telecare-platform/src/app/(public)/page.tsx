@@ -30,14 +30,9 @@ import { useEffect, useState, useRef } from "react";
 import { useLanguage } from "@/hooks/useLanguage";
 import AuthModal from "@/components/AuthModal";
 
-// Function to check if screen is too small
-const isScreenTooSmall = () => {
-  if (typeof window === "undefined") return false;
-  return window.innerWidth < 300 || window.innerHeight < 300;
-};
-
 export default function Home() {
   const [showSmallScreenWarning, setShowSmallScreenWarning] = useState(false);
+  const [isClient, setIsClient] = useState(false);
   const [showDropdown, setShowDropdown] = useState(false);
   const [showDemoDropdown, setShowDemoDropdown] = useState(false);
   const [authModal, setAuthModal] = useState<{
@@ -63,9 +58,14 @@ export default function Home() {
   };
 
   useEffect(() => {
+    // Set client flag
+    setIsClient(true);
+    
     const checkScreenSize = () => {
-      const isTooSmall = isScreenTooSmall();
-      setShowSmallScreenWarning(isTooSmall);
+      if (typeof window !== "undefined") {
+        const isTooSmall = window.innerWidth < 300 || window.innerHeight < 300;
+        setShowSmallScreenWarning(isTooSmall);
+      }
     };
 
     // Check immediately on mount
@@ -99,8 +99,8 @@ export default function Home() {
     };
   }, []);
 
-  // If screen is too small, only show the warning - no other content
-  if (showSmallScreenWarning) {
+  // Only show small screen warning after client mount to avoid hydration mismatch
+  if (isClient && showSmallScreenWarning) {
     return (
       <div className="fixed inset-0 bg-gradient-to-b from-green-800 to-green-950 text-white flex items-center justify-center z-[9999] px-4 text-center">
         <div>
@@ -119,13 +119,12 @@ export default function Home() {
       <header className="bg-white dark:bg-black opacity-95 fixed top-0 left-0 right-0 z-50">
         <nav className="container mx-auto px-4 py-4 flex justify-between items-center min-h-[64px]">
           {/* Logo - Top Left */}
-          <div className="font-extrabold text-xl text-[#0A2540] dark:text-white flex items-center gap-2">
-            <span data-lang-en="">
-              Jusur <span className="hide-nav">(جسور)</span>
-            </span>
-            <span data-lang-ar="" className="hidden">
-              جسور
-            </span>
+          <div className="flex items-center gap-2">
+            <img 
+              src="/images/jusur-logo.png" 
+              alt="Jusur Logo" 
+              className="h-8 w-auto"
+            />
             <TrophyIcon className="hide-nav h-4 w-4 text-yellow-500" />
             <span
               className="hide-nav text-yellow-500 text-sm font-semibold"
@@ -256,13 +255,16 @@ export default function Home() {
         <section className="relative bg-gradient-to-b from-green-800 to-green-950 text-white text-center pt-28 pb-20 px-6 overflow-hidden">
           {/* Background Image */}
           <div 
-            className="absolute inset-0 bg-cover bg-center bg-no-repeat opacity-20"
+            className="absolute inset-0 opacity-25"
             style={{
               backgroundImage: 'url("/images/gaza-destruction.jpg")',
+              backgroundSize: 'cover',
+              backgroundPosition: 'center',
+              backgroundRepeat: 'no-repeat',
             }}
           ></div>
           {/* Green Gradient Overlay */}
-          <div className="absolute inset-0 bg-gradient-to-b from-green-800/85 to-green-950/90"></div>
+          <div className="absolute inset-0 bg-gradient-to-b from-green-800/80 to-green-950/85"></div>
           {/* Content */}
           <div className="relative z-10">
           <div className="container mx-auto">
@@ -409,7 +411,7 @@ export default function Home() {
               </a>
             </div>
           </div>
-          <div className="mt-12 -mb-8 text-gray-500 text-xs">
+          <div className="mt-12 -mb-8 text-zinc-300 text-xs">
             <span data-lang-en="">
               *Based on a limited survey of consultant surgeons and general
               practitioners across the UK.
@@ -1113,12 +1115,13 @@ export default function Home() {
       <footer className="bg-gradient-to-r from-green-800 to-green-950 text-white">
         <div className="container mx-auto px-6 py-12 text-center">
           <div className="max-w-4xl mx-auto">
-            <h3 className="font-extrabold text-2xl mb-4">
-              <span data-lang-en="">Jusur (جسور)</span>
-              <span data-lang-ar="" className="hidden">
-                جسور
-              </span>
-            </h3>
+            <div className="flex justify-center mb-4">
+              <img 
+                src="/images/jusur-logo.png" 
+                alt="Jusur Logo" 
+                className="h-12 w-auto"
+              />
+            </div>
 
             <p className="text-gray-300 mb-4 text-lg">
               <span data-lang-en="">

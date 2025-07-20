@@ -70,16 +70,22 @@ const detectLanguage = (): Language => {
 };
 
 export const useLanguage = (): UseLanguageReturn => {
-  // Detect language immediately during initialization
-  const [state, setState] = useState<LanguageState>(() => {
+  // Initialize with default to avoid hydration mismatch
+  const [state, setState] = useState<LanguageState>({
+    language: DEFAULT_LANGUAGE,
+    direction: "ltr",
+  });
+
+  // Detect and set language on client mount
+  useEffect(() => {
     const detectedLang = detectLanguage();
     const direction: Direction = detectedLang === "ar" ? "rtl" : "ltr";
 
-    return {
+    setState({
       language: detectedLang,
       direction,
-    };
-  });
+    });
+  }, []);
 
   // Apply detected language to document on mount
   useEffect(() => {

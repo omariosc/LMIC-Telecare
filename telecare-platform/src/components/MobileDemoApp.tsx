@@ -8,7 +8,6 @@ import {
   ChatBubbleLeftRightIcon,
   BellIcon,
   Cog6ToothIcon,
-  HeartIcon,
   DocumentTextIcon,
   UsersIcon,
   ChartBarIcon,
@@ -40,7 +39,76 @@ import {
 import { useLanguage } from "@/hooks/useLanguage";
 import { dummyPublicUsers, getUserById, getAvailableSpecialists } from "@/data/dummyUsers";
 import { dummyCases, dummyResponses, getCaseById, getResponsesByCase } from "@/data/dummyCases";
-import type { PublicUserProfile, MedicalCase, CaseResponse } from "@/types";
+import type { PublicUserProfile, MedicalCase, CaseResponse, User } from "@/types";
+
+// Dummy data for pending registrations
+const dummyPendingRegistrations: Array<Partial<User> & { id: string }> = [
+  {
+    id: "pending_001",
+    firstName: "Omar",
+    lastName: "Al-Rashid",
+    email: "omar.rashid@gmail.com",
+    role: "uk_specialist",
+    specialties: ["cardiology", "internal_medicine"],
+    gmcNumber: "7789012",
+    institution: "Manchester Royal Infirmary",
+    yearsOfExperience: 12,
+    status: "pending",
+    createdAt: "2025-01-18T10:30:00Z"
+  },
+  {
+    id: "pending_002",
+    firstName: "Aisha",
+    lastName: "Khan", 
+    email: "aisha.khan@nhs.uk",
+    role: "uk_specialist",
+    specialties: ["pediatrics", "emergency_medicine"],
+    gmcNumber: "7890123",
+    institution: "Birmingham Children's Hospital",
+    yearsOfExperience: 8,
+    status: "pending",
+    createdAt: "2025-01-19T14:15:00Z"
+  },
+  {
+    id: "pending_003",
+    firstName: "Khalil",
+    lastName: "Mansour",
+    email: "k.mansour@gaza-med.ps",
+    role: "gaza_clinician",
+    specialties: ["surgery", "trauma"],
+    institution: "Gaza European Hospital",
+    yearsOfExperience: 6,
+    status: "pending",
+    referralCode: "REF123",
+    createdAt: "2025-01-20T09:00:00Z"
+  }
+];
+
+// Dummy data for incidents
+const dummyIncidents = [
+  {
+    id: "incident_001",
+    caseId: "case_001",
+    caseTitle: "Urgent pediatric consultation needed",
+    reportedBy: "uk_002",
+    reportReason: "Inappropriate content in case description",
+    reportDetails: "Case contains non-medical content that violates platform guidelines",
+    status: "pending",
+    createdAt: "2025-01-19T16:30:00Z",
+    reportedUser: "gaza_002"
+  },
+  {
+    id: "incident_002", 
+    caseId: "case_005",
+    caseTitle: "Post-surgical complications advice",
+    reportedBy: "gaza_001",
+    reportReason: "Spam or duplicate posting",
+    reportDetails: "User has posted the same case multiple times with different details",
+    status: "pending",
+    createdAt: "2025-01-20T11:45:00Z",
+    reportedUser: "uk_004"
+  }
+];
 
 export default function MobileDemoApp() {
   const { language } = useLanguage();
@@ -51,9 +119,21 @@ export default function MobileDemoApp() {
     | "scheduled"
     | "profile"
     | "case-detail"
+    | "registration-requests"
+    | "incidents"
   >("dashboard");
   
   const [currentUserId, setCurrentUserId] = useState<string>("gaza_001");
+  
+  // Set default view for admin users
+  React.useEffect(() => {
+    const currentUser = getUserById(currentUserId);
+    if (currentUser?.role === "admin" && activeView === "dashboard") {
+      setActiveView("registration-requests");
+    } else if (currentUser?.role !== "admin" && (activeView === "registration-requests" || activeView === "incidents")) {
+      setActiveView("dashboard");
+    }
+  }, [currentUserId, activeView]);
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const [selectedCase, setSelectedCase] = useState<MedicalCase | null>(null);
   const [isOffline, setIsOffline] = useState(false);
@@ -85,7 +165,7 @@ export default function MobileDemoApp() {
           onClick={() => setViewMode("mobile")}
           className={`p-2 rounded-md transition-colors ${
             viewMode === "mobile"
-              ? "bg-blue-600 text-white"
+              ? "bg-green-950 text-white"
               : "text-gray-600 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-zinc-700"
           }`}
           title={language === "ar" ? "عرض الهاتف" : "Mobile View"}
@@ -96,7 +176,7 @@ export default function MobileDemoApp() {
           onClick={() => setViewMode("desktop")}
           className={`p-2 rounded-md transition-colors ${
             viewMode === "desktop"
-              ? "bg-blue-600 text-white"
+              ? "bg-green-950 text-white"
               : "text-gray-600 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-zinc-700"
           }`}
           title={language === "ar" ? "عرض سطح المكتب" : "Desktop View"}
@@ -110,17 +190,9 @@ export default function MobileDemoApp() {
   const Header = () => (
     <header className="bg-white dark:bg-zinc-900 shadow-sm border-b border-gray-200 dark:border-zinc-700 h-16 flex items-center justify-between px-4 sticky top-0 z-40">
       <div className="flex items-center">
-        {viewMode === "mobile" && (
-          <button
-            onClick={() => setSidebarOpen(true)}
-            className="text-gray-600 dark:text-gray-300 hover:text-gray-800 dark:hover:text-gray-100 mr-3"
-          >
-            <Bars3Icon className="h-6 w-6" />
-          </button>
-        )}
         <div className="flex items-center space-x-2">
-          <div className="w-8 h-8 bg-gradient-to-r from-blue-600 to-green-600 rounded-lg flex items-center justify-center">
-            <HeartIcon className="h-4 w-4 text-white" />
+          <div className="w-8 h-8 rounded-lg overflow-hidden">
+            <img src="/app-icon.png" alt="Jusur" className="w-full h-full object-cover" />
           </div>
           <span className="font-bold text-gray-800 dark:text-white hidden sm:block">
             {language === "ar" ? "جسور" : "Jusur"}
@@ -151,10 +223,6 @@ export default function MobileDemoApp() {
             </span>
           )}
         </div>
-
-        <div className="w-8 h-8 bg-blue-600 rounded-full flex items-center justify-center text-white">
-          <UserIcon className="h-4 w-4" />
-        </div>
       </div>
     </header>
   );
@@ -163,16 +231,18 @@ export default function MobileDemoApp() {
     <div
       className={`${
         viewMode === "desktop"
-          ? "fixed inset-y-0 left-0 z-40 w-64 bg-gradient-to-b from-blue-900 to-blue-800 text-white"
-          : `fixed inset-y-0 left-0 z-50 w-64 bg-gradient-to-b from-blue-900 to-blue-800 text-white transform ${
-              sidebarOpen ? "translate-x-0" : "-translate-x-full"
-            } transition-transform duration-300 ease-in-out`
-      }`}
+          ? "fixed inset-y-0 left-0 z-40 w-64 bg-gradient-to-b from-green-900 to-green-950 text-white"
+          : "fixed top-0 bottom-20 z-50 w-64 bg-gradient-to-b from-green-900 to-green-950 text-white transition-all duration-300 ease-in-out"
+      }
+      ` + (!sidebarOpen && viewMode === "mobile" ? "hidden" : "")}
+      style={viewMode === "mobile" ? { 
+        left: sidebarOpen ? 'calc(50vw - 192px)' : 'calc(50vw - 448px)'
+      } : {}}
     >
-      <div className="flex items-center justify-between h-16 px-4 bg-blue-800">
+      <div className="flex items-center justify-between h-16 px-4 bg-green-950">
         <div className="flex items-center space-x-2">
-          <div className="w-8 h-8 bg-gradient-to-r from-blue-400 to-green-400 rounded-lg flex items-center justify-center">
-            <HeartIcon className="h-4 w-4 text-white" />
+          <div className="w-8 h-8 rounded-lg overflow-hidden">
+            <img src="/app-icon.png" alt="Jusur" className="w-full h-full object-cover" />
           </div>
           <h1 className="text-lg font-bold">
             {language === "ar" ? "جسور" : "Jusur"}
@@ -181,7 +251,7 @@ export default function MobileDemoApp() {
         {viewMode === "mobile" && (
           <button
             onClick={() => setSidebarOpen(false)}
-            className="text-white hover:text-blue-200"
+            className="text-white hover:text-green-200"
           >
             <XMarkIcon className="h-6 w-6" />
           </button>
@@ -189,25 +259,32 @@ export default function MobileDemoApp() {
       </div>
 
       <nav className={viewMode === "desktop" ? "mt-8" : "mt-8"}>
-        <NavItem icon={<ChartBarIcon className="h-5 w-5" />} label={language === "ar" ? "لوحة التحكم" : "Dashboard"} view="dashboard" />
-        <NavItem icon={<ChatBubbleOvalLeftIcon className="h-5 w-5" />} label={language === "ar" ? "المنتدى الطبي" : "Medical Forum"} view="forum" />
-        {currentUserType === "gaza_clinician" && (
-          <NavItem icon={<BoltIcon className="h-5 w-5" />} label={language === "ar" ? "استشارة طارئة" : "Emergency Consult"} view="emergency" />
+        {currentUserType === "admin" ? (
+          <>
+            <NavItem icon={<UsersIcon className="h-5 w-5" />} label={language === "ar" ? "طلبات التسجيل" : "Registration Requests"} view="registration-requests" />
+            <NavItem icon={<ExclamationTriangleIcon className="h-5 w-5" />} label={language === "ar" ? "الحوادث" : "Incidents"} view="incidents" />
+          </>
+        ) : (
+          <>
+            <NavItem icon={<ChartBarIcon className="h-5 w-5" />} label={language === "ar" ? "لوحة التحكم" : "Dashboard"} view="dashboard" />
+            <NavItem icon={<ChatBubbleOvalLeftIcon className="h-5 w-5" />} label={language === "ar" ? "المنتدى الطبي" : "Medical Forum"} view="forum" />
+            <NavItem icon={<BoltIcon className="h-5 w-5" />} label={language === "ar" ? "استشارة طارئة" : "Emergency Consult"} view="emergency" />
+            <NavItem icon={<CalendarIcon className="h-5 w-5" />} label={language === "ar" ? "الاجتماعات المجدولة" : "Scheduled MDTs"} view="scheduled" />
+            <NavItem icon={<UserIcon className="h-5 w-5" />} label={language === "ar" ? "الملف الشخصي" : "Profile"} view="profile" />
+          </>
         )}
-        <NavItem icon={<CalendarIcon className="h-5 w-5" />} label={language === "ar" ? "الاجتماعات المجدولة" : "Scheduled MDTs"} view="scheduled" />
-        <NavItem icon={<UserIcon className="h-5 w-5" />} label={language === "ar" ? "الملف الشخصي" : "Profile"} view="profile" />
       </nav>
 
       {/* User Type Switcher (Demo only) */}
       <div className={`absolute ${viewMode === "desktop" ? "bottom-20" : "bottom-20"} left-0 right-0 px-4`}>
-        <div className="bg-blue-700 rounded-lg p-3 mb-4">
-          <p className="text-xs text-blue-200 mb-2">
+        <div className="bg-green-900 rounded-lg p-3 mb-4">
+          <p className="text-xs text-green-200 mb-2">
             {language === "ar" ? "تجريبي: تبديل نوع المستخدم" : "Demo: Switch User Type"}
           </p>
           <select
             value={currentUserId}
             onChange={(e) => setCurrentUserId(e.target.value)}
-            className="w-full bg-blue-600 text-white border border-blue-500 rounded px-2 py-1 text-sm"
+            className="w-full bg-green-950 text-white border border-green-800 rounded px-2 py-1 text-sm"
           >
             <optgroup label={language === "ar" ? "أطباء غزة" : "Gaza Clinicians"}>
               {dummyPublicUsers.filter(u => u.role === "gaza_clinician").map(user => (
@@ -234,15 +311,15 @@ export default function MobileDemoApp() {
         </div>
       </div>
 
-      <div className="absolute bottom-0 left-0 right-0 p-4 bg-blue-800">
+      <div className="absolute bottom-0 left-0 right-0 p-4 bg-green-950">
         <div className="flex items-center space-x-3">
-          <div className="w-10 h-10 bg-blue-600 rounded-full flex items-center justify-center relative">
+          <div className="w-10 h-10 bg-green-950 rounded-full flex items-center justify-center relative">
             <UserIcon className="h-4 w-4" />
-            <CheckCircleIcon className="absolute -bottom-1 -right-1 w-4 h-4 text-green-400 bg-blue-800 rounded-full" />
+            <CheckCircleIcon className="absolute -bottom-1 -right-1 w-4 h-4 text-green-400 bg-green-950 rounded-full" />
           </div>
           <div className="flex-1 min-w-0">
             <p className="text-sm font-medium truncate">{currentUser.displayName}</p>
-            <p className="text-xs text-blue-200 truncate">
+            <p className="text-xs text-green-200 truncate">
               {currentUser.specialties?.[0] || currentUser.role}
               {currentUser.points && ` • ${currentUser.points} pts`}
             </p>
@@ -257,7 +334,7 @@ export default function MobileDemoApp() {
                       : "bg-gray-400"
                   }`}
                 />
-                <span className="text-xs text-blue-200 capitalize">
+                <span className="text-xs text-green-200 capitalize">
                   {language === "ar" 
                     ? (currentUser.availabilityStatus === "available" ? "متاح" : 
                        currentUser.availabilityStatus === "busy" ? "مشغول" : "غير متصل")
@@ -272,58 +349,67 @@ export default function MobileDemoApp() {
     </div>
   );
 
-  const MobileBottomNav = () => (
-    <div className="fixed bottom-0 z-40">
-      <div className="w-full max-w-md mx-auto bg-white dark:bg-zinc-900 border-t border-gray-200 dark:border-zinc-700 px-4 py-2">
-        <div className="flex justify-around">
-          <BottomNavItem
-            icon={<ChartBarIcon className="h-5 w-5" />}
-            label={language === "ar" ? "لوحة" : "Dashboard"}
-            view="dashboard"
-            isActive={activeView === "dashboard"}
-          />
-          <BottomNavItem
-            icon={<ChatBubbleOvalLeftIcon className="h-5 w-5" />}
-            label={language === "ar" ? "منتدى" : "Forum"}
-            view="forum"
-            isActive={activeView === "forum"}
-          />
-          {currentUserType === "gaza_clinician" && (
+  const MobileBottomNav = () => {
+    // Don't show bottom nav for admin users
+    if (currentUserType === "admin") {
+      return null;
+    }
+
+    return (
+      <div className="fixed bottom-0 left-0 right-0 z-40">
+        <div className="w-full bg-white dark:bg-zinc-900 border-t border-gray-200 dark:border-zinc-700 px-4 py-3">
+          <div className="flex justify-between max-w-sm mx-auto">
+            <BottomNavItem
+              icon={<ChartBarIcon className="h-5 w-5" />}
+              label={language === "ar" ? "لوحة" : "Dashboard"}
+              view="dashboard"
+              isActive={activeView === "dashboard"}
+            />
+            <BottomNavItem
+              icon={<ChatBubbleOvalLeftIcon className="h-5 w-5" />}
+              label={language === "ar" ? "منتدى" : "Forum"}
+              view="forum"
+              isActive={activeView === "forum"}
+            />
             <BottomNavItem
               icon={<BoltIcon className="h-5 w-5" />}
               label={language === "ar" ? "طارئ" : "Emergency"}
               view="emergency"
               isActive={activeView === "emergency"}
             />
-          )}
-          <BottomNavItem
-            icon={<CalendarIcon className="h-5 w-5" />}
-            label={language === "ar" ? "مجدول" : "Scheduled"}
-            view="scheduled"
-            isActive={activeView === "scheduled"}
-          />
-          <BottomNavItem
-            icon={<UserIcon className="h-5 w-5" />}
-            label={language === "ar" ? "ملف" : "Profile"}
-            view="profile"
-            isActive={activeView === "profile"}
-          />
+            <BottomNavItem
+              icon={<CalendarIcon className="h-5 w-5" />}
+              label={language === "ar" ? "مجدول" : "Scheduled"}
+              view="scheduled"
+              isActive={activeView === "scheduled"}
+            />
+            <BottomNavItem
+              icon={<UserIcon className="h-5 w-5" />}
+              label={language === "ar" ? "ملف" : "Profile"}
+              view="profile"
+              isActive={activeView === "profile"}
+            />
+          </div>
         </div>
       </div>
-    </div>
-  );
+    );
+  };
 
   const BottomNavItem: React.FC<{
     icon: React.ReactNode;
     label: string;
     view: string;
     isActive: boolean;
-  }> = ({ icon, label, view, isActive }) => (
+    disabled?: boolean;
+  }> = ({ icon, label, view, isActive, disabled = false }) => (
     <button
-      onClick={() => setActiveView(view as any)}
+      onClick={() => !disabled && setActiveView(view as any)}
+      disabled={disabled}
       className={`flex flex-col items-center py-2 px-3 rounded-lg transition-colors min-w-0 ${
-        isActive
-          ? "text-blue-600 dark:text-blue-400 bg-blue-50 dark:bg-blue-950"
+        disabled
+          ? "text-gray-300 dark:text-gray-600 cursor-not-allowed opacity-50"
+          : isActive
+          ? "text-green-600 dark:text-green-400 bg-green-50 dark:bg-green-950"
           : "text-gray-600 dark:text-gray-400 hover:text-gray-800 dark:hover:text-gray-200"
       }`}
     >
@@ -342,8 +428,8 @@ export default function MobileDemoApp() {
         setActiveView(view as any);
         setSidebarOpen(false);
       }}
-      className={`flex items-center w-full px-4 py-3 text-left hover:bg-blue-800 transition-colors ${
-        activeView === view ? "bg-blue-800 border-r-4 border-blue-300" : ""
+      className={`flex items-center w-full px-4 py-3 text-left hover:bg-green-900 transition-colors ${
+        activeView === view ? "bg-green-900 border-r-4 border-green-300" : ""
       }`}
     >
       <span className="mr-3">{icon}</span>
@@ -354,12 +440,12 @@ export default function MobileDemoApp() {
   const Dashboard = () => (
     <div className="p-4 space-y-6">
       {/* Welcome Section */}
-      <div className="bg-gradient-to-r from-blue-600 to-green-600 text-white rounded-lg p-6">
+      <div className="bg-gradient-to-r from-green-900 to-green-600 text-white rounded-lg p-6">
         <h2 className="text-xl font-bold mb-2">
           {language === "ar" ? "مرحباً، " : "Welcome, "}
           {currentUser.displayName}
         </h2>
-        <p className="text-blue-100 mb-4">
+        <p className="text-green-100 mb-4">
           {currentUserType === "gaza_clinician"
             ? language === "ar"
               ? "احصل على استشارات طبية من أطباء متخصصين في المملكة المتحدة"
@@ -371,7 +457,7 @@ export default function MobileDemoApp() {
         {currentUserType === "gaza_clinician" && (
           <button
             onClick={() => setActiveView("emergency")}
-            className="bg-white text-blue-600 px-4 py-2 rounded-lg font-medium hover:bg-blue-50 transition-colors"
+            className="bg-white text-green-950 px-4 py-2 rounded-lg font-medium hover:bg-green-50 transition-colors"
           >
             {language === "ar"
               ? "طلب استشارة طارئة"
@@ -389,7 +475,7 @@ export default function MobileDemoApp() {
           title={language === "ar" ? "الحالات النشطة" : "Active Cases"}
           value="12"
           change="+3"
-          color="blue"
+          color="green"
         />
         <StatsCard
           icon={<UsersIcon className="h-5 w-5" />}
@@ -422,7 +508,7 @@ export default function MobileDemoApp() {
           </h3>
           <button
             onClick={() => setActiveView("forum")}
-            className="text-blue-600 hover:text-blue-800 text-sm font-medium"
+            className="text-green-600 hover:text-green-800 text-sm font-medium"
           >
             {language === "ar" ? "عرض الكل" : "View All"}
           </button>
@@ -444,7 +530,7 @@ export default function MobileDemoApp() {
     color: string;
   }> = ({ icon, title, value, change, color }) => {
     const colorClasses = {
-      blue: "text-blue-600 bg-blue-100 dark:bg-blue-950",
+      blue: "text-green-600 bg-green-100 dark:bg-green-950",
       green: "text-green-600 bg-green-100 dark:bg-green-950",
       purple: "text-purple-600 bg-purple-100 dark:bg-purple-950",
       red: "text-red-600 bg-red-100 dark:bg-red-950",
@@ -493,7 +579,7 @@ export default function MobileDemoApp() {
     };
 
     const statusColors = {
-      open: "text-blue-600 bg-blue-100 dark:bg-blue-950",
+      open: "text-green-600 bg-green-100 dark:bg-green-950",
       in_progress: "text-purple-600 bg-purple-100 dark:bg-purple-950",
       resolved: "text-green-600 bg-green-100 dark:bg-green-950",
       closed: "text-gray-600 bg-gray-100 dark:bg-gray-950",
@@ -539,7 +625,7 @@ export default function MobileDemoApp() {
                 <PhotoIcon className="h-3.5 w-3.5 text-gray-400" />
               )}
               {case_.requiresTranslation && (
-                <LanguageIcon className="h-3.5 w-3.5 text-blue-500" />
+                <LanguageIcon className="h-3.5 w-3.5 text-green-500" />
               )}
             </div>
             <h3
@@ -586,7 +672,7 @@ export default function MobileDemoApp() {
           {language === "ar" ? "المنتدى الطبي" : "Medical Forum"}
         </h2>
         {currentUserType === "gaza_clinician" && (
-          <button className="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition-colors flex items-center space-x-2">
+          <button className="bg-green-950 text-white px-4 py-2 rounded-lg hover:bg-green-900 transition-colors flex items-center space-x-2">
             <PlusIcon className="h-4 w-4" />
             <span>{language === "ar" ? "إضافة حالة" : "Post Case"}</span>
           </button>
@@ -630,7 +716,7 @@ export default function MobileDemoApp() {
     <button
       className={`px-3 py-1 rounded-full text-sm font-medium transition-colors ${
         active
-          ? "bg-blue-600 text-white"
+          ? "bg-green-950 text-white"
           : "bg-gray-100 dark:bg-zinc-700 text-gray-600 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-zinc-600"
       }`}
     >
@@ -665,7 +751,7 @@ export default function MobileDemoApp() {
     };
 
     const statusColors = {
-      open: "text-blue-600 bg-blue-100 dark:bg-blue-950",
+      open: "text-green-600 bg-green-100 dark:bg-green-950",
       in_progress: "text-purple-600 bg-purple-100 dark:bg-purple-950",
       resolved: "text-green-600 bg-green-100 dark:bg-green-950",
       closed: "text-gray-600 bg-gray-100 dark:bg-gray-950",
@@ -677,7 +763,7 @@ export default function MobileDemoApp() {
         <div className="flex items-center space-x-3">
           <button
             onClick={() => setActiveView("forum")}
-            className="text-blue-600 hover:text-blue-800 p-2 -ml-2 rounded-lg hover:bg-blue-50 dark:hover:bg-blue-950"
+            className="text-green-600 hover:text-green-800 p-2 -ml-2 rounded-lg hover:bg-green-50 dark:hover:bg-green-950"
           >
             <ChevronRightIcon className="h-5 w-5 rotate-180" />
           </button>
@@ -855,7 +941,7 @@ export default function MobileDemoApp() {
             {currentUserType === "uk_specialist" && (
               <button
                 onClick={() => setShowResponseForm(!showResponseForm)}
-                className="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition-colors flex items-center space-x-2"
+                className="bg-green-950 text-white px-4 py-2 rounded-lg hover:bg-green-900 transition-colors flex items-center space-x-2"
               >
                 <PlusIcon className="h-4 w-4" />
                 <span>{language === "ar" ? "إضافة استشارة" : "Add Response"}</span>
@@ -870,7 +956,7 @@ export default function MobileDemoApp() {
                 value={newResponse}
                 onChange={(e) => setNewResponse(e.target.value)}
                 placeholder={language === "ar" ? "اكتب استشارتك هنا..." : "Write your consultation here..."}
-                className="w-full h-32 p-3 border border-gray-300 dark:border-zinc-600 rounded-lg resize-none focus:ring-2 focus:ring-blue-500 focus:border-transparent dark:bg-zinc-800 dark:text-white"
+                className="w-full h-32 p-3 border border-gray-300 dark:border-zinc-600 rounded-lg resize-none focus:ring-2 focus:ring-green-500 focus:border-transparent dark:bg-zinc-800 dark:text-white"
               />
               <div className="flex justify-end space-x-2 mt-3">
                 <button
@@ -885,7 +971,7 @@ export default function MobileDemoApp() {
                     setNewResponse("");
                     setShowResponseForm(false);
                   }}
-                  className="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition-colors flex items-center space-x-2"
+                  className="bg-green-950 text-white px-4 py-2 rounded-lg hover:bg-green-900 transition-colors flex items-center space-x-2"
                 >
                   <PaperAirplaneIcon className="h-4 w-4" />
                   <span>{language === "ar" ? "إرسال" : "Submit"}</span>
@@ -902,7 +988,7 @@ export default function MobileDemoApp() {
                 <div key={response.id} className="border border-gray-200 dark:border-zinc-700 rounded-lg p-4">
                   <div className="flex items-start justify-between mb-3">
                     <div className="flex items-center space-x-3">
-                      <div className="w-10 h-10 bg-blue-600 rounded-full flex items-center justify-center text-white">
+                      <div className="w-10 h-10 bg-green-950 rounded-full flex items-center justify-center text-white">
                         <UserIcon className="h-4 w-4" />
                       </div>
                       <div>
@@ -945,7 +1031,7 @@ export default function MobileDemoApp() {
                   
                   <div className="flex items-center justify-between">
                     <div className="flex items-center space-x-4">
-                      <button className="flex items-center space-x-1 text-gray-600 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400">
+                      <button className="flex items-center space-x-1 text-gray-600 dark:text-gray-300 hover:text-green-600 dark:hover:text-green-400">
                         <HandThumbUpIcon className="h-3.5 w-3.5" />
                         <span className="text-sm">{response.likeCount}</span>
                       </button>
@@ -967,6 +1053,198 @@ export default function MobileDemoApp() {
     );
   };
 
+  const RegistrationRequestsView = () => (
+    <div className="p-4 space-y-4">
+      <h2 className="text-xl font-bold dark:text-white">
+        {language === "ar" ? "طلبات التسجيل" : "Registration Requests"}
+      </h2>
+      
+      <div className="space-y-4">
+        {dummyPendingRegistrations.map((request) => (
+          <div key={request.id} className="bg-white dark:bg-zinc-900 rounded-lg shadow p-4 border border-gray-200 dark:border-zinc-700">
+            <div className="flex justify-between items-start mb-3">
+              <div className="flex-1">
+                <h3 className="font-semibold dark:text-white text-lg">
+                  {request.firstName} {request.lastName}
+                </h3>
+                <p className="text-gray-600 dark:text-gray-300 text-sm">
+                  {request.email}
+                </p>
+              </div>
+              <span className={`px-2 py-1 rounded-full text-xs font-medium ${
+                request.role === "uk_specialist" 
+                  ? "bg-blue-100 text-blue-600 dark:bg-blue-950"
+                  : "bg-green-100 text-green-600 dark:bg-green-950"
+              }`}>
+                {request.role === "uk_specialist" 
+                  ? (language === "ar" ? "أخصائي بريطاني" : "UK Specialist")
+                  : (language === "ar" ? "طبيب غزة" : "Gaza Clinician")
+                }
+              </span>
+            </div>
+
+            <div className="grid grid-cols-1 gap-2 mb-4 text-sm">
+              {request.gmcNumber && (
+                <div>
+                  <span className="font-medium text-gray-600 dark:text-gray-300">
+                    {language === "ar" ? "رقم GMC:" : "GMC Number:"}
+                  </span>
+                  <span className="ml-2 dark:text-white">{request.gmcNumber}</span>
+                </div>
+              )}
+              <div>
+                <span className="font-medium text-gray-600 dark:text-gray-300">
+                  {language === "ar" ? "التخصصات:" : "Specialties:"}
+                </span>
+                <span className="ml-2 dark:text-white">
+                  {request.specialties?.join(", ") || "N/A"}
+                </span>
+              </div>
+              <div>
+                <span className="font-medium text-gray-600 dark:text-gray-300">
+                  {language === "ar" ? "المؤسسة:" : "Institution:"}
+                </span>
+                <span className="ml-2 dark:text-white">{request.institution}</span>
+              </div>
+              <div>
+                <span className="font-medium text-gray-600 dark:text-gray-300">
+                  {language === "ar" ? "سنوات الخبرة:" : "Experience:"}
+                </span>
+                <span className="ml-2 dark:text-white">
+                  {request.yearsOfExperience} {language === "ar" ? "سنوات" : "years"}
+                </span>
+              </div>
+              {request.referralCode && (
+                <div>
+                  <span className="font-medium text-gray-600 dark:text-gray-300">
+                    {language === "ar" ? "رمز الإحالة:" : "Referral Code:"}
+                  </span>
+                  <span className="ml-2 dark:text-white">{request.referralCode}</span>
+                </div>
+              )}
+              <div>
+                <span className="font-medium text-gray-600 dark:text-gray-300">
+                  {language === "ar" ? "تاريخ التقديم:" : "Applied:"}
+                </span>
+                <span className="ml-2 dark:text-white">
+                  {new Date(request.createdAt!).toLocaleDateString()}
+                </span>
+              </div>
+            </div>
+
+            <div className="flex space-x-3">
+              <button className="flex-1 bg-green-950 text-white px-4 py-2 rounded-lg hover:bg-green-900 transition-colors flex items-center justify-center space-x-2">
+                <CheckCircleIcon className="h-4 w-4" />
+                <span>{language === "ar" ? "موافقة" : "Approve"}</span>
+              </button>
+              <button className="flex-1 bg-red-600 text-white px-4 py-2 rounded-lg hover:bg-red-700 transition-colors flex items-center justify-center space-x-2">
+                <XMarkIcon className="h-4 w-4" />
+                <span>{language === "ar" ? "رفض" : "Reject"}</span>
+              </button>
+            </div>
+          </div>
+        ))}
+      </div>
+
+      {dummyPendingRegistrations.length === 0 && (
+        <div className="text-center py-8">
+          <UsersIcon className="h-12 w-12 text-gray-400 mx-auto mb-4" />
+          <h3 className="text-lg font-medium text-gray-600 dark:text-gray-300 mb-2">
+            {language === "ar" ? "لا توجد طلبات تسجيل" : "No Registration Requests"}
+          </h3>
+          <p className="text-gray-500 dark:text-gray-400">
+            {language === "ar" ? "سيتم عرض طلبات التسجيل الجديدة هنا" : "New registration requests will appear here"}
+          </p>
+        </div>
+      )}
+    </div>
+  );
+
+  const IncidentsView = () => (
+    <div className="p-4 space-y-4">
+      <h2 className="text-xl font-bold dark:text-white">
+        {language === "ar" ? "الحوادث" : "Incidents"}
+      </h2>
+      
+      <div className="space-y-4">
+        {dummyIncidents.map((incident) => {
+          const reportedUser = getUserById(incident.reportedUser);
+          const reportingUser = getUserById(incident.reportedBy);
+          
+          return (
+            <div key={incident.id} className="bg-white dark:bg-zinc-900 rounded-lg shadow p-4 border border-gray-200 dark:border-zinc-700">
+              <div className="flex justify-between items-start mb-3">
+                <div className="flex-1">
+                  <h3 className="font-semibold dark:text-white text-lg mb-1">
+                    {incident.caseTitle}
+                  </h3>
+                  <p className="text-red-600 dark:text-red-400 text-sm font-medium">
+                    {incident.reportReason}
+                  </p>
+                </div>
+                <span className="px-2 py-1 rounded-full text-xs font-medium bg-yellow-100 text-yellow-600 dark:bg-yellow-950">
+                  {language === "ar" ? "قيد المراجعة" : "Pending"}
+                </span>
+              </div>
+
+              <div className="mb-4 text-sm">
+                <p className="text-gray-600 dark:text-gray-300 mb-2">
+                  {incident.reportDetails}
+                </p>
+                
+                <div className="grid grid-cols-1 gap-2">
+                  <div>
+                    <span className="font-medium text-gray-600 dark:text-gray-300">
+                      {language === "ar" ? "المبلغ عنه:" : "Reported User:"}
+                    </span>
+                    <span className="ml-2 dark:text-white">{reportedUser?.displayName}</span>
+                  </div>
+                  <div>
+                    <span className="font-medium text-gray-600 dark:text-gray-300">
+                      {language === "ar" ? "المبلغ:" : "Reported By:"}
+                    </span>
+                    <span className="ml-2 dark:text-white">{reportingUser?.displayName}</span>
+                  </div>
+                  <div>
+                    <span className="font-medium text-gray-600 dark:text-gray-300">
+                      {language === "ar" ? "تاريخ البلاغ:" : "Reported:"}
+                    </span>
+                    <span className="ml-2 dark:text-white">
+                      {new Date(incident.createdAt).toLocaleDateString()}
+                    </span>
+                  </div>
+                </div>
+              </div>
+
+              <div className="flex space-x-3">
+                <button className="flex-1 bg-gray-500 text-white px-4 py-2 rounded-lg hover:bg-gray-600 transition-colors flex items-center justify-center space-x-2">
+                  <EyeIcon className="h-4 w-4" />
+                  <span>{language === "ar" ? "تجاهل" : "Ignore Incident"}</span>
+                </button>
+                <button className="flex-1 bg-red-600 text-white px-4 py-2 rounded-lg hover:bg-red-700 transition-colors flex items-center justify-center space-x-2">
+                  <NoSymbolIcon className="h-4 w-4" />
+                  <span>{language === "ar" ? "حظر المستخدم" : "Ban User"}</span>
+                </button>
+              </div>
+            </div>
+          );
+        })}
+      </div>
+
+      {dummyIncidents.length === 0 && (
+        <div className="text-center py-8">
+          <ExclamationTriangleIcon className="h-12 w-12 text-gray-400 mx-auto mb-4" />
+          <h3 className="text-lg font-medium text-gray-600 dark:text-gray-300 mb-2">
+            {language === "ar" ? "لا توجد حوادث" : "No Incidents"}
+          </h3>
+          <p className="text-gray-500 dark:text-gray-400">
+            {language === "ar" ? "سيتم عرض البلاغات الجديدة هنا" : "New incident reports will appear here"}
+          </p>
+        </div>
+      )}
+    </div>
+  );
+
   const renderContent = () => {
     switch (activeView) {
       case "dashboard":
@@ -981,6 +1259,10 @@ export default function MobileDemoApp() {
         return <div className="p-4"><h2 className="text-xl font-bold dark:text-white">{language === "ar" ? "الملف الشخصي" : "Profile"}</h2><p className="text-gray-600 dark:text-gray-300 mt-2">{language === "ar" ? "قريباً..." : "Coming soon..."}</p></div>;
       case "case-detail":
         return <CaseDetailView />;
+      case "registration-requests":
+        return <RegistrationRequestsView />;
+      case "incidents":
+        return <IncidentsView />;
       default:
         return <Dashboard />;
     }
@@ -994,16 +1276,18 @@ export default function MobileDemoApp() {
       
       {viewMode === "desktop" && <SidebarNav />}
       
-      <div className={`flex-1 flex flex-col ${
+      <div className={`flex-1 flex flex-col relative z-40 ${
         viewMode === "desktop" ? "ml-64" : ""
       }`}>
         {/* Container with responsive width */}
         <div className={`w-full ${
-          viewMode === "mobile" ? "max-w-md mx-auto" : "max-w-none"
+          viewMode === "mobile" 
+            ? "max-w-sm mx-auto min-h-screen border-x border-gray-300 dark:border-zinc-600 bg-white dark:bg-zinc-900" 
+            : "max-w-none"
         }`}>
           <Header />
           <main className={`flex-1 overflow-auto ${
-            viewMode === "mobile" ? "pb-20" : ""
+            viewMode === "mobile" && currentUserType !== "admin" ? "pb-20" : ""
           }`}>
             {renderContent()}
           </main>
@@ -1012,19 +1296,30 @@ export default function MobileDemoApp() {
         </div>
       </div>
       
-      {viewMode === "mobile" && <SidebarNav />}
+      {viewMode === "mobile" && (
+        <>
+          {/* Backdrop overlay */}
+          {sidebarOpen && (
+            <div 
+              className="fixed inset-0 bg-black bg-opacity-50 z-30 transition-opacity duration-300 ease-in-out"
+              onClick={() => setSidebarOpen(false)}
+            />
+          )}
+          <SidebarNav />
+        </>
+      )}
 
       {/* Offline Banner */}
       {isOffline && (
-        <div className={`fixed ${viewMode === "mobile" ? "bottom-24" : "bottom-4"} bg-yellow-100 border border-yellow-300 rounded-lg p-2 flex items-center space-x-2 z-50 ${
+        <div className={`fixed ${viewMode === "mobile" ? "top-16" : "top-4"} bg-yellow-100 border border-yellow-300 rounded-lg p-2 flex items-center space-x-2 z-40 ${
           viewMode === "desktop" 
             ? "left-68 right-4" 
             : viewMode === "mobile"
-            ? "left-4 right-20"
+            ? "left-1/2 transform -translate-x-1/2 w-80 max-w-[calc(100vw-2rem)]"
             : "left-4 right-4"
         }`}>
           <NoSymbolIcon className="h-4 w-4 text-yellow-600 flex-shrink-0" />
-          <span className="text-yellow-800 text-sm">
+          <span className="text-yellow-800 text-sm truncate">
             {language === "ar"
               ? "عمل بدون اتصال"
               : "Working offline"}
