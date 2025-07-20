@@ -184,6 +184,49 @@
     scroll-behavior: smooth;
   }
 
+  /* Theme-based background colors */
+  html {
+    background-color: white;
+    color: #111827;
+  }
+
+  html.dark {
+    background-color: black;
+    color: white;
+  }
+
+  html.light {
+    background-color: white;
+    color: #111827;
+  }
+
+  /* Ensure body inherits background from html */
+  body {
+    background-color: inherit;
+    color: inherit;
+  }
+
+  /* Override any conflicting background classes */
+  .bg-white {
+    background-color: white;
+  }
+
+  /* Ensure full viewport coverage */
+  html, body, #__next {
+    min-height: 100vh;
+    width: 100%;
+  }
+
+  /* Root container background consistency */
+  #__next {
+    background-color: inherit;
+  }
+
+  /* Modal overlay backgrounds */
+  .fixed.inset-0 {
+    background: inherit;
+  }
+
   /* Typography improvements */
   h1,
   h2,

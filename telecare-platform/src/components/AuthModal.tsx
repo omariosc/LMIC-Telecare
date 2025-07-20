@@ -15,12 +15,14 @@ type AuthModalProps = {
   isOpen: boolean;
   onClose: () => void;
   userType: "gaza-clinician" | "uk-clinician" | "register-uk";
+  onLoginSuccess?: () => void;
 };
 
 export default function AuthModal({
   isOpen,
   onClose,
   userType,
+  onLoginSuccess,
 }: AuthModalProps) {
   const [currentLanguage, setCurrentLanguage] = useState<Language>("en");
   const [lastUserType, setLastUserType] = useState(userType);
@@ -31,6 +33,7 @@ export default function AuthModal({
       setLastUserType(userType);
     }
   }, [isOpen, userType]);
+
 
   // Read language from localStorage and listen for changes
   useEffect(() => {
@@ -71,23 +74,18 @@ export default function AuthModal({
   }, [isOpen]);
 
   const getTitleContent = () => {
-    // Use lastUserType during transitions to prevent flashing
-    const activeUserType = isOpen ? userType : lastUserType;
+    // Always use lastUserType during any transition to prevent flashing
+    const activeUserType = lastUserType;
 
-    if (activeUserType === "gaza-clinician") {
-      return {
-        en: "Gaza Clinician Login",
-        ar: "دخول طبيب غزة",
-      };
-    } else if (activeUserType === "uk-clinician") {
-      return {
-        en: "UK Clinician Login",
-        ar: "دخول طبيب بريطاني",
-      };
-    } else {
+    if (activeUserType === "register-uk") {
       return {
         en: "UK Clinician Registration",
         ar: "تسجيل طبيب بريطاني",
+      };
+    } else {
+      return {
+        en: "Login",
+        ar: "تسجيل الدخول",
       };
     }
   };
@@ -104,7 +102,7 @@ export default function AuthModal({
           leaveFrom="opacity-100"
           leaveTo="opacity-80"
         >
-          <div className="fixed inset-0 bg-black bg-opacity-50 dark:bg-black" />
+          <div className="fixed inset-0 bg-zinc-950/90 bg-opacity-50 dark:bg-white dark:bg-opacity-20" />
         </Transition.Child>
 
         <div className="fixed inset-0 overflow-y-auto">
@@ -120,9 +118,14 @@ export default function AuthModal({
             >
               <Dialog.Panel
                 id="auth-modal-content"
-                className="w-full max-w-md transform overflow-hidden rounded-2xl bg-white dark:bg-zinc-900 p-6 text-left align-middle shadow-xl transition-all"
+                className={`w-full max-w-md transform overflow-hidden rounded-2xl bg-white dark:bg-zinc-900 p-6 align-middle shadow-xl transition-all ${
+                  currentLanguage === "ar" ? "text-right" : "text-left"
+                }`}
+                dir={currentLanguage === "ar" ? "rtl" : "ltr"}
               >
-                <div className="flex justify-between items-center mb-4">
+                <div className={`flex justify-between items-center mb-4 ${
+                  currentLanguage === "ar" ? "flex-row-reverse" : ""
+                }`}>
                   <Dialog.Title
                     as="h3"
                     className="text-lg font-bold leading-6 text-gray-900 dark:text-white"
@@ -133,7 +136,7 @@ export default function AuthModal({
                   </Dialog.Title>
                   <button
                     onClick={onClose}
-                    className="text-gray-400 hover:text-gray-600 dark:text-gray-300 dark:hover:text-gray-100 transition-colors"
+                    className="text-gray-400 hover:text-gray-600 dark:text-gray-300 dark:hover:text-gray-100 transition-colors cursor-pointer"
                   >
                     <XMarkIcon className="h-6 w-6" />
                   </button>
@@ -141,25 +144,32 @@ export default function AuthModal({
 
                 <div className="mb-6">
                   <p className="text-sm text-gray-600 dark:text-gray-300 leading-relaxed">
-                    {currentLanguage === "ar"
-                      ? "للوصول إلى منصة جسور الطبية، يرجى تحميل التطبيق على هاتفك. التطبيق مصمم خصيصاً للعمل في بيئات ذات اتصال محدود بالإنترنت."
-                      : "To access the Jusur medical platform, please download the app on your phone. The app is specifically designed to work in low-bandwidth environments."}
+                    {lastUserType === "register-uk"
+                      ? (currentLanguage === "ar"
+                          ? "للانضمام كطبيب متطوع بريطاني، يرجى إكمال عملية التسجيل والتحقق من هويتك. ستحتاج إلى رقم GMC الخاص بك وجواز السفر للتحقق من الهوية."
+                          : "To join as a UK volunteer clinician, please complete the registration and identity verification process. You'll need your GMC number and passport for identity verification.")
+                      : (currentLanguage === "ar"
+                          ? "للوصول إلى منصة جسور الطبية، يرجى تحميل التطبيق على هاتفك. التطبيق مصمم خصيصاً للعمل في بيئات ذات اتصال محدود بالإنترنت."
+                          : "To access the Jusur medical platform, please download the app on your phone. The app is specifically designed to work in low-bandwidth environments.")}
                   </p>
                 </div>
 
-                {/* PWA Installation Instructions */}
-                <div className="space-y-4">
+                {/* PWA Installation Instructions - Only show for non-registration types */}
+                {lastUserType !== "register-uk" && (
+                  <div className="space-y-4">
                   {/* Android Instructions */}
-                  <div className="border border-gray-200 dark:border-gray-600 rounded-lg p-4 bg-gray-50 dark:bg-blue-950">
+                  <div className="border border-gray-200 dark:border-gray-600 rounded-lg p-4 bg-gray-50 dark:bg-green-950">
                     <h4 className="font-semibold text-gray-900 dark:text-white mb-3 flex items-center gap-2">
-                      <DevicePhoneMobileIcon className="h-5 w-5 text-blue-600" />
+                      <DevicePhoneMobileIcon className="h-5 w-5 text-green-600" />
                       {currentLanguage === "ar"
                         ? "للهواتف الذكية (أندرويد/أيفون)"
                         : "For Smartphones (Android/iPhone)"}
                     </h4>
                     <ol className="space-y-3 text-sm text-gray-700 dark:text-gray-300">
-                      <li className="flex items-start gap-3">
-                        <span className="flex-shrink-0 w-6 h-6 bg-blue-100 dark:bg-blue-900 text-blue-600 dark:text-blue-300 rounded-full flex items-center justify-center text-xs font-bold">
+                      <li className={`flex items-start gap-3 ${
+                        currentLanguage === "ar" ? "flex-row-reverse" : ""
+                      }`}>
+                        <span className="flex-shrink-0 w-6 h-6 bg-green-100 dark:bg-green-900 text-green-600 dark:text-green-300 rounded-full flex items-center justify-center text-xs font-bold">
                           1
                         </span>
                         <span>
@@ -168,8 +178,10 @@ export default function AuthModal({
                             : "Open this website in your mobile browser"}
                         </span>
                       </li>
-                      <li className="flex items-start gap-3">
-                        <span className="flex-shrink-0 w-6 h-6 bg-blue-100 dark:bg-blue-900 text-blue-600 dark:text-blue-300 rounded-full flex items-center justify-center text-xs font-bold">
+                      <li className={`flex items-start gap-3 ${
+                        currentLanguage === "ar" ? "flex-row-reverse" : ""
+                      }`}>
+                        <span className="flex-shrink-0 w-6 h-6 bg-green-100 dark:bg-green-900 text-green-600 dark:text-green-300 rounded-full flex items-center justify-center text-xs font-bold">
                           2
                         </span>
                         <div className="space-y-2">
@@ -178,9 +190,11 @@ export default function AuthModal({
                               ? "اضغط على زر المشاركة:"
                               : "Tap the share button:"}
                           </span>
-                          <div className="flex gap-4 mt-2">
+                          <div className={`flex gap-4 mt-2 ${
+                            currentLanguage === "ar" ? "flex-row-reverse" : ""
+                          }`}>
                             <div className="text-center">
-                              <ShareIcon className="h-6 w-6 mx-auto text-blue-600" />
+                              <ShareIcon className="h-6 w-6 mx-auto text-green-600" />
                               <span className="text-xs text-gray-500 dark:text-gray-400">
                                 {currentLanguage === "ar" ? "أيفون" : "iPhone"}
                               </span>
@@ -196,8 +210,10 @@ export default function AuthModal({
                           </div>
                         </div>
                       </li>
-                      <li className="flex items-start gap-3">
-                        <span className="flex-shrink-0 w-6 h-6 bg-blue-100 dark:bg-blue-900 text-blue-600 dark:text-blue-300 rounded-full flex items-center justify-center text-xs font-bold">
+                      <li className={`flex items-start gap-3 ${
+                        currentLanguage === "ar" ? "flex-row-reverse" : ""
+                      }`}>
+                        <span className="flex-shrink-0 w-6 h-6 bg-green-100 dark:bg-green-900 text-green-600 dark:text-green-300 rounded-full flex items-center justify-center text-xs font-bold">
                           3
                         </span>
                         <div>
@@ -206,7 +222,9 @@ export default function AuthModal({
                               ? 'اختر "إضافة إلى الشاشة الرئيسية" أو "تثبيت التطبيق"'
                               : 'Select "Add to Home Screen" or "Install App"'}
                           </span>
-                          <div className="mt-1 flex items-center gap-2 text-xs text-gray-500 dark:text-gray-400">
+                          <div className={`mt-1 flex items-center gap-2 text-xs text-gray-500 dark:text-gray-400 ${
+                            currentLanguage === "ar" ? "flex-row-reverse" : ""
+                          }`}>
                             <PlusIcon className="h-4 w-4" />
                             <span>
                               {currentLanguage === "ar"
@@ -216,8 +234,10 @@ export default function AuthModal({
                           </div>
                         </div>
                       </li>
-                      <li className="flex items-start gap-3">
-                        <span className="flex-shrink-0 w-6 h-6 bg-blue-100 dark:bg-blue-900 text-blue-600 dark:text-blue-300 rounded-full flex items-center justify-center text-xs font-bold">
+                      <li className={`flex items-start gap-3 ${
+                        currentLanguage === "ar" ? "flex-row-reverse" : ""
+                      }`}>
+                        <span className="flex-shrink-0 w-6 h-6 bg-green-100 dark:bg-green-900 text-green-600 dark:text-green-300 rounded-full flex items-center justify-center text-xs font-bold">
                           4
                         </span>
                         <span>
@@ -237,19 +257,25 @@ export default function AuthModal({
                         : "App Benefits:"}
                     </h4>
                     <ul className="text-sm text-green-700 dark:text-green-300 space-y-1">
-                      <li className="flex items-center gap-2">
+                      <li className={`flex items-center gap-2 ${
+                        currentLanguage === "ar" ? "flex-row-reverse" : ""
+                      }`}>
                         <div className="w-2 h-2 bg-green-500 dark:bg-green-400 rounded-full"></div>
                         {currentLanguage === "ar"
                           ? "يعمل دون اتصال بالإنترنت"
                           : "Works offline"}
                       </li>
-                      <li className="flex items-center gap-2">
+                      <li className={`flex items-center gap-2 ${
+                        currentLanguage === "ar" ? "flex-row-reverse" : ""
+                      }`}>
                         <div className="w-2 h-2 bg-green-500 dark:bg-green-400 rounded-full"></div>
                         {currentLanguage === "ar"
                           ? "محسن للاتصال المحدود"
                           : "Optimized for limited connectivity"}
                       </li>
-                      <li className="flex items-center gap-2">
+                      <li className={`flex items-center gap-2 ${
+                        currentLanguage === "ar" ? "flex-row-reverse" : ""
+                      }`}>
                         <div className="w-2 h-2 bg-green-500 dark:bg-green-400 rounded-full"></div>
                         {currentLanguage === "ar"
                           ? "إشعارات فورية للحالات الطارئة"
@@ -278,17 +304,129 @@ export default function AuthModal({
                     <div className="mt-2">
                       <a
                         href="mailto:support@jusur.org.uk"
-                        className="text-blue-600 hover:text-blue-800 text-xs underline"
+                        className="text-green-600 hover:text-green-800 text-xs underline"
                       >
                         {currentLanguage === "ar"
-                          ? "اتصل بفريق الدعم"
-                          : "Contact Support Team"}
+                          ? "اتصل بفريق الدعم (support@jusur.org.uk)"
+                          : "Contact Support Team (support@jusur.org.uk)"}
                       </a>
                     </div>
                   </div>
-                </div>
+                  </div>
+                )}
 
-                <div className="mt-6 flex justify-end gap-3">
+                {/* UK Registration Information */}
+                {lastUserType === "register-uk" && (
+                  <div className="space-y-4">
+                    <div className="bg-green-50 dark:bg-green-900/20 border border-green-200 dark:border-green-800 rounded-lg p-4">
+                      <h4 className="font-semibold text-green-800 dark:text-green-300 mb-3">
+                        {currentLanguage === "ar"
+                          ? "ما ستحتاجه للتسجيل:"
+                          : "What you'll need for registration:"}
+                      </h4>
+                      <ul className="text-sm text-green-700 dark:text-green-300 space-y-2">
+                        <li className={`flex items-center gap-2 ${
+                          currentLanguage === "ar" ? "flex-row-reverse" : ""
+                        }`}>
+                          <div className="w-2 h-2 bg-green-500 dark:bg-green-400 rounded-full"></div>
+                          {currentLanguage === "ar"
+                            ? "رقم GMC الخاص بك (رقم التسجيل الطبي العام)"
+                            : "Your GMC number (General Medical Council registration)"}
+                        </li>
+                        <li className={`flex items-center gap-2 ${
+                          currentLanguage === "ar" ? "flex-row-reverse" : ""
+                        }`}>
+                          <div className="w-2 h-2 bg-green-500 dark:bg-green-400 rounded-full"></div>
+                          {currentLanguage === "ar"
+                            ? "صورة واضحة من صفحة الصورة في جواز السفر"
+                            : "Clear photo of your passport photo page"}
+                        </li>
+                        <li className={`flex items-center gap-2 ${
+                          currentLanguage === "ar" ? "flex-row-reverse" : ""
+                        }`}>
+                          <div className="w-2 h-2 bg-green-500 dark:bg-green-400 rounded-full"></div>
+                          {currentLanguage === "ar"
+                            ? "كاميرا للتحقق من الهوية (صورة حية)"
+                            : "Camera for live identity verification"}
+                        </li>
+                        <li className={`flex items-center gap-2 ${
+                          currentLanguage === "ar" ? "flex-row-reverse" : ""
+                        }`}>
+                          <div className="w-2 h-2 bg-green-500 dark:bg-green-400 rounded-full"></div>
+                          {currentLanguage === "ar"
+                            ? "عنوان بريد إلكتروني صالح للتحقق"
+                            : "Valid email address for verification"}
+                        </li>
+                      </ul>
+                    </div>
+
+                    <div className="bg-green-50 dark:bg-green-900/20 border border-green-200 dark:border-green-800 rounded-lg p-4">
+                      <h4 className="font-semibold text-green-800 dark:text-green-300 mb-2">
+                        {currentLanguage === "ar"
+                          ? "عملية التسجيل (5 خطوات):"
+                          : "Registration Process (5 Steps):"}
+                      </h4>
+                      <ol className="text-sm text-green-700 dark:text-green-300 space-y-1">
+                        <li className={`flex items-start gap-2 ${
+                          currentLanguage === "ar" ? "flex-row-reverse" : ""
+                        }`}>
+                          <span className="text-xs bg-green-200 dark:bg-green-800 text-green-800 dark:text-green-200 rounded-full w-5 h-5 flex items-center justify-center font-bold">1</span>
+                          {currentLanguage === "ar"
+                            ? "التحقق من رقم GMC"
+                            : "GMC Number Verification"}
+                        </li>
+                        <li className={`flex items-start gap-2 ${
+                          currentLanguage === "ar" ? "flex-row-reverse" : ""
+                        }`}>
+                          <span className="text-xs bg-green-200 dark:bg-green-800 text-green-800 dark:text-green-200 rounded-full w-5 h-5 flex items-center justify-center font-bold">2</span>
+                          {currentLanguage === "ar"
+                            ? "رفع صورة جواز السفر"
+                            : "Passport Photo Upload"}
+                        </li>
+                        <li className={`flex items-start gap-2 ${
+                          currentLanguage === "ar" ? "flex-row-reverse" : ""
+                        }`}>
+                          <span className="text-xs bg-green-200 dark:bg-green-800 text-green-800 dark:text-green-200 rounded-full w-5 h-5 flex items-center justify-center font-bold">3</span>
+                          {currentLanguage === "ar"
+                            ? "التحقق من الهوية بالكاميرا"
+                            : "Live Face Verification"}
+                        </li>
+                        <li className={`flex items-start gap-2 ${
+                          currentLanguage === "ar" ? "flex-row-reverse" : ""
+                        }`}>
+                          <span className="text-xs bg-green-200 dark:bg-green-800 text-green-800 dark:text-green-200 rounded-full w-5 h-5 flex items-center justify-center font-bold">4</span>
+                          {currentLanguage === "ar"
+                            ? "التحقق من البريد الإلكتروني"
+                            : "Email Verification"}
+                        </li>
+                        <li className={`flex items-start gap-2 ${
+                          currentLanguage === "ar" ? "flex-row-reverse" : ""
+                        }`}>
+                          <span className="text-xs bg-green-200 dark:bg-green-800 text-green-800 dark:text-green-200 rounded-full w-5 h-5 flex items-center justify-center font-bold">5</span>
+                          {currentLanguage === "ar"
+                            ? "إنشاء كلمة المرور"
+                            : "Account Setup"}
+                        </li>
+                      </ol>
+                    </div>
+
+                    {/* Gaza Clinician Information */}
+                    <div className="bg-blue-50 dark:bg-blue-900/20 border border-blue-200 dark:border-blue-800 rounded-lg p-4">
+                      <h4 className="font-semibold text-blue-800 dark:text-blue-300 mb-2">
+                        {currentLanguage === "ar"
+                          ? "للكوادر الطبية في غزة:"
+                          : "For Gaza Medical Staff:"}
+                      </h4>
+                      <p className="text-sm text-blue-700 dark:text-blue-300">
+                        {currentLanguage === "ar"
+                          ? "إذا كنت من الكوادر الطبية في غزة، يرجى التسجيل باستخدام رمز الإحالة المقدم لك من قبل المنظمة أو المستشفى الخاص بك. اتصل بمسؤول النظام للحصول على رمز الإحالة الخاص بك."
+                          : "If you are medical staff in Gaza, please register using the referral code provided to you by your organization or hospital. Contact your system administrator to obtain your referral code."}
+                      </p>
+                    </div>
+                  </div>
+                )}
+
+                {/* <div className="mt-6 flex justify-end gap-3">
                   <button
                     type="button"
                     className="inline-flex justify-center rounded-md border border-gray-300 dark:border-gray-500 bg-white dark:bg-gray-700 px-4 py-2 text-sm font-medium text-gray-700 dark:text-gray-200 hover:bg-gray-50 dark:hover:bg-gray-600 focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2 cursor-pointer"
@@ -298,21 +436,28 @@ export default function AuthModal({
                   </button>
                   <button
                     type="button"
-                    className="inline-flex justify-center rounded-md border border-transparent bg-blue-600 dark:bg-blue-500 px-4 py-2 text-sm font-medium text-white hover:bg-blue-700 dark:hover:bg-blue-600 focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2 cursor-pointer"
+                    className="inline-flex justify-center rounded-md border border-transparent bg-green-600 dark:bg-green-500 px-4 py-2 text-sm font-medium text-white hover:bg-green-700 dark:hover:bg-green-600 focus:outline-none focus-visible:ring-2 focus-visible:ring-green-500 focus-visible:ring-offset-2 cursor-pointer"
                     onClick={() => {
-                      // In a real implementation, this would trigger PWA install prompt
-                      if ("serviceWorker" in navigator) {
-                        // Trigger PWA install prompt
-                        window.location.reload();
+                      if (lastUserType === "register-uk") {
+                        // Redirect to registration page for UK clinicians
+                        window.location.href = "/register";
+                        return;
                       }
+                      
+                      // For other user types, redirect to demo page instead of reloading
+                      window.location.href = "/demo/mobile";
                       onClose();
                     }}
                   >
-                    {currentLanguage === "ar"
-                      ? "فهمت، دعني أحمل التطبيق"
-                      : "Got it, let me install"}
+                    {lastUserType === "register-uk"
+                      ? (currentLanguage === "ar"
+                          ? "بدء التسجيل"
+                          : "Start Registration")
+                      : (currentLanguage === "ar"
+                          ? "فهمت، دعني أحمل التطبيق"
+                          : "Got it, let me install")}
                   </button>
-                </div>
+                </div> */}
               </Dialog.Panel>
             </Transition.Child>
           </div>

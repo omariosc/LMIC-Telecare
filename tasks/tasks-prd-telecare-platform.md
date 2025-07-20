@@ -46,10 +46,10 @@ prd-telecare-platform.md
   - [x] 1.7 Set up development environment with Wrangler CLI
   - [x] 1.8 Create TypeScript interfaces for core data models
 
-- [ ] 2.0 Build asynchronous forum with case management (with dummy users)
-  - [ ] 2.1 Create dummy user data with different roles (UK specialist, Gaza clinician, admin)
-  - [ ] 2.2 Build user switcher component for development testing
-  - [ ] 2.3 Implement case listing page with filtering by specialty and urgency
+- [x] 2.0 Build asynchronous forum with case management (with dummy users)
+  - [x] 2.1 Create dummy user data with different roles (UK specialist, Gaza clinician, admin)
+  - [x] 2.2 Build user switcher component for development testing
+  - [x] 2.3 Implement case listing page with filtering by specialty and urgency
   - [ ] 2.4 Create case detail view with threaded response display
   - [ ] 2.5 Build case creation form with text input and file upload support
   - [ ] 2.6 Implement response creation and editing functionality
@@ -99,10 +99,10 @@ prd-telecare-platform.md
   - [x] 6.8 Add support contact information for installation issues
 
 - [ ] 7.0 Implement full user authentication and registration system (final phase)
-  - [ ] 7.1 Integrate GMC website scraping for UK doctor verification
-  - [ ] 7.2 Build multi-step registration flow for UK specialists
+  - [x] 7.1 Integrate GMC website scraping for UK doctor verification
+  - [x] 7.2 Build multi-step registration flow for UK specialists
   - [ ] 7.3 Implement document upload and facial recognition verification
-  - [ ] 7.4 Create Gaza clinician registration with referral codes
+  - [x] 7.4 Create Gaza clinician registration with referral codes
   - [ ] 7.5 Add 2FA authentication with NHS email verification
   - [ ] 7.6 Build admin panel for user management and verification
   - [ ] 7.7 Implement role-based access control and permissions

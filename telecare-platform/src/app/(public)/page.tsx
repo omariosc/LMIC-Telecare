@@ -55,12 +55,19 @@ export default function Home() {
 
   const closeAuthModal = () => {
     setAuthModal({ isOpen: false, userType: "gaza-clinician" });
+    // Ensure dropdown is also closed when modal is closed
+    setShowDropdown(false);
+  };
+
+  const handleLoginSuccess = () => {
+    // Auto-redirect to demo page after successful login/registration
+    window.location.href = "/demo/mobile";
   };
 
   useEffect(() => {
     // Set client flag
     setIsClient(true);
-    
+
     const checkScreenSize = () => {
       if (typeof window !== "undefined") {
         const isTooSmall = window.innerWidth < 300 || window.innerHeight < 300;
@@ -116,13 +123,13 @@ export default function Home() {
   return (
     <div data-language={language} data-direction={direction}>
       {/* Header & Navigation - Fixed Top */}
-      <header className="bg-white dark:bg-black opacity-95 fixed top-0 left-0 right-0 z-50">
+      <header className="bg-green-950 dark:bg-black opacity-95 fixed top-0 left-0 right-0 z-50">
         <nav className="container mx-auto px-4 py-4 flex justify-between items-center min-h-[64px]">
           {/* Logo - Top Left */}
           <div className="flex items-center gap-2">
-            <img 
-              src="/images/jusur-logo.png" 
-              alt="Jusur Logo" 
+            <img
+              src="/images/jusur-logo.png"
+              alt="Jusur Logo"
               className="h-8 w-auto"
             />
             <TrophyIcon className="hide-nav h-4 w-4 text-yellow-500" />
@@ -160,7 +167,7 @@ export default function Home() {
             <button
               id="lang-toggle"
               onClick={toggleLanguage}
-              className="bg-gray-100 dark:bg-zinc-900 dark:text-white text-black px-3 py-2 rounded-full font-semibold text-sm dark:hover:bg-zinc-800 hover:bg-gray-200 transition-colors cursor-pointer"
+              className="bg-gray-100 dark:bg-zinc-900 dark:text-white text-black px-3 py-2 rounded-full font-semibold text-sm dark:hover:bg-zinc-800 !hover:bg-zinc-100 transition-colors cursor-pointer"
             >
               <span data-lang-en="">ع</span>
               <span data-lang-ar="" className="hidden">
@@ -172,7 +179,7 @@ export default function Home() {
             <div className="relative" ref={dropdownRef}>
               <button
                 onClick={() => setShowDropdown(!showDropdown)}
-                className="text-black dark:text-white dark:hover:text-zinc-400 hover:text-zinc-600 px-3 py-2 rounded-md font-medium text-sm flex items-center gap-2 transition-colors  cursor-pointer"
+                className="text-white dark:text-white dark:hover:text-zinc-400 hover:text-zinc-400 px-3 py-2 rounded-md font-medium text-sm flex items-center gap-2 transition-colors  cursor-pointer"
               >
                 <UserIcon className="h-4 w-4" />
                 <svg
@@ -200,24 +207,12 @@ export default function Home() {
                     className="block w-full text-left px-4 py-2 text-sm text-gray-900 dark:text-gray-100 hover:bg-gray-100 dark:hover:bg-zinc-700 hover:text-[#0A2540] dark:hover:text-white transition-colors cursor-pointer"
                     onClick={() => setShowDropdown(false)}
                   >
-                    <span data-lang-en="">Quick Demo (No Login)</span>
+                    <span data-lang-en="">Quick Demo</span>
                     <span data-lang-ar="" className="hidden">
-                      تجريبي سريع (بدون دخول)
+                      تجربة سريعة
                     </span>
                   </a>
                   <div className="border-t border-gray-200 dark:border-zinc-700 my-1"></div>
-                  <button
-                    onClick={() => {
-                      openAuthModal("gaza-clinician");
-                      setShowDropdown(false);
-                    }}
-                    className="block w-full text-left px-4 py-2 text-sm text-gray-900 dark:text-gray-100 hover:bg-gray-100 dark:hover:bg-zinc-700 hover:text-[#0A2540] dark:hover:text-white transition-colors cursor-pointer"
-                  >
-                    <span data-lang-en="">Login (Gaza Clinician)</span>
-                    <span data-lang-ar="" className="hidden">
-                      دخول طبيب غزة
-                    </span>
-                  </button>
                   <button
                     onClick={() => {
                       openAuthModal("uk-clinician");
@@ -225,9 +220,9 @@ export default function Home() {
                     }}
                     className="block w-full text-left px-4 py-2 text-sm text-gray-900 dark:text-gray-100 hover:bg-gray-100 dark:hover:bg-zinc-700 hover:text-[#0A2540] dark:hover:text-white transition-colors cursor-pointer"
                   >
-                    <span data-lang-en="">Login (UK Clinician)</span>
+                    <span data-lang-en="">Login</span>
                     <span data-lang-ar="" className="hidden">
-                      دخول طبيب بريطاني
+                      تسجيل الدخول
                     </span>
                   </button>
                   <button
@@ -237,9 +232,9 @@ export default function Home() {
                     }}
                     className="block w-full text-left px-4 py-2 text-sm text-gray-900 dark:text-gray-100 hover:bg-gray-100 dark:hover:bg-zinc-700 hover:text-[#0A2540] dark:hover:text-white transition-colors cursor-pointer"
                   >
-                    <span data-lang-en="">Register (UK Clinician)</span>
+                    <span data-lang-en="">Register</span>
                     <span data-lang-ar="" className="hidden">
-                      تسجيل طبيب بريطاني
+                      تسجيل
                     </span>
                   </button>
                 </div>
@@ -254,173 +249,178 @@ export default function Home() {
         {/* Hero Section */}
         <section className="relative bg-gradient-to-b from-green-800 to-green-950 text-white text-center pt-28 pb-20 px-6 overflow-hidden">
           {/* Background Image */}
-          <div 
-            className="absolute inset-0 opacity-25"
+          <div
+            className="absolute inset-0"
             style={{
               backgroundImage: 'url("/images/gaza-destruction.jpg")',
-              backgroundSize: 'cover',
-              backgroundPosition: 'center',
-              backgroundRepeat: 'no-repeat',
+              backgroundSize: "cover",
+              backgroundPosition: "center",
+              backgroundRepeat: "no-repeat",
             }}
           ></div>
           {/* Green Gradient Overlay */}
           <div className="absolute inset-0 bg-gradient-to-b from-green-800/80 to-green-950/85"></div>
           {/* Content */}
           <div className="relative z-10">
-          <div className="container mx-auto">
-            <h1 className="text-4xl md:text-6xl font-extrabold leading-tight initial-hidden">
-              <span data-lang-en="">
-                Their Hospitals Are Beyond Capacity.
-                <br />
-                Your Expertise is Their Lifeline.
-              </span>
-              <span data-lang-ar="" className="hidden">
-                نظام صحي على وشك الانهيار
-              </span>
-            </h1>
-            <div className="mt-6 text-lg md:text-xl text-gray-200 max-w-5xl mx-auto initial-hidden">
-              <p>
+            <div className="container mx-auto">
+              <h1 className="text-4xl md:text-6xl font-extrabold leading-tight initial-hidden">
                 <span data-lang-en="">
-                  <strong>Jusur (جسور)</strong> is the Arabic word for bridges.
-                  Just because we cannot get physical aid into Gaza, it does not
-                  mean we cannot provide them support, bridging our knowledge to
-                  people who need it the <em>most</em>.
+                  Their Hospitals Are Beyond Capacity.
+                  <br />
+                  Your Expertise is Their Lifeline.
                 </span>
                 <span data-lang-ar="" className="hidden">
-                  مجرد أننا لا نستطيع إدخال المساعدات المادية إلى غزة، لا يعني
-                  أننا لا نستطيع تقديم الدعم لهم، وربط معرفتنا بالأشخاص الذين
-                  يحتاجونها أكثر من غيرهم.
+                  مستشفياتهم تجاوزت طاقتها الاستيعابية.
+                  <br />
+                  خبرتك هي شريان حياتهم.
                 </span>
-              </p>
-            </div>
-            <div className="mt-8 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 max-w-7xl mx-auto text-center">
-              <div className="bg-white dark:bg-black p-6 rounded-xl shadow-md initial-hidden hover:shadow-xl transition-shadow duration-300">
-                <h3 className="text-4xl font-extrabold text-red-500">
-                  <span data-lang-en="">2.3 Million</span>
-                  <span data-lang-ar="" className="hidden">
-                    2.3 مليون
-                  </span>
-                </h3>
-                <p className="mt-2 font-semibold text-gray-600 dark:text-white">
-                  <span data-lang-en="">People need urgent healthcare</span>
-                  <span data-lang-ar="" className="hidden">
-                    شخص بحاجة لرعاية صحية عاجلة
-                  </span>
-                </p>
-              </div>
-              <div className="bg-white dark:bg-black p-6 rounded-xl shadow-md initial-hidden hover:shadow-xl transition-shadow duration-300">
-                <h3 className="text-4xl font-extrabold text-red-500">
-                  <span data-lang-en="">Only 17</span>
-                  <span data-lang-ar="" className="hidden">
-                    17 فقط
-                  </span>
-                </h3>
-                <p className="mt-2 font-semibold text-gray-600 dark:text-white">
-                  <span data-lang-en="">
-                    Hospitals{" "}
-                    <span className="text-red-500">partially&nbsp;</span>
-                    functional
-                  </span>
-                  <span data-lang-ar="" className="hidden">
-                    مستشفى يعمل جزئياً
-                  </span>
-                </p>
-              </div>
-              <div className="bg-white dark:bg-black p-6 rounded-xl shadow-md initial-hidden hover:shadow-xl transition-shadow duration-300">
-                <h3 className="text-4xl font-extrabold text-red-500">
-                  <span data-lang-en="">90%</span>
-                  <span data-lang-ar="" className="hidden">
-                    90%
-                  </span>
-                </h3>
-                <p className="mt-2 font-semibold text-gray-600 dark:text-white">
-                  <span data-lang-en="">Shortage of specialists</span>
-                  <span data-lang-ar="" className="hidden">
-                    نقص في الأخصائيين
-                  </span>
-                </p>
-              </div>
-              <div className="bg-white dark:bg-black p-6 rounded-xl shadow-md initial-hidden hover:shadow-xl transition-shadow duration-300">
-                <h3 className="text-4xl font-extrabold text-red-500">
-                  <span data-lang-en="">Limited</span>
-                  <span data-lang-ar="" className="hidden">
-                    محدود
-                  </span>
-                </h3>
-                <p className="mt-2 font-semibold text-gray-600 dark:text-white">
-                  <span data-lang-en="">Medical supply access</span>
-                  <span data-lang-ar="" className="hidden">
-                    وصول محدود للإمدادات الطبية
-                  </span>
-                </p>
-              </div>
-            </div>
-            <div className="mt-8">
-              <div className="inline-block bg-red-800/80 text-white font-semibold px-4 py-2 rounded-full mt-4">
+              </h1>
+              <div className="mt-6 text-lg md:text-xl text-gray-200 max-w-5xl mx-auto initial-hidden">
                 <p>
                   <span data-lang-en="">
-                    <strong>UK Doctors Agree*:</strong> Your remote guidance is
-                    currently the #1 most impactful intervention.
+                    <strong>Jusur (جسور)</strong> is the Arabic word for
+                    bridges. Just because we cannot get physical aid into Gaza,
+                    it does not mean we cannot provide them support, bridging
+                    our knowledge to people who need it the <em>most</em>.
                   </span>
                   <span data-lang-ar="" className="hidden">
-                    <strong>أطباء بريطانيا يوافقون*:</strong> إرشادك عن بعد هو
-                    التدخل الأكثر تأثيراً.
+                    <strong>جسور</strong> كلمة عربية تعني الجسور.
+                    مجرد أننا لا نستطيع إدخال المساعدات المادية إلى غزة، لا يعني
+                    أننا لا نستطيع تقديم الدعم لهم، وربط معرفتنا بالأشخاص الذين
+                    يحتاجونها <em>أكثر من غيرهم</em>.
                   </span>
                 </p>
               </div>
+              <div className="mt-8 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 max-w-7xl mx-auto text-center">
+                <div className="bg-white dark:bg-black p-6 rounded-xl shadow-md initial-hidden hover:shadow-xl transition-shadow duration-300">
+                  <h3 className="text-4xl font-extrabold text-red-500">
+                    <span data-lang-en="">2.3 Million</span>
+                    <span data-lang-ar="" className="hidden">
+                      2.3 مليون
+                    </span>
+                  </h3>
+                  <p className="mt-2 font-semibold text-gray-600 dark:text-white">
+                    <span data-lang-en="">People need urgent healthcare</span>
+                    <span data-lang-ar="" className="hidden">
+                      شخص بحاجة لرعاية صحية عاجلة
+                    </span>
+                  </p>
+                </div>
+                <div className="bg-white dark:bg-black p-6 rounded-xl shadow-md initial-hidden hover:shadow-xl transition-shadow duration-300">
+                  <h3 className="text-4xl font-extrabold text-red-500">
+                    <span data-lang-en="">Only 17</span>
+                    <span data-lang-ar="" className="hidden">
+                      17 فقط
+                    </span>
+                  </h3>
+                  <p className="mt-2 font-semibold text-gray-600 dark:text-white">
+                    <span data-lang-en="">
+                      Hospitals{" "}
+                      <span className="text-red-500">partially&nbsp;</span>
+                      functional
+                    </span>
+                    <span data-lang-ar="" className="hidden">
+                      مستشفى يعمل جزئياً
+                    </span>
+                  </p>
+                </div>
+                <div className="bg-white dark:bg-black p-6 rounded-xl shadow-md initial-hidden hover:shadow-xl transition-shadow duration-300">
+                  <h3 className="text-4xl font-extrabold text-red-500">
+                    <span data-lang-en="">90%</span>
+                    <span data-lang-ar="" className="hidden">
+                      90%
+                    </span>
+                  </h3>
+                  <p className="mt-2 font-semibold text-gray-600 dark:text-white">
+                    <span data-lang-en="">Shortage of specialists</span>
+                    <span data-lang-ar="" className="hidden">
+                      نقص في الأخصائيين
+                    </span>
+                  </p>
+                </div>
+                <div className="bg-white dark:bg-black p-6 rounded-xl shadow-md initial-hidden hover:shadow-xl transition-shadow duration-300">
+                  <h3 className="text-4xl font-extrabold text-red-500">
+                    <span data-lang-en="">Limited</span>
+                    <span data-lang-ar="" className="hidden">
+                      محدود
+                    </span>
+                  </h3>
+                  <p className="mt-2 font-semibold text-gray-600 dark:text-white">
+                    <span data-lang-en="">Medical supply access</span>
+                    <span data-lang-ar="" className="hidden">
+                      وصول محدود للإمدادات الطبية
+                    </span>
+                  </p>
+                </div>
+              </div>
+              <div className="mt-8">
+                <div className="inline-block bg-red-800/80 text-white font-semibold px-4 py-2 rounded-full mt-4">
+                  <p>
+                    <span data-lang-en="">
+                      <strong>UK Doctors Agree*:</strong> Your remote guidance
+                      is currently the #1 most impactful intervention.
+                    </span>
+                    <span data-lang-ar="" className="hidden">
+                      <strong>أطباء بريطانيا يوافقون*:</strong> إرشادك عن بعد هو
+                      التدخل الأكثر تأثيراً.
+                    </span>
+                  </p>
+                </div>
+              </div>
+              <p className="mt-8 text-lg md:text-xl max-w-3xl mx-auto text-gray-300">
+                <span data-lang-en="">
+                  In Gaza, hospitals are overwhelmed, operating at over{" "}
+                  <strong className="text-red-500">350%&nbsp;</strong>
+                  capacity with a critical shortage of specialist doctors.
+                  Triage is happening, but without the right expertise to guide
+                  complex treatments,{" "}
+                  <strong>lives that could be saved are being lost</strong>.
+                  When physical aid cannot get in, knowledge is the{" "}
+                  <em>most</em> powerful resource we can send.
+                </span>
+                <span data-lang-ar="" className="hidden">
+                  في غزة، المستشفيات مكتظة وتعمل بأكثر من{" "}
+                  <strong className="text-red-500">350%&nbsp;</strong>
+                  من طاقتها مع نقص حاد في الأطباء الأخصائيين. يتم الفرز، ولكن بدون الخبرة
+                  المناسبة لتوجيه العلاجات المعقدة،{" "}
+                  <strong>تُفقد أرواح كان يمكن إنقاذها</strong>.
+                  عندما لا تتمكن المساعدات المادية من الدخول، تكون
+                  المعرفة هي <em>أقوى</em> مورد يمكننا إرساله.
+                </span>
+              </p>
+              <div className="mt-10 flex flex-col sm:flex-row justify-center items-center gap-4">
+                <button
+                  onClick={() => openAuthModal("register-uk")}
+                  className="w-full sm:w-auto bg-white text-[#0A2540] px-8 py-3 rounded-full font-bold text-lg hover:bg-gray-200 transition-transform transform hover:scale-105 flex items-center justify-center gap-3 initial-hidden"
+                >
+                  <UserPlusIcon className="h-6 w-6" />
+                  <span data-lang-en="">Register</span>
+                  <span data-lang-ar="" className="hidden">
+                    تسجيل
+                  </span>
+                </button>
+                <a
+                  href="#"
+                  className="w-full sm:w-auto bg-red-600 text-white px-8 py-3 rounded-full font-bold text-lg hover:bg-red-700 transition-colors flex items-center justify-center gap-3 initial-hidden animate-slideInRight0"
+                >
+                  <PhoneArrowUpRightIcon className="h-6 w-6" />
+                  <span data-lang-en="">Emergency Consultation</span>
+                  <span data-lang-ar="" className="hidden">
+                    استشارة طارئة
+                  </span>
+                </a>
+              </div>
             </div>
-            <p className="mt-8 text-lg md:text-xl max-w-3xl mx-auto text-gray-300">
+            <div className="mt-12 -mb-8 text-zinc-300 text-xs">
               <span data-lang-en="">
-                In Gaza, hospitals are overwhelmed, operating at over{" "}
-                <strong className="text-red-500">350%&nbsp;</strong>
-                capacity with a critical shortage of specialist doctors. Triage
-                is happening, but without the right expertise to guide complex
-                treatments,{" "}
-                <strong>lives that could be saved are being lost</strong>. When
-                physical aid cannot get in, knowledge is the <em>most</em>{" "}
-                powerful resource we can send.
+                *Based on a limited survey of consultant surgeons and general
+                practitioners across the UK.
               </span>
               <span data-lang-ar="" className="hidden">
-                في غزة، المستشفيات مكتظة وتعمل بأكثر من 350% من طاقتها مع نقص
-                حاد في الأطباء الأخصائيين. يتم الفرز، ولكن بدون الخبرة المناسبة
-                لتوجيه العلاجات المعقدة، تُفقد أرواح كان يمكن إنقاذها. عندما لا
-                تتمكن المساعدات المادية من الدخول، تكون المعرفة هي أقوى مورد
-                يمكننا إرساله.
+                *بناءً على مسح محدود للجراحين الاستشاريين والممارسين العامين في
+                جميع أنحاء المملكة المتحدة.
               </span>
-            </p>
-            <div className="mt-10 flex flex-col sm:flex-row justify-center items-center gap-4">
-              <a
-                href="https://forms.gle/G5JNgJtSJKcNbRRF6"
-                className="w-full sm:w-auto bg-white text-[#0A2540] px-8 py-3 rounded-full font-bold text-lg hover:bg-gray-200 transition-transform transform hover:scale-105 flex items-center justify-center gap-3 initial-hidden"
-              >
-                <UserPlusIcon className="h-6 w-6" />
-                <span data-lang-en="">Register Interest</span>
-                <span data-lang-ar="" className="hidden">
-                  تسجيل الاهتمام
-                </span>
-              </a>
-              <a
-                href="#"
-                className="w-full sm:w-auto bg-red-600 text-white px-8 py-3 rounded-full font-bold text-lg hover:bg-red-700 transition-colors flex items-center justify-center gap-3 initial-hidden animate-slideInRight0"
-              >
-                <PhoneArrowUpRightIcon className="h-6 w-6" />
-                <span data-lang-en="">Emergency Consultation</span>
-                <span data-lang-ar="" className="hidden">
-                  استشارة طارئة
-                </span>
-              </a>
             </div>
-          </div>
-          <div className="mt-12 -mb-8 text-zinc-300 text-xs">
-            <span data-lang-en="">
-              *Based on a limited survey of consultant surgeons and general
-              practitioners across the UK.
-            </span>
-            <span data-lang-ar="" className="hidden">
-              *بناءً على مسح محدود للجراحين الاستشاريين والممارسين العامين في
-              جميع أنحاء المملكة المتحدة.
-            </span>
-          </div>
           </div>
         </section>
 
@@ -511,7 +511,7 @@ export default function Home() {
                     <h4 className="text-lg dark:text-white font-bold">
                       <span data-lang-en="">Complex Trauma</span>
                       <span data-lang-ar="" className="hidden">
-                        صدمة معقدة
+                        إصابات معقدة
                       </span>
                     </h4>
                   </div>
@@ -1116,10 +1116,10 @@ export default function Home() {
         <div className="container mx-auto px-6 py-12 text-center">
           <div className="max-w-4xl mx-auto">
             <div className="flex justify-center mb-4">
-              <img 
-                src="/images/jusur-logo.png" 
-                alt="Jusur Logo" 
-                className="h-12 w-auto"
+              <img
+                src="/images/jusur-logo.png"
+                alt="Jusur Logo"
+                className="h-16 w-auto"
               />
             </div>
 
@@ -1167,6 +1167,7 @@ export default function Home() {
         isOpen={authModal.isOpen}
         onClose={closeAuthModal}
         userType={authModal.userType}
+        onLoginSuccess={handleLoginSuccess}
       />
     </div>
   );

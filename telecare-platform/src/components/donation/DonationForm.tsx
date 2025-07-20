@@ -1,8 +1,11 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { loadStripe } from "@stripe/stripe-js";
 import { CurrencyDollarIcon } from "@heroicons/react/24/outline";
+import Image from "next/image";
+
+type Language = "en" | "ar";
 
 // Log the publishable key for debugging (first and last 4 chars)
 const publishableKey = process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY!;
@@ -17,6 +20,58 @@ export default function DonationForm() {
   const [customAmount, setCustomAmount] = useState<string>("");
   const [isLoading, setIsLoading] = useState(false);
   const [isCustom, setIsCustom] = useState(false);
+  const [currentLanguage, setCurrentLanguage] = useState<Language>("en");
+
+  // Load translations
+  const [translations, setTranslations] = useState<any>(null);
+
+  useEffect(() => {
+    const loadTranslations = async () => {
+      try {
+        const stored = localStorage.getItem("jusur-language");
+        const lang = stored === "ar" || stored === "en" ? stored : "en";
+        setCurrentLanguage(lang);
+
+        if (lang === "ar") {
+          const arTranslations = await import("../../locales/ar.json");
+          setTranslations(arTranslations.default);
+        }
+      } catch (error) {
+        console.error("Failed to load translations:", error);
+      }
+    };
+
+    loadTranslations();
+
+    // Listen for language changes
+    const handleStorageChange = (e: StorageEvent) => {
+      if (e.key === "jusur-language") {
+        loadTranslations();
+      }
+    };
+
+    const handleLanguageChange = () => {
+      loadTranslations();
+    };
+
+    window.addEventListener("storage", handleStorageChange);
+    window.addEventListener("languageChanged", handleLanguageChange);
+
+    return () => {
+      window.removeEventListener("storage", handleStorageChange);
+      window.removeEventListener("languageChanged", handleLanguageChange);
+    };
+  }, []);
+
+  const t = (key: string, fallback: string) => {
+    if (!translations) return fallback;
+    const keys = key.split(".");
+    let value = translations;
+    for (const k of keys) {
+      value = value?.[k];
+    }
+    return value || fallback;
+  };
 
   const handleDonate = async () => {
     try {
@@ -24,7 +79,7 @@ export default function DonationForm() {
       const donationAmount = isCustom ? parseFloat(customAmount) : amount;
 
       if (!donationAmount || donationAmount < 1) {
-        alert("Please enter a valid donation amount (minimum £1)");
+        alert(t("donation.minAmount", "Please enter a valid donation amount (minimum £1)"));
         return;
       }
 
@@ -84,28 +139,41 @@ export default function DonationForm() {
       }
     } catch (error) {
       console.error("Error:", error);
-      alert("An error occurred. Please try again.");
+      alert(t("donation.error", "An error occurred. Please try again."));
     } finally {
       setIsLoading(false);
     }
   };
 
   return (
-    <div className="bg-white p-8 rounded-xl shadow-lg max-w-md mx-auto">
+    <div 
+      className={`bg-white p-8 rounded-xl shadow-lg max-w-md mx-auto ${
+        currentLanguage === "ar" ? "text-right" : "text-left"
+      }`}
+      dir={currentLanguage === "ar" ? "rtl" : "ltr"}
+    >
       <div className="text-center mb-6">
-        <CurrencyDollarIcon className="h-12 w-12 text-green-600 mx-auto mb-4" />
+        <div className="h-12 w-12 mx-auto mb-4 relative">
+          <Image
+            src="/images/jusur-logo.png"
+            alt="Jusur Logo"
+            width={48}
+            height={48}
+            className="rounded-full"
+          />
+        </div>
         <h3 className="text-2xl font-bold text-gray-900 mb-2">
-          Support Jusur (جسور)
+          {t("donation.formTitle", "Support Jusur (جسور)")}
         </h3>
         <p className="text-gray-600">
-          Your donation helps fund platform development
+          {t("donation.formDescription", "Your donation helps fund platform development")}
         </p>
       </div>
 
       <div className="space-y-4">
         <div>
           <label className="block text-sm font-medium text-gray-700 mb-2">
-            Choose Amount (USD)
+            {t("donation.chooseAmount", "Choose Amount (USD)")}
           </label>
           <div className="grid grid-cols-3 gap-2 mb-4">
             {DONATION_AMOUNTS.map((preset) => (
@@ -140,7 +208,7 @@ export default function DonationForm() {
                 : "bg-white text-gray-700 border-gray-300 hover:border-green-600 cursor-pointer"
             }`}
           >
-            Custom Amount
+            {t("donation.customAmount", "Custom Amount")}
           </button>
         </div>
 
@@ -150,7 +218,7 @@ export default function DonationForm() {
               htmlFor="customAmount"
               className="block text-sm font-medium text-gray-700 mb-1"
             >
-              Enter Amount
+              {t("donation.enterAmount", "Enter Amount")}
             </label>
             <div className="relative">
               <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
@@ -203,18 +271,26 @@ export default function DonationForm() {
           {isLoading ? (
             <>
               <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-white"></div>
-              Processing...
+              {t("donation.processing", "Processing...")}
             </>
           ) : (
             <>
-              <CurrencyDollarIcon className="h-5 w-5" />
-              Donate £{isCustom ? customAmount || "0" : amount}
+              <div className="h-5 w-5 relative">
+                <Image
+                  src="/images/jusur-logo.png"
+                  alt="Jusur Logo"
+                  width={20}
+                  height={20}
+                  className="rounded-full"
+                />
+              </div>
+              {t("donation.donateButton", "Donate")} £{isCustom ? customAmount || "0" : amount}
             </>
           )}
         </button>
 
         <div className="text-xs text-gray-500 text-center">
-          Secure payment powered by Stripe.
+          {t("donation.securePayment", "Secure payment powered by Stripe.")}
         </div>
       </div>
     </div>

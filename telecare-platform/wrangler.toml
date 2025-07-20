@@ -1,10 +1,9 @@
-# Cloudflare configuration for Telecare Platform
+# Cloudflare Pages configuration for Telecare Platform
 name = "telecare-platform"
-main = "src/worker.ts"
 compatibility_date = "2024-07-20"
 compatibility_flags = ["nodejs_compat"]
 
-# Cloudflare Pages configuration
+# Pages build output directory
 pages_build_output_dir = "out"
 
 # Environment variables
@@ -12,12 +11,8 @@ pages_build_output_dir = "out"
 ENVIRONMENT = "production"
 NODE_ENV = "production"
 
-[env.staging.vars]
+[env.preview.vars]
 ENVIRONMENT = "staging"
-NODE_ENV = "development"
-
-[env.development.vars]
-ENVIRONMENT = "development"
 NODE_ENV = "development"
 
 # D1 Database bindings
@@ -26,46 +21,25 @@ binding = "DB"
 database_name = "telecare-platform-prod"
 database_id = "251c7686-fe80-462d-8244-2e85d9fcaa73"
 
-[[env.staging.d1_databases]]
+[[env.preview.d1_databases]]
 binding = "DB"
 database_name = "telecare-platform-staging"
 database_id = ""  # Will be set after creating the database
-
-[[env.development.d1_databases]]
-binding = "DB"
-database_name = "telecare-platform-dev"
-database_id = "d47f16e2-ac9e-4854-8b77-0a8621c1f194"  # Will be set after creating the database
 
 # R2 Storage bindings (for file uploads)
 [[env.production.r2_buckets]]
 binding = "STORAGE"
 bucket_name = "telecare-platform-storage-prod"
 
-[[env.staging.r2_buckets]]
+[[env.preview.r2_buckets]]
 binding = "STORAGE"
 bucket_name = "telecare-platform-storage-staging"
-
-[[env.development.r2_buckets]]
-binding = "STORAGE"
-bucket_name = "telecare-platform-storage-dev"
 
 # KV bindings (for caching and session storage)
 [[env.production.kv_namespaces]]
 binding = "CACHE"
 id = "fc83186cc3374443b02c8f7a7876291c"
 
-[[env.staging.kv_namespaces]]
+[[env.preview.kv_namespaces]]
 binding = "CACHE"
 id = ""  # Will be set after creating the namespace
-
-[[env.development.kv_namespaces]]
-binding = "CACHE"
-id = "2272c3615cb14deaa2dad88b665f1173"
-
-# Worker configuration
-[build]
-command = "npm run build"
-
-# Deployment configuration
-[triggers]
-crons = ["0 0 * * *"]  # Daily cleanup tasks

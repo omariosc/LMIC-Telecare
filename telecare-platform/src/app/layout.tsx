@@ -1,6 +1,7 @@
 import type { Metadata, Viewport } from "next";
 import { Inter } from "next/font/google";
 import "./globals.css";
+import ClientThemeProvider from "../components/ClientThemeProvider";
 
 const inter = Inter({
   subsets: ["latin"],
@@ -12,6 +13,11 @@ export const metadata: Metadata = {
   title: "Jusur (جسور)",
   description:
     "Jusur (جسور) is a humanitarian platform connecting UK medical specialists with frontline clinicians in Gaza to provide life-saving guidance. Bridging knowledge where physical aid cannot reach.",
+  icons: {
+    icon: "/images/jusur-logo.png",
+    shortcut: "/images/jusur-logo.png",
+    apple: "/images/jusur-logo.png",
+  },
   keywords: [
     "jusur",
     "gaza",
@@ -91,14 +97,16 @@ export default function RootLayout({
           href="/icons/icon-512x512.png"
         />
       </head>
-      <body className="font-sans antialiased">
-        {/* Future AuthProvider will wrap children here */}
-        <div id="__next">{children}</div>
+      <body className="font-sans antialiased text-gray-900 dark:text-white">
+        <ClientThemeProvider>
+          {/* Future AuthProvider will wrap children here */}
+          <div id="__next">{children}</div>
 
-        {/* PWA Components */}
-        <div id="pwa-components">
-          {/* These will be imported dynamically in production */}
-        </div>
+          {/* PWA Components */}
+          <div id="pwa-components">
+            {/* These will be imported dynamically in production */}
+          </div>
+        </ClientThemeProvider>
       </body>
     </html>
   );

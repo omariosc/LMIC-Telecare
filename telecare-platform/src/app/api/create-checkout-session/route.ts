@@ -43,7 +43,7 @@ export async function POST(request: NextRequest) {
               name: "Jusur (جسور) Platform Donation",
               description:
                 "Support platform development for Gaza healthcare",
-              images: ["https://placehold.co/400x400/0A2540/FFFFFF?text=Jusur"],
+              images: [`${process.env.NEXT_PUBLIC_APP_URL || 'https://jusur.org.uk'}/images/jusur-logo.png`],
             },
             unit_amount: amount * 100, // Stripe expects amount in cents
           },
