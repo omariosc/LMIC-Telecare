@@ -26,8 +26,10 @@ import {
   EyeSlashIcon,
   FireIcon,
 } from "@heroicons/react/24/outline";
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
 import { useLanguage } from "@/hooks/useLanguage";
+import AuthModal from "@/components/AuthModal";
+import { DarkModeToggle } from "@/components/DarkModeToggle";
 
 // Function to check if screen is too small
 const isScreenTooSmall = () => {
@@ -37,8 +39,27 @@ const isScreenTooSmall = () => {
 
 export default function Home() {
   const [showSmallScreenWarning, setShowSmallScreenWarning] = useState(false);
+  const [showDropdown, setShowDropdown] = useState(false);
+  const [authModal, setAuthModal] = useState<{
+    isOpen: boolean;
+    userType: "gaza-clinician" | "uk-clinician" | "register-uk";
+  }>({
+    isOpen: false,
+    userType: "gaza-clinician",
+  });
+  const dropdownRef = useRef<HTMLDivElement>(null);
 
   const { language, direction, toggleLanguage } = useLanguage();
+
+  const openAuthModal = (
+    userType: "gaza-clinician" | "uk-clinician" | "register-uk"
+  ) => {
+    setAuthModal({ isOpen: true, userType });
+  };
+
+  const closeAuthModal = () => {
+    setAuthModal({ isOpen: false, userType: "gaza-clinician" });
+  };
 
   useEffect(() => {
     const checkScreenSize = () => {
@@ -52,8 +73,20 @@ export default function Home() {
     // Check on resize
     window.addEventListener("resize", checkScreenSize);
 
+    // Click outside handler for dropdown
+    const handleClickOutside = (event: MouseEvent) => {
+      if (dropdownRef.current && !dropdownRef.current.contains(event.target as Node)) {
+        setShowDropdown(false);
+      }
+    };
+
+    document.addEventListener("mousedown", handleClickOutside);
+
     // Cleanup
-    return () => window.removeEventListener("resize", checkScreenSize);
+    return () => {
+      window.removeEventListener("resize", checkScreenSize);
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
   }, []);
 
   // If screen is too small, only show the warning - no other content
@@ -61,7 +94,7 @@ export default function Home() {
     return (
       <div className="fixed inset-0 bg-gradient-to-b from-green-800 to-green-950 text-white flex items-center justify-center z-[9999] px-4 text-center">
         <div>
-          <h1 className="text-lg font-bold text-white">
+          <h1 className="text-lg dark:text-white font-bold text-white">
             Screen width too small. Jusur (جسور) is not supported on your
             device.
           </h1>
@@ -73,25 +106,25 @@ export default function Home() {
   return (
     <div data-language={language} data-direction={direction}>
       {/* Header & Navigation - Fixed Top */}
-      <header className="bg-white opacity-95 fixed top-0 left-0 right-0 z-50">
+      <header className="bg-white dark:bg-black opacity-95 fixed top-0 left-0 right-0 z-50">
         <nav className="container mx-auto px-4 py-4 flex justify-between items-center min-h-[64px]">
           {/* Logo - Top Left */}
-          <div className="font-extrabold text-xl text-[#0A2540] flex items-center gap-2">
+          <div className="font-extrabold text-xl text-[#0A2540] dark:text-white flex items-center gap-2">
             <span data-lang-en="">
               Jusur <span className="hide-nav">(جسور)</span>
             </span>
             <span data-lang-ar="" className="hidden">
               جسور
             </span>
-            <TrophyIcon className="hide-nav h-4 w-4 text-yellow-700" />
+            <TrophyIcon className="hide-nav h-4 w-4 text-yellow-500" />
             <span
-              className="hide-nav text-yellow-700 text-sm font-semibold"
+              className="hide-nav text-yellow-500 text-sm font-semibold"
               data-lang-en=""
             >
               Winner (إن شاء الله)
             </span>
             <span
-              className="hide-nav text-yellow-700 text-sm font-semibold hidden"
+              className="hide-nav text-yellow-500 text-sm font-semibold hidden"
               data-lang-ar=""
             >
               فائز (إن شاء الله)
@@ -118,7 +151,7 @@ export default function Home() {
             <button
               id="lang-toggle"
               onClick={toggleLanguage}
-              className="bg-gray-100 text-gray-700 px-3 py-2 rounded-full font-semibold text-sm hover:bg-gray-200 transition-colors cursor-pointer"
+              className="bg-gray-100 dark:bg-zinc-900 dark:text-white text-black px-3 py-2 rounded-full font-semibold text-sm dark:hover:bg-zinc-800 hover:bg-gray-200 transition-colors cursor-pointer"
             >
               <span data-lang-en="">ع</span>
               <span data-lang-ar="" className="hidden">
@@ -127,11 +160,14 @@ export default function Home() {
             </button>
 
             {/* User/Login Dropdown */}
-            <div className="relative group">
-              <button className="text-gray-700 hover:text-[#0A2540] px-3 py-2 rounded-md font-medium text-sm flex items-center gap-2 transition-colors">
+            <div className="relative" ref={dropdownRef}>
+              <button 
+                onClick={() => setShowDropdown(!showDropdown)}
+                className="text-black dark:text-white dark:hover:text-zinc-400 hover:text-zinc-600 px-3 py-2 rounded-md font-medium text-sm flex items-center gap-2 transition-colors"
+              >
                 <UserIcon className="h-4 w-4" />
                 <svg
-                  className="w-4 h-4 ml-1"
+                  className={`w-4 h-4 ml-1 transition-transform duration-200 ${showDropdown ? 'rotate-180' : ''}`}
                   fill="none"
                   stroke="currentColor"
                   viewBox="0 0 24 24"
@@ -146,35 +182,44 @@ export default function Home() {
               </button>
 
               {/* Dropdown Menu */}
-              <div className="absolute right-0 mt-2 w-56 bg-white rounded-md shadow-lg border border-gray-200 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 z-50">
+              <div className={`absolute right-0 mt-2 w-56 bg-white dark:bg-zinc-800 rounded-md shadow-lg border border-gray-200 dark:border-zinc-700 transition-all duration-200 z-50 ${showDropdown ? 'opacity-100 visible' : 'opacity-0 invisible'}`}>
                 <div className="py-2">
-                  <a
-                    href="/login/gaza-clinician"
-                    className="block px-4 py-2 text-sm text-gray-900 hover:bg-gray-100 hover:text-[#0A2540] transition-colors"
+                  <button
+                    onClick={() => {
+                      openAuthModal("gaza-clinician");
+                      setShowDropdown(false);
+                    }}
+                    className="block w-full text-left px-4 py-2 text-sm text-gray-900 dark:text-gray-100 hover:bg-gray-100 dark:hover:bg-zinc-700 hover:text-[#0A2540] dark:hover:text-white transition-colors cursor-pointer"
                   >
                     <span data-lang-en="">Login (Gaza Clinician)</span>
                     <span data-lang-ar="" className="hidden">
                       دخول طبيب غزة
                     </span>
-                  </a>
-                  <a
-                    href="/login/uk-clinician"
-                    className="block px-4 py-2 text-sm text-gray-900 hover:bg-gray-100 hover:text-[#0A2540] transition-colors"
+                  </button>
+                  <button
+                    onClick={() => {
+                      openAuthModal("uk-clinician");
+                      setShowDropdown(false);
+                    }}
+                    className="block w-full text-left px-4 py-2 text-sm text-gray-900 dark:text-gray-100 hover:bg-gray-100 dark:hover:bg-zinc-700 hover:text-[#0A2540] dark:hover:text-white transition-colors cursor-pointer"
                   >
                     <span data-lang-en="">Login (UK Clinician)</span>
                     <span data-lang-ar="" className="hidden">
                       دخول طبيب بريطاني
                     </span>
-                  </a>
-                  <a
-                    href="/register/uk-clinician"
-                    className="block px-4 py-2 text-sm text-gray-900 hover:bg-gray-100 hover:text-[#0A2540] transition-colors"
+                  </button>
+                  <button
+                    onClick={() => {
+                      openAuthModal("register-uk");
+                      setShowDropdown(false);
+                    }}
+                    className="block w-full text-left px-4 py-2 text-sm text-gray-900 dark:text-gray-100 hover:bg-gray-100 dark:hover:bg-zinc-700 hover:text-[#0A2540] dark:hover:text-white transition-colors cursor-pointer"
                   >
                     <span data-lang-en="">Register (UK Clinician)</span>
                     <span data-lang-ar="" className="hidden">
                       تسجيل طبيب بريطاني
                     </span>
-                  </a>
+                  </button>
                 </div>
               </div>
             </div>
@@ -213,28 +258,28 @@ export default function Home() {
               </p>
             </div>
             <div className="mt-8 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 max-w-7xl mx-auto text-center">
-              <div className="bg-white p-6 rounded-xl shadow-md initial-hidden hover:shadow-xl transition-shadow duration-300">
+              <div className="bg-white dark:bg-black p-6 rounded-xl shadow-md initial-hidden hover:shadow-xl transition-shadow duration-300">
                 <h3 className="text-4xl font-extrabold text-red-500">
                   <span data-lang-en="">2.3 Million</span>
                   <span data-lang-ar="" className="hidden">
                     2.3 مليون
                   </span>
                 </h3>
-                <p className="mt-2 font-semibold text-gray-600">
+                <p className="mt-2 font-semibold text-gray-600 dark:text-white">
                   <span data-lang-en="">People need urgent healthcare</span>
                   <span data-lang-ar="" className="hidden">
                     شخص بحاجة لرعاية صحية عاجلة
                   </span>
                 </p>
               </div>
-              <div className="bg-white p-6 rounded-xl shadow-md initial-hidden hover:shadow-xl transition-shadow duration-300">
+              <div className="bg-white dark:bg-black p-6 rounded-xl shadow-md initial-hidden hover:shadow-xl transition-shadow duration-300">
                 <h3 className="text-4xl font-extrabold text-red-500">
                   <span data-lang-en="">Only 17</span>
                   <span data-lang-ar="" className="hidden">
                     17 فقط
                   </span>
                 </h3>
-                <p className="mt-2 font-semibold text-gray-600">
+                <p className="mt-2 font-semibold text-gray-600 dark:text-white">
                   <span data-lang-en="">
                     Hospitals{" "}
                     <span className="text-red-500">partially&nbsp;</span>
@@ -245,28 +290,28 @@ export default function Home() {
                   </span>
                 </p>
               </div>
-              <div className="bg-white p-6 rounded-xl shadow-md initial-hidden hover:shadow-xl transition-shadow duration-300">
+              <div className="bg-white dark:bg-black p-6 rounded-xl shadow-md initial-hidden hover:shadow-xl transition-shadow duration-300">
                 <h3 className="text-4xl font-extrabold text-red-500">
                   <span data-lang-en="">90%</span>
                   <span data-lang-ar="" className="hidden">
                     90%
                   </span>
                 </h3>
-                <p className="mt-2 font-semibold text-gray-600">
+                <p className="mt-2 font-semibold text-gray-600 dark:text-white">
                   <span data-lang-en="">Shortage of specialists</span>
                   <span data-lang-ar="" className="hidden">
                     نقص في الأخصائيين
                   </span>
                 </p>
               </div>
-              <div className="bg-white p-6 rounded-xl shadow-md initial-hidden hover:shadow-xl transition-shadow duration-300">
+              <div className="bg-white dark:bg-black p-6 rounded-xl shadow-md initial-hidden hover:shadow-xl transition-shadow duration-300">
                 <h3 className="text-4xl font-extrabold text-red-500">
                   <span data-lang-en="">Limited</span>
                   <span data-lang-ar="" className="hidden">
                     محدود
                   </span>
                 </h3>
-                <p className="mt-2 font-semibold text-gray-600">
+                <p className="mt-2 font-semibold text-gray-600 dark:text-white">
                   <span data-lang-en="">Medical supply access</span>
                   <span data-lang-ar="" className="hidden">
                     وصول محدود للإمدادات الطبية
@@ -343,10 +388,10 @@ export default function Home() {
         </section>
 
         {/* Why UK Specialists Section */}
-        <section className="py-20 md:py-28 bg-white">
+        <section className="py-20 md:py-28 bg-white dark:bg-black">
           <div className="container mx-auto px-6">
             <div className="text-center">
-              <h2 className="text-3xl md:text-4xl font-bold text-gray-900">
+              <h2 className="text-3xl md:text-4xl font-bold text-gray-900 dark:text-white">
                 <span data-lang-en="">
                   Why UK Medical Specialists Are Critical
                 </span>
@@ -358,19 +403,19 @@ export default function Home() {
 
             {/* UK Specialists Benefits - Green Border */}
             <div className="mt-12 grid grid-cols-1 md:grid-cols-2 gap-6 max-w-5xl mx-auto">
-              <div className="bg-gray-50 p-6 rounded-xl border-2 border-green-500 initial-hidden hover:shadow-xl transition-shadow duration-300">
+              <div className="bg-gray-50 dark:bg-zinc-900 dark:text-white p-6 rounded-xl border-2 border-green-500 initial-hidden hover:shadow-xl transition-shadow duration-300">
                 <div className="flex items-center gap-3 mb-4">
-                  <div className="w-10 h-10 bg-green-100 rounded-lg flex items-center justify-center">
+                  <div className="w-10 h-10 bg-green-100 dark:bg-green-950 rounded-lg flex items-center justify-center">
                     <VideoCameraIcon className="h-6 w-6 text-green-600" />
                   </div>
-                  <h3 className="text-lg font-bold">
+                  <h3 className="text-lg dark:text-white font-bold">
                     <span data-lang-en="">Remote Consultation Expertise</span>
                     <span data-lang-ar="" className="hidden">
                       خبرة في الاستشارات عن بعد
                     </span>
                   </h3>
                 </div>
-                <p className="text-gray-600">
+                <p className="text-gray-600 dark:text-zinc-300">
                   <span data-lang-en="">
                     UK doctors provide life-saving specialist guidance when
                     local expertise is overwhelmed or unavailable.
@@ -381,12 +426,12 @@ export default function Home() {
                   </span>
                 </p>
               </div>
-              <div className="bg-gray-50 p-6 rounded-xl border-2 border-green-500 initial-hidden hover:shadow-xl transition-shadow duration-300">
+              <div className="bg-gray-50 dark:bg-zinc-900 dark:text-white p-6 rounded-xl border-2 border-green-500 initial-hidden hover:shadow-xl transition-shadow duration-300">
                 <div className="flex items-center gap-3 mb-4">
-                  <div className="w-10 h-10 bg-green-100 rounded-lg flex items-center justify-center">
+                  <div className="w-10 h-10 bg-green-100 dark:bg-green-950 rounded-lg flex items-center justify-center">
                     <BoltIcon className="h-6 w-6 text-green-600" />
                   </div>
-                  <h3 className="text-lg font-bold">
+                  <h3 className="text-lg dark:text-white font-bold">
                     <span data-lang-en="">
                       Immediate Access, Breaking Barriers
                     </span>
@@ -395,7 +440,7 @@ export default function Home() {
                     </span>
                   </h3>
                 </div>
-                <p className="text-gray-600">
+                <p className="text-gray-600 dark:text-white">
                   <span data-lang-en="">
                     Digital consultations bypass physical restrictions and
                     blockade limitations to deliver urgent medical support.
@@ -410,7 +455,7 @@ export default function Home() {
 
             {/* Gaza Healthcare Challenges - Red Border */}
             <div className="mt-12">
-              <h3 className="text-2xl font-bold text-gray-900 text-center mb-8">
+              <h3 className="text-2xl font-bold text-gray-900 dark:text-white text-center mb-8">
                 <span data-lang-en="">
                   Critical Challenges in Gaza Healthcare
                 </span>
@@ -421,19 +466,19 @@ export default function Home() {
 
               {/* Medical/Clinical Challenges */}
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 max-w-7xl mx-auto mb-8">
-                <div className="bg-gray-50 p-6 rounded-xl border-2 border-red-500 initial-hidden hover:shadow-xl transition-shadow duration-300">
+                <div className="bg-gray-50 dark:bg-zinc-900 dark:text-white p-6  rounded-xl border-2 border-red-500 initial-hidden hover:shadow-xl transition-shadow duration-300">
                   <div className="flex items-center gap-3 mb-4">
-                    <div className="w-10 h-10 bg-red-100 rounded-lg flex items-center justify-center">
+                    <div className="w-10 h-10 bg-red-100 dark:bg-red-950 rounded-lg flex items-center justify-center">
                       <FireIcon className="h-6 w-6 text-red-600" />
                     </div>
-                    <h4 className="text-lg font-bold">
+                    <h4 className="text-lg dark:text-white font-bold">
                       <span data-lang-en="">Complex Trauma</span>
                       <span data-lang-ar="" className="hidden">
                         صدمة معقدة
                       </span>
                     </h4>
                   </div>
-                  <p className="text-gray-600 text-sm">
+                  <p className="text-gray-600 text-sm text-zinc-300 text-zinc-300">
                     <span data-lang-en="">
                       Limited advanced surgical expertise for complex blast
                       injuries
@@ -444,19 +489,19 @@ export default function Home() {
                   </p>
                 </div>
 
-                <div className="bg-gray-50 p-6 rounded-xl border-2 border-red-500 initial-hidden hover:shadow-xl transition-shadow duration-300">
+                <div className="bg-gray-50 dark:bg-zinc-900 dark:text-white p-6  rounded-xl border-2 border-red-500 initial-hidden hover:shadow-xl transition-shadow duration-300">
                   <div className="flex items-center gap-3 mb-4">
-                    <div className="w-10 h-10 bg-red-100 rounded-lg flex items-center justify-center">
+                    <div className="w-10 h-10 bg-red-100 dark:bg-red-950 rounded-lg flex items-center justify-center">
                       <AcademicCapIcon className="h-6 w-6 text-red-600" />
                     </div>
-                    <h4 className="text-lg font-bold">
+                    <h4 className="text-lg dark:text-white font-bold">
                       <span data-lang-en="">Training Deficit</span>
                       <span data-lang-ar="" className="hidden">
                         نقص التدريب
                       </span>
                     </h4>
                   </div>
-                  <p className="text-gray-600 text-sm">
+                  <p className="text-gray-600 text-sm text-zinc-300">
                     <span data-lang-en="">
                       Limited opportunities for continuing education and skill
                       development
@@ -467,19 +512,19 @@ export default function Home() {
                   </p>
                 </div>
 
-                <div className="bg-gray-50 p-6 rounded-xl border-2 border-red-500 initial-hidden hover:shadow-xl transition-shadow duration-300">
+                <div className="bg-gray-50 dark:bg-zinc-900 dark:text-white p-6  rounded-xl border-2 border-red-500 initial-hidden hover:shadow-xl transition-shadow duration-300">
                   <div className="flex items-center gap-3 mb-4">
-                    <div className="w-10 h-10 bg-red-100 rounded-lg flex items-center justify-center">
+                    <div className="w-10 h-10 bg-red-100 dark:bg-red-950 rounded-lg flex items-center justify-center">
                       <MagnifyingGlassIcon className="h-6 w-6 text-red-600" />
                     </div>
-                    <h4 className="text-lg font-bold">
+                    <h4 className="text-lg dark:text-white font-bold">
                       <span data-lang-en="">Diagnostic Limitations</span>
                       <span data-lang-ar="" className="hidden">
                         قيود التشخيص
                       </span>
                     </h4>
                   </div>
-                  <p className="text-gray-600 text-sm">
+                  <p className="text-gray-600 text-sm text-zinc-300">
                     <span data-lang-en="">
                       Lack of diagnostic modalities like pathology and advanced
                       imaging
@@ -490,19 +535,19 @@ export default function Home() {
                   </p>
                 </div>
 
-                <div className="bg-gray-50 p-6 rounded-xl border-2 border-red-500 initial-hidden hover:shadow-xl transition-shadow duration-300">
+                <div className="bg-gray-50 dark:bg-zinc-900 dark:text-white p-6  rounded-xl border-2 border-red-500 initial-hidden hover:shadow-xl transition-shadow duration-300">
                   <div className="flex items-center gap-3 mb-4">
-                    <div className="w-10 h-10 bg-red-100 rounded-lg flex items-center justify-center">
+                    <div className="w-10 h-10 bg-red-100 dark:bg-red-950 rounded-lg flex items-center justify-center">
                       <UsersIcon className="h-6 w-6 text-red-600" />
                     </div>
-                    <h4 className="text-lg font-bold">
+                    <h4 className="text-lg dark:text-white font-bold">
                       <span data-lang-en="">Multidisciplinary Gap</span>
                       <span data-lang-ar="" className="hidden">
                         فجوة متعددة التخصصات
                       </span>
                     </h4>
                   </div>
-                  <p className="text-gray-600 text-sm">
+                  <p className="text-gray-600 text-sm text-zinc-300">
                     <span data-lang-en="">
                       Lack of experts in some specialties which hinders the
                       implementation of multidisciplinary coordinated team-based
@@ -518,19 +563,19 @@ export default function Home() {
 
               {/* Infrastructure Challenges */}
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 max-w-7xl mx-auto">
-                <div className="bg-gray-50 p-6 rounded-xl border-2 border-red-500 initial-hidden hover:shadow-xl transition-shadow duration-300">
+                <div className="bg-gray-50 dark:bg-zinc-900 dark:text-white p-6  rounded-xl border-2 border-red-500 initial-hidden hover:shadow-xl transition-shadow duration-300">
                   <div className="flex items-center gap-3 mb-4">
-                    <div className="w-10 h-10 bg-red-100 rounded-lg flex items-center justify-center">
+                    <div className="w-10 h-10 bg-red-100 dark:bg-red-950 rounded-lg flex items-center justify-center">
                       <WifiIcon className="h-6 w-6 text-red-600" />
                     </div>
-                    <h4 className="text-lg font-bold">
+                    <h4 className="text-lg dark:text-white font-bold">
                       <span data-lang-en="">Connectivity Issues</span>
                       <span data-lang-ar="" className="hidden">
                         مشاكل الاتصال
                       </span>
                     </h4>
                   </div>
-                  <p className="text-gray-600 text-sm">
+                  <p className="text-gray-600 text-sm text-zinc-300">
                     <span data-lang-en="">
                       Internet availability limited to few hours daily with low
                       average speeds
@@ -541,19 +586,19 @@ export default function Home() {
                   </p>
                 </div>
 
-                <div className="bg-gray-50 p-6 rounded-xl border-2 border-red-500 initial-hidden0 hover:shadow-xl transition-shadow">
+                <div className="bg-gray-50 dark:bg-zinc-900 dark:text-white p-6  rounded-xl border-2 border-red-500 initial-hidden0 hover:shadow-xl transition-shadow">
                   <div className="flex items-center gap-3 mb-4">
-                    <div className="w-10 h-10 bg-red-100 rounded-lg flex items-center justify-center">
+                    <div className="w-10 h-10 bg-red-100 dark:bg-red-950 rounded-lg flex items-center justify-center">
                       <ComputerDesktopIcon className="h-6 w-6 text-red-600" />
                     </div>
-                    <h4 className="text-lg font-bold">
+                    <h4 className="text-lg dark:text-white font-bold">
                       <span data-lang-en="">Device Limitations</span>
                       <span data-lang-ar="" className="hidden">
                         قيود الأجهزة
                       </span>
                     </h4>
                   </div>
-                  <p className="text-gray-600 text-sm">
+                  <p className="text-gray-600 text-sm text-zinc-300">
                     <span data-lang-en="">
                       Shortage of computing devices, solutions must work on
                       basic smartphones
@@ -565,19 +610,19 @@ export default function Home() {
                   </p>
                 </div>
 
-                <div className="bg-gray-50 p-6 rounded-xl border-2 border-red-500 initial-hidden hover:shadow-xl transition-shadow duration-300">
+                <div className="bg-gray-50 dark:bg-zinc-900 dark:text-white p-6  rounded-xl border-2 border-red-500 initial-hidden hover:shadow-xl transition-shadow duration-300">
                   <div className="flex items-center gap-3 mb-4">
-                    <div className="w-10 h-10 bg-red-100 rounded-lg flex items-center justify-center">
+                    <div className="w-10 h-10 bg-red-100 dark:bg-red-950 rounded-lg flex items-center justify-center">
                       <PowerIcon className="h-6 w-6 text-red-600" />
                     </div>
-                    <h4 className="text-lg font-bold">
+                    <h4 className="text-lg dark:text-white font-bold">
                       <span data-lang-en="">Power Restrictions</span>
                       <span data-lang-ar="" className="hidden">
                         قيود الطاقة
                       </span>
                     </h4>
                   </div>
-                  <p className="text-gray-600 text-sm">
+                  <p className="text-gray-600 text-sm text-zinc-300">
                     <span data-lang-en="">
                       Electricity available almost only in hospitals or medical
                       points
@@ -588,19 +633,19 @@ export default function Home() {
                   </p>
                 </div>
 
-                <div className="bg-gray-50 p-6 rounded-xl border-2 border-red-500 initial-hidden hover:shadow-xl transition-shadow duration-300">
+                <div className="bg-gray-50 dark:bg-zinc-900 dark:text-white p-6  rounded-xl border-2 border-red-500 initial-hidden hover:shadow-xl transition-shadow duration-300">
                   <div className="flex items-center gap-3 mb-4">
-                    <div className="w-10 h-10 bg-red-100 rounded-lg flex items-center justify-center">
+                    <div className="w-10 h-10 bg-red-100 dark:bg-red-950 rounded-lg flex items-center justify-center">
                       <EyeSlashIcon className="h-6 w-6 text-red-600" />
                     </div>
-                    <h4 className="text-lg font-bold">
+                    <h4 className="text-lg dark:text-white font-bold">
                       <span data-lang-en="">Data Security Concerns</span>
                       <span data-lang-ar="" className="hidden">
                         مخاوف أمن البيانات
                       </span>
                     </h4>
                   </div>
-                  <p className="text-gray-600 text-sm">
+                  <p className="text-gray-600 text-sm text-zinc-300">
                     <span data-lang-en="">
                       Patient privacy must be maintained despite infrastructure
                       challenges
@@ -613,7 +658,7 @@ export default function Home() {
               </div>
             </div>
 
-            <p className="text-center mt-12 text-lg text-gray-700 font-semibold">
+            <p className="text-center mt-12 text-lg text-gray-700 dark:text-white font-semibold">
               <span data-lang-en="">
                 Your expertise can bridge the gap between{" "}
                 <strong className="text-red-500">critical need</strong>{" "}
@@ -629,16 +674,19 @@ export default function Home() {
         </section>
 
         {/* Platform Features Section */}
-        <section id="features" className="py-20 md:py-28 bg-gray-50">
+        <section
+          id="features"
+          className="py-20 md:py-28 bg-gray-50 dark:bg-zinc-950"
+        >
           <div className="container mx-auto px-6">
             <div className="text-center mb-16">
-              <h2 className="text-3xl md:text-4xl font-bold text-gray-900">
+              <h2 className="text-3xl md:text-4xl font-bold text-gray-900 dark:text-white">
                 <span data-lang-en="">Platform Features</span>
                 <span data-lang-ar="" className="hidden">
                   ميزات المنصة
                 </span>
               </h2>
-              <p className="mt-4 max-w-2xl mx-auto text-gray-600">
+              <p className="mt-4 max-w-2xl mx-auto text-gray-600 text-zinc-400">
                 <span data-lang-en="">
                   Humanitarian medical technology designed specifically for
                   Gaza&apos;s healthcare crisis.
@@ -651,19 +699,19 @@ export default function Home() {
             </div>
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8 max-w-6xl mx-auto">
               <div
-                className="bg-white p-6 rounded-xl shadow-sm initial-hidden"
+                className="bg-white bg-zinc-900 p-6 rounded-xl shadow-sm initial-hidden"
                 style={{ animationDelay: "800ms" }}
               >
-                <div className="w-12 h-12 bg-red-100 rounded-lg flex items-center justify-center mb-4">
+                <div className="w-12 h-12 bg-red-100 dark:bg-red-950 rounded-lg flex items-center justify-center mb-4">
                   <ExclamationTriangleIcon className="h-6 w-6 text-red-600" />
                 </div>
-                <h3 className="text-lg font-bold">
+                <h3 className="text-lg dark:text-white font-bold">
                   <span data-lang-en="">Emergency Consultation</span>
                   <span data-lang-ar="" className="hidden">
                     استشارة طارئة
                   </span>
                 </h3>
-                <p className="mt-1 text-gray-600">
+                <p className="mt-1 text-gray-600 text-zinc-300 text-zinc-300">
                   <span data-lang-en="">
                     24/7 instant access to UK specialists for critical
                     emergencies.
@@ -675,19 +723,19 @@ export default function Home() {
                 </p>
               </div>
               <div
-                className="bg-white p-6 rounded-xl shadow-sm initial-hidden"
+                className="bg-white bg-zinc-900 p-6 rounded-xl shadow-sm initial-hidden"
                 style={{ animationDelay: "1000ms" }}
               >
-                <div className="w-12 h-12 bg-blue-100 rounded-lg flex items-center justify-center mb-4">
+                <div className="w-12 h-12 bg-blue-100 dark:bg-blue-950 rounded-lg flex items-center justify-center mb-4">
                   <VideoCameraIcon className="h-6 w-6 text-blue-600" />
                 </div>
-                <h3 className="text-lg font-bold">
+                <h3 className="text-lg dark:text-white font-bold">
                   <span data-lang-en="">Secure Video Calls</span>
                   <span data-lang-ar="" className="hidden">
                     مكالمات فيديو آمنة
                   </span>
                 </h3>
-                <p className="mt-1 text-gray-600">
+                <p className="mt-1 text-gray-600 text-zinc-300">
                   <span data-lang-en="">
                     Encrypted video and chat between Gaza clinicians and UK
                     experts.
@@ -698,19 +746,19 @@ export default function Home() {
                 </p>
               </div>
               <div
-                className="bg-white p-6 rounded-xl shadow-sm initial-hidden"
+                className="bg-white bg-zinc-900 p-6 rounded-xl shadow-sm initial-hidden"
                 style={{ animationDelay: "1200ms" }}
               >
-                <div className="w-12 h-12 bg-green-100 rounded-lg flex items-center justify-center mb-4">
+                <div className="w-12 h-12 bg-green-100 dark:bg-green-950 rounded-lg flex items-center justify-center mb-4">
                   <UserGroupIcon className="h-6 w-6 text-green-600" />
                 </div>
-                <h3 className="text-lg font-bold">
+                <h3 className="text-lg dark:text-white font-bold">
                   <span data-lang-en="">Expert Matching</span>
                   <span data-lang-ar="" className="hidden">
                     مطابقة الخبراء
                   </span>
                 </h3>
-                <p className="mt-1 text-gray-600">
+                <p className="mt-1 text-gray-600 text-zinc-300">
                   <span data-lang-en="">
                     Intelligent specialist matching based on medical expertise
                     and availability.
@@ -721,19 +769,19 @@ export default function Home() {
                 </p>
               </div>
               <div
-                className="bg-white p-6 rounded-xl shadow-sm initial-hidden"
+                className="bg-white bg-zinc-900 p-6 rounded-xl shadow-sm initial-hidden"
                 style={{ animationDelay: "1400ms" }}
               >
-                <div className="w-12 h-12 bg-purple-100 rounded-lg flex items-center justify-center mb-4">
+                <div className="w-12 h-12 bg-purple-100 dark:bg-purple-950 rounded-lg flex items-center justify-center mb-4">
                   <DocumentTextIcon className="h-6 w-6 text-purple-600" />
                 </div>
-                <h3 className="text-lg font-bold">
+                <h3 className="text-lg dark:text-white font-bold">
                   <span data-lang-en="">Medical Records</span>
                   <span data-lang-ar="" className="hidden">
                     السجلات الطبية
                   </span>
                 </h3>
-                <p className="mt-1 text-gray-600">
+                <p className="mt-1 text-gray-600 text-zinc-300">
                   <span data-lang-en="">
                     Secure patient data documentation and medical record
                     management.
@@ -744,19 +792,19 @@ export default function Home() {
                 </p>
               </div>
               <div
-                className="bg-white p-6 rounded-xl shadow-sm initial-hidden"
+                className="bg-white bg-zinc-900 p-6 rounded-xl shadow-sm initial-hidden"
                 style={{ animationDelay: "1600ms" }}
               >
-                <div className="w-12 h-12 bg-orange-100 rounded-lg flex items-center justify-center mb-4">
+                <div className="w-12 h-12 bg-orange-100 dark:bg-orange-950 rounded-lg flex items-center justify-center mb-4">
                   <DevicePhoneMobileIcon className="h-6 w-6 text-orange-600" />
                 </div>
-                <h3 className="text-lg font-bold">
+                <h3 className="text-lg dark:text-white font-bold">
                   <span data-lang-en="">Offline Access</span>
                   <span data-lang-ar="" className="hidden">
                     الوصول دون اتصال
                   </span>
                 </h3>
-                <p className="mt-1 text-gray-600">
+                <p className="mt-1 text-gray-600 text-zinc-300">
                   <span data-lang-en="">
                     Works offline with limited internet - designed for
                     Gaza&apos;s connectivity challenges.
@@ -768,19 +816,19 @@ export default function Home() {
                 </p>
               </div>
               <div
-                className="bg-white p-6 rounded-xl shadow-sm initial-hidden"
+                className="bg-white bg-zinc-900 p-6 rounded-xl shadow-sm initial-hidden"
                 style={{ animationDelay: "1800ms" }}
               >
-                <div className="w-12 h-12 bg-indigo-100 rounded-lg flex items-center justify-center mb-4">
+                <div className="w-12 h-12 bg-indigo-100 dark:bg-indigo-950 rounded-lg flex items-center justify-center mb-4">
                   <GlobeAltIcon className="h-6 w-6 text-indigo-600" />
                 </div>
-                <h3 className="text-lg font-bold">
+                <h3 className="text-lg dark:text-white font-bold">
                   <span data-lang-en="">Arabic-English Support</span>
                   <span data-lang-ar="" className="hidden">
                     دعم عربي-إنجليزي
                   </span>
                 </h3>
-                <p className="mt-1 text-gray-600">
+                <p className="mt-1 text-gray-600 text-zinc-300">
                   <span data-lang-en="">
                     Full multilingual interface with medical translation
                     capabilities.
@@ -791,7 +839,7 @@ export default function Home() {
                 </p>
               </div>
             </div>
-            <div className="mt-12 text-center text-sm font-semibold text-gray-600 flex flex-wrap justify-center items-center gap-x-6 gap-y-2">
+            <div className="mt-12 text-center text-sm font-semibold text-gray-600 text-zinc-400 flex flex-wrap justify-center items-center gap-x-6 gap-y-2">
               <span className="flex items-center gap-2">
                 <LockClosedIcon className="h-4 w-4" />
                 <span data-lang-en="">End-to-End Encrypted</span>
@@ -825,9 +873,12 @@ export default function Home() {
         </section>
 
         {/* How It Works */}
-        <section id="how-it-works" className="py-20 md:py-28 bg-white">
+        <section
+          id="how-it-works"
+          className="py-20 md:py-28 bg-white dark:bg-black"
+        >
           <div className="container mx-auto px-6 text-center">
-            <h2 className="text-3xl md:text-4xl font-bold text-gray-900">
+            <h2 className="text-3xl md:text-4xl font-bold text-gray-900 dark:text-white">
               <span data-lang-en="">Simple, Secure, and Built for Impact</span>
               <span data-lang-ar="" className="hidden">
                 بسيط، آمن، ومصمم للتأثير
@@ -839,13 +890,13 @@ export default function Home() {
                 <div className="w-16 h-16 bg-green-600 text-white rounded-full flex items-center justify-center text-2xl font-bold border-4 border-white">
                   1
                 </div>
-                <h3 className="mt-4 text-xl font-bold">
+                <h3 className="mt-4 text-xl dark:text-white font-bold">
                   <span data-lang-en="">Register & Verify</span>
                   <span data-lang-ar="" className="hidden">
                     سجل وتحقق
                   </span>
                 </h3>
-                <p className="mt-2 text-gray-600 max-w-xs">
+                <p className="mt-2 text-gray-600 dark:text-zinc-300 max-w-xs">
                   <span data-lang-en="">
                     Securely verify your GMC credentials in minutes.
                   </span>
@@ -858,13 +909,13 @@ export default function Home() {
                 <div className="w-16 h-16 bg-green-600 text-white rounded-full flex items-center justify-center text-2xl font-bold border-4 border-white">
                   2
                 </div>
-                <h3 className="mt-4 text-xl font-bold">
+                <h3 className="mt-4 text-xl dark:text-white font-bold">
                   <span data-lang-en="">Connect on Your Terms</span>
                   <span data-lang-ar="" className="hidden">
                     تواصل بشروطك
                   </span>
                 </h3>
-                <p className="mt-2 text-gray-600 max-w-xs">
+                <p className="mt-2 text-gray-600 dark:text-zinc-300 max-w-xs">
                   <span data-lang-en="">
                     Set your availability for on-call pings, MDTs, or forum
                     consults.
@@ -879,13 +930,13 @@ export default function Home() {
                 <div className="w-16 h-16 bg-green-600 text-white rounded-full flex items-center justify-center text-2xl font-bold border-4 border-white">
                   3
                 </div>
-                <h3 className="mt-4 text-xl font-bold">
+                <h3 className="mt-4 text-xl dark:text-white font-bold">
                   <span data-lang-en="">Guide and Save Lives</span>
                   <span data-lang-ar="" className="hidden">
                     أرشد وأنقذ الأرواح
                   </span>
                 </h3>
-                <p className="mt-2 text-gray-600 max-w-xs">
+                <p className="mt-2 text-gray-600 dark:text-zinc-300 max-w-xs">
                   <span data-lang-en="">
                     Provide life-saving guidance through our secure,
                     low-bandwidth platform.
@@ -901,9 +952,9 @@ export default function Home() {
         </section>
 
         {/* Join Mission CTA */}
-        <section id="join" className="py-20 md:py-28 bg-gray-50">
+        <section id="join" className="py-20 md:py-28 bg-gray-50 dark:bg-zinc-950">
           <div className="container mx-auto px-6 text-center">
-            <h2 className="text-3xl md:text-4xl font-bold text-gray-900">
+            <h2 className="text-3xl md:text-4xl font-bold text-gray-900 dark:text-white">
               <span data-lang-en="">
                 Join the Mission to Save Lives in Gaza
               </span>
@@ -913,19 +964,19 @@ export default function Home() {
             </h2>
             <div className="mt-12 grid grid-cols-1 lg:grid-cols-3 gap-8 max-w-6xl mx-auto">
               <div
-                className="bg-gray-50 p-8 rounded-xl border-2 border-blue-600 text-center flex flex-col h-full initial-hidden"
+                className="bg-gray-50 dark:bg-zinc-900 p-8 rounded-xl border-2 border-blue-600 text-center flex flex-col h-full initial-hidden"
                 style={{ animationDelay: "200ms" }}
               >
                 <div className="flex items-center justify-center gap-3 mb-4">
                   <BuildingOffice2Icon className="h-8 w-8 text-blue-600" />
-                  <h3 className="text-xl font-bold">
+                  <h3 className="text-xl dark:text-white font-bold">
                     <span data-lang-en="">Gaza Clinicians</span>
                     <span data-lang-ar="" className="hidden">
                       للكوادر الطبية في غزة
                     </span>
                   </h3>
                 </div>
-                <p className="mt-2 text-gray-600 flex-grow">
+                <p className="mt-2 text-gray-600 dark:text-zinc-300 flex-grow">
                   <span data-lang-en="">
                     Register for free, immediate access to verified UK
                     specialists for emergency consultations. Requires referral
@@ -936,8 +987,8 @@ export default function Home() {
                     معتمدين للاستشارات الطارئة.
                   </span>
                 </p>
-                <a
-                  href="#"
+                <button
+                  onClick={() => openAuthModal("gaza-clinician")}
                   className="mt-6 bg-blue-600 text-white px-6 py-3 rounded-full font-bold hover:bg-blue-700 flex items-center justify-center gap-2 mx-auto w-fit"
                 >
                   <UserPlusIcon className="h-5 w-5 flex-shrink-0" />
@@ -945,22 +996,22 @@ export default function Home() {
                   <span data-lang-ar="" className="hidden">
                     سجل الآن
                   </span>
-                </a>
+                </button>
               </div>
               <div
-                className="bg-gray-50 p-8 rounded-xl border-2 border-red-600 text-center flex flex-col h-full initial-hidden"
+                className="bg-gray-50 dark:bg-zinc-900 p-8 rounded-xl border-2 border-red-600 text-center flex flex-col h-full initial-hidden"
                 style={{ animationDelay: "400ms" }}
               >
                 <div className="flex items-center justify-center gap-3 mb-4">
                   <HeartIcon className="h-8 w-8 text-red-600" />
-                  <h3 className="text-xl font-bold">
+                  <h3 className="text-xl dark:text-white font-bold">
                     <span data-lang-en="">UK Medical Specialists</span>
                     <span data-lang-ar="" className="hidden">
                       للأخصائيين الطبيين في بريطانيا
                     </span>
                   </h3>
                 </div>
-                <p className="mt-2 text-gray-600 flex-grow">
+                <p className="mt-2 text-gray-600 dark:text-zinc-300 flex-grow">
                   <span data-lang-en="">
                     Volunteer your expertise to provide critical medical
                     consultations when traditional aid channels are restricted.
@@ -970,8 +1021,8 @@ export default function Home() {
                     المساعدات التقليدية مقيدة.
                   </span>
                 </p>
-                <a
-                  href="#"
+                <button
+                  onClick={() => openAuthModal("register-uk")}
                   className="mt-6 bg-red-600 text-white px-6 py-3 rounded-full font-bold hover:bg-red-700 flex items-center justify-center gap-2 mx-auto w-fit"
                 >
                   <HeartIcon className="h-5 w-5 flex-shrink-0" />
@@ -979,22 +1030,22 @@ export default function Home() {
                   <span data-lang-ar="" className="hidden">
                     سجل للمساعدة
                   </span>
-                </a>
+                </button>
               </div>
               <div
-                className="bg-gray-50 p-8 rounded-xl border-2 border-green-600 text-center flex flex-col h-full initial-hidden"
+                className="bg-gray-50 dark:bg-zinc-900 p-8 rounded-xl border-2 border-green-600 text-center flex flex-col h-full initial-hidden"
                 style={{ animationDelay: "600ms" }}
               >
                 <div className="flex items-center justify-center gap-3 mb-4">
                   <CurrencyDollarIcon className="h-8 w-8 text-green-600" />
-                  <h3 className="text-xl font-bold">
+                  <h3 className="text-xl dark:text-white font-bold">
                     <span data-lang-en="">Support Gaza</span>
                     <span data-lang-ar="" className="hidden">
                       ادعم غزة
                     </span>
                   </h3>
                 </div>
-                <p className="mt-2 text-gray-600 flex-grow">
+                <p className="mt-2 text-gray-600 dark:text-zinc-300 flex-grow">
                   <span data-lang-en="">
                     Can&apos;t provide medical expertise? Support our platform
                     and help fund critical medical equipment for Gaza.
@@ -1069,6 +1120,16 @@ export default function Home() {
           </div>
         </div>
       </footer>
+
+      {/* Floating Dark Mode Toggle */}
+      <DarkModeToggle />
+
+      {/* Authentication Modal */}
+      <AuthModal
+        isOpen={authModal.isOpen}
+        onClose={closeAuthModal}
+        userType={authModal.userType}
+      />
     </div>
   );
 }

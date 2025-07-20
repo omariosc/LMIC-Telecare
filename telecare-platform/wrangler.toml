@@ -1,0 +1,71 @@
+# Cloudflare configuration for Telecare Platform
+name = "telecare-platform"
+main = "src/worker.ts"
+compatibility_date = "2024-07-20"
+compatibility_flags = ["nodejs_compat"]
+
+# Cloudflare Pages configuration
+pages_build_output_dir = "out"
+
+# Environment variables
+[env.production.vars]
+ENVIRONMENT = "production"
+NODE_ENV = "production"
+
+[env.staging.vars]
+ENVIRONMENT = "staging"
+NODE_ENV = "development"
+
+[env.development.vars]
+ENVIRONMENT = "development"
+NODE_ENV = "development"
+
+# D1 Database bindings
+[[env.production.d1_databases]]
+binding = "DB"
+database_name = "telecare-platform-prod"
+database_id = ""  # Will be set after creating the database
+
+[[env.staging.d1_databases]]
+binding = "DB"
+database_name = "telecare-platform-staging"
+database_id = ""  # Will be set after creating the database
+
+[[env.development.d1_databases]]
+binding = "DB"
+database_name = "telecare-platform-dev"
+database_id = ""  # Will be set after creating the database
+
+# R2 Storage bindings (for file uploads)
+[[env.production.r2_buckets]]
+binding = "STORAGE"
+bucket_name = "telecare-platform-storage-prod"
+
+[[env.staging.r2_buckets]]
+binding = "STORAGE"
+bucket_name = "telecare-platform-storage-staging"
+
+[[env.development.r2_buckets]]
+binding = "STORAGE"
+bucket_name = "telecare-platform-storage-dev"
+
+# KV bindings (for caching and session storage)
+[[env.production.kv_namespaces]]
+binding = "CACHE"
+id = ""  # Will be set after creating the namespace
+
+[[env.staging.kv_namespaces]]
+binding = "CACHE"
+id = ""  # Will be set after creating the namespace
+
+[[env.development.kv_namespaces]]
+binding = "CACHE"
+id = ""  # Will be set after creating the namespace
+
+# Worker configuration
+[build]
+command = "npm run build"
+
+# Deployment configuration
+[triggers]
+crons = ["0 0 * * *"]  # Daily cleanup tasks
