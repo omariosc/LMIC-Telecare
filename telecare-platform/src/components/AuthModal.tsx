@@ -258,21 +258,33 @@ export default function AuthModal({
                     </ul>
                   </div>
 
-                  {/* Alternative Access */}
+                  {/* Demo Access */}
                   <div className="text-center pt-4 border-t border-gray-200 dark:border-gray-600">
-                    <p className="text-xs text-gray-500 dark:text-gray-400 mb-2">
+                    <p className="text-xs text-gray-500 dark:text-gray-400 mb-3">
                       {currentLanguage === "ar"
-                        ? "واجهت مشكلة في التحميل؟"
-                        : "Having trouble installing?"}
+                        ? "تريد تجربة المنصة أولاً؟"
+                        : "Want to try the platform first?"}
                     </p>
                     <a
-                      href="mailto:O.Choudhry@leeds.ac.uk"
-                      className="text-blue-600 hover:text-blue-800 text-sm underline"
+                      href="/demo/mobile"
+                      className="inline-flex items-center gap-2 bg-green-600 text-white px-4 py-2 rounded-md text-sm font-medium hover:bg-green-700 transition-colors mb-2"
+                      onClick={onClose}
                     >
+                      <DevicePhoneMobileIcon className="h-4 w-4" />
                       {currentLanguage === "ar"
-                        ? "اتصل بفريق الدعم"
-                        : "Contact Support Team"}
+                        ? "تجربة المنصة (بدون تحميل)"
+                        : "Try Demo (No Install Required)"}
                     </a>
+                    <div className="mt-2">
+                      <a
+                        href="mailto:support@jusur.org.uk"
+                        className="text-blue-600 hover:text-blue-800 text-xs underline"
+                      >
+                        {currentLanguage === "ar"
+                          ? "اتصل بفريق الدعم"
+                          : "Contact Support Team"}
+                      </a>
+                    </div>
                   </div>
                 </div>
 

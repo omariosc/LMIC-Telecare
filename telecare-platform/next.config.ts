@@ -3,9 +3,10 @@ import withPWA from "next-pwa";
 
 const nextConfig: NextConfig = {
   reactStrictMode: true,
-  output: "export",
+  // Commented out static export to enable API routes for Stripe
+  // output: "export",
   trailingSlash: true,
-  distDir: "out",
+  // distDir: "out", // Not needed without static export
 
   // Experimental features disabled temporarily to fix critters dependency
   // experimental: {
@@ -35,6 +36,10 @@ const nextConfig: NextConfig = {
           {
             key: "X-XSS-Protection",
             value: "1; mode=block",
+          },
+          {
+            key: "Content-Security-Policy",
+            value: "img-src 'self' data: https://q.stripe.com https://js.stripe.com https://stripe-camo.global.ssl.fastly.net https://d1wqzb5bdbcre6.cloudfront.net https://qr.stripe.com https://b.stripecdn.com https://files.stripe.com; frame-src 'self' https://checkout.stripe.com https://js.stripe.com; script-src 'self' 'unsafe-inline' 'unsafe-eval' https://js.stripe.com;",
           },
         ],
       },

@@ -4,9 +4,11 @@ import { useState } from "react";
 import { loadStripe } from "@stripe/stripe-js";
 import { CurrencyDollarIcon } from "@heroicons/react/24/outline";
 
-const stripePromise = loadStripe(
-  process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY!
-);
+// Log the publishable key for debugging (first and last 4 chars)
+const publishableKey = process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY!;
+console.log("Using Stripe Publishable Key:", publishableKey.substring(0, 7) + "..." + publishableKey.slice(-4));
+
+const stripePromise = loadStripe(publishableKey);
 
 const DONATION_AMOUNTS = [25, 50, 100];
 
@@ -26,6 +28,9 @@ export default function DonationForm() {
         return;
       }
 
+      console.log("Making request to:", "/api/create-checkout-session");
+      console.log("Request data:", { amount: donationAmount, currency: "usd" });
+
       const response = await fetch("/api/create-checkout-session", {
         method: "POST",
         headers: {
@@ -37,7 +42,21 @@ export default function DonationForm() {
         }),
       });
 
-      const { sessionId, error } = await response.json();
+      console.log("Response status:", response.status);
+      console.log("Response headers:", response.headers);
+
+      // Check if response is ok
+      if (!response.ok) {
+        const errorText = await response.text();
+        console.error("Error response:", errorText);
+        alert(`HTTP Error ${response.status}: ${errorText}`);
+        return;
+      }
+
+      const responseData = await response.json();
+      console.log("Response data:", responseData);
+      
+      const { sessionId, error } = responseData;
 
       if (error) {
         alert(`Error: £{error}`);
@@ -45,12 +64,23 @@ export default function DonationForm() {
       }
 
       const stripe = await stripePromise;
-      const { error: stripeError } = await stripe!.redirectToCheckout({
+      console.log("Stripe instance loaded:", !!stripe);
+      console.log("Redirecting to checkout with sessionId:", sessionId);
+      
+      // Add a small delay to ensure session is fully created
+      await new Promise(resolve => setTimeout(resolve, 100));
+      
+      if (!stripe) {
+        throw new Error("Stripe failed to load");
+      }
+      
+      const { error: stripeError } = await stripe.redirectToCheckout({
         sessionId,
       });
 
       if (stripeError) {
-        alert(`Stripe error: £{stripeError.message}`);
+        console.error("Stripe redirect error:", stripeError);
+        alert(`Stripe error: ${stripeError.message}`);
       }
     } catch (error) {
       console.error("Error:", error);

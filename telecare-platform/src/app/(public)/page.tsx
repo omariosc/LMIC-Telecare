@@ -39,6 +39,7 @@ const isScreenTooSmall = () => {
 export default function Home() {
   const [showSmallScreenWarning, setShowSmallScreenWarning] = useState(false);
   const [showDropdown, setShowDropdown] = useState(false);
+  const [showDemoDropdown, setShowDemoDropdown] = useState(false);
   const [authModal, setAuthModal] = useState<{
     isOpen: boolean;
     userType: "gaza-clinician" | "uk-clinician" | "register-uk";
@@ -47,6 +48,7 @@ export default function Home() {
     userType: "gaza-clinician",
   });
   const dropdownRef = useRef<HTMLDivElement>(null);
+  const demoDropdownRef = useRef<HTMLDivElement>(null);
 
   const { language, direction, toggleLanguage } = useLanguage();
 
@@ -72,13 +74,19 @@ export default function Home() {
     // Check on resize
     window.addEventListener("resize", checkScreenSize);
 
-    // Click outside handler for dropdown
+    // Click outside handler for dropdowns
     const handleClickOutside = (event: MouseEvent) => {
       if (
         dropdownRef.current &&
         !dropdownRef.current.contains(event.target as Node)
       ) {
         setShowDropdown(false);
+      }
+      if (
+        demoDropdownRef.current &&
+        !demoDropdownRef.current.contains(event.target as Node)
+      ) {
+        setShowDemoDropdown(false);
       }
     };
 
@@ -188,6 +196,17 @@ export default function Home() {
                 className={`absolute right-0 mt-2 w-56 bg-white dark:bg-zinc-800 rounded-md shadow-lg border border-gray-200 dark:border-zinc-700 transition-all duration-200 z-50 ${showDropdown ? "opacity-100 visible" : "opacity-0 invisible"}`}
               >
                 <div className="py-2">
+                  <a
+                    href="/demo/mobile"
+                    className="block w-full text-left px-4 py-2 text-sm text-gray-900 dark:text-gray-100 hover:bg-gray-100 dark:hover:bg-zinc-700 hover:text-[#0A2540] dark:hover:text-white transition-colors cursor-pointer"
+                    onClick={() => setShowDropdown(false)}
+                  >
+                    <span data-lang-en="">Quick Demo (No Login)</span>
+                    <span data-lang-ar="" className="hidden">
+                      تجريبي سريع (بدون دخول)
+                    </span>
+                  </a>
+                  <div className="border-t border-gray-200 dark:border-zinc-700 my-1"></div>
                   <button
                     onClick={() => {
                       openAuthModal("gaza-clinician");
@@ -234,7 +253,18 @@ export default function Home() {
       {/* Main Content */}
       <main>
         {/* Hero Section */}
-        <section className="bg-gradient-to-b from-green-800 to-green-950 text-white text-center pt-28 pb-20 px-6">
+        <section className="relative bg-gradient-to-b from-green-800 to-green-950 text-white text-center pt-28 pb-20 px-6 overflow-hidden">
+          {/* Background Image */}
+          <div 
+            className="absolute inset-0 bg-cover bg-center bg-no-repeat opacity-20"
+            style={{
+              backgroundImage: 'url("/images/gaza-destruction.jpg")',
+            }}
+          ></div>
+          {/* Green Gradient Overlay */}
+          <div className="absolute inset-0 bg-gradient-to-b from-green-800/85 to-green-950/90"></div>
+          {/* Content */}
+          <div className="relative z-10">
           <div className="container mx-auto">
             <h1 className="text-4xl md:text-6xl font-extrabold leading-tight initial-hidden">
               <span data-lang-en="">
@@ -388,6 +418,7 @@ export default function Home() {
               *بناءً على مسح محدود للجراحين الاستشاريين والممارسين العامين في
               جميع أنحاء المملكة المتحدة.
             </span>
+          </div>
           </div>
         </section>
 

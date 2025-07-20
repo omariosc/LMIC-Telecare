@@ -43,6 +43,8 @@ export default function DonationSuccess() {
 
         <h1 className="text-2xl font-bold text-gray-900 mb-4">
           Thank You for Your Donation!
+          <br />
+          جزاك الله خيرا
         </h1>
 
         <p className="text-gray-600 mb-6">
@@ -79,7 +81,7 @@ export default function DonationSuccess() {
             className={`w-full py-3 px-6 rounded-full font-bold transition-colors inline-flex items-center justify-center gap-2 ${
               copied
                 ? "bg-green-100 text-green-700 border border-green-300"
-                : "bg-gray-100 text-gray-700 hover:bg-gray-200"
+                : "bg-gray-100 text-gray-700 hover:bg-gray-200 cursor-pointer"
             }`}
           >
             <LinkIcon className="h-4 w-4" />

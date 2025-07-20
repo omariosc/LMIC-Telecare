@@ -6,8 +6,24 @@ const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!, {
 });
 
 export async function POST(request: NextRequest) {
+  console.log("API Route Called: /api/create-checkout-session");
+  
   try {
+    // Check if Stripe is properly configured
+    if (!process.env.STRIPE_SECRET_KEY) {
+      console.error("STRIPE_SECRET_KEY is not configured");
+      return NextResponse.json(
+        { error: "Stripe configuration error" },
+        { status: 500 }
+      );
+    }
+
+    // Log partial key for debugging (first and last 4 chars)
+    const secretKey = process.env.STRIPE_SECRET_KEY;
+    console.log("Using Stripe Secret Key:", secretKey.substring(0, 7) + "..." + secretKey.slice(-4));
+
     const { amount, currency = "usd" } = await request.json();
+    console.log("Request data:", { amount, currency });
 
     if (!amount || amount < 1) {
       return NextResponse.json(
@@ -16,6 +32,7 @@ export async function POST(request: NextRequest) {
       );
     }
 
+    console.log("Creating Stripe session...");
     const session = await stripe.checkout.sessions.create({
       payment_method_types: ["card"],
       line_items: [
@@ -25,7 +42,7 @@ export async function POST(request: NextRequest) {
             product_data: {
               name: "Jusur (جسور) Platform Donation",
               description:
-                "Support medical aid and platform development for Gaza healthcare",
+                "Support platform development for Gaza healthcare",
               images: ["https://placehold.co/400x400/0A2540/FFFFFF?text=Jusur"],
             },
             unit_amount: amount * 100, // Stripe expects amount in cents
@@ -42,6 +59,7 @@ export async function POST(request: NextRequest) {
       },
     });
 
+    console.log("Stripe session created successfully:", session.id);
     return NextResponse.json({ sessionId: session.id });
   } catch (error) {
     console.error("Error creating checkout session:", error);
@@ -52,4 +70,5 @@ export async function POST(request: NextRequest) {
   }
 }
 
-export const runtime = "edge";
+// Removing edge runtime to troubleshoot Stripe API issues
+// export const runtime = "edge";
