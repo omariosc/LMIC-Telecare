@@ -2,7 +2,6 @@
 
 import type {
   ID,
-  UUID,
   Timestamp,
   EmailAddress,
   UserRole,
@@ -279,7 +278,7 @@ export interface ProfessionalVerification {
 }
 
 // Rate limiting and security
-export interface RateLimitInfo {
+export interface AuthRateLimitInfo {
   endpoint: string;
   userId?: ID;
   ipAddress?: string;

@@ -6,7 +6,6 @@ import type {
   PaginatedResponse,
   PaginationParams,
   ValidationError,
-  ErrorInfo,
 } from "./common";
 
 // Generic API response wrapper
@@ -178,13 +177,13 @@ export interface SearchFacets {
   };
 }
 
-// File upload API types
-export interface FileUploadRequest {
+// File upload API types (renamed to avoid conflict with file-upload.ts)
+export interface FileUploadInitRequest {
   purpose: string;
   metadata?: Record<string, unknown>;
 }
 
-export interface FileUploadResponse {
+export interface FileUploadInitResponse {
   fileId: ID;
   uploadUrl: string;
   expiresAt: Timestamp;

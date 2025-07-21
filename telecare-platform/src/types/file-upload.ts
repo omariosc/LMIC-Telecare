@@ -2,10 +2,8 @@
 
 import type {
   ID,
-  UUID,
   Timestamp,
   URL,
-  EmailAddress,
   UploadPurpose,
   FileType,
   MimeType,
@@ -122,10 +120,10 @@ export interface FileUploadResponse {
   uploadUrl?: string; // For direct uploads
   multipartSession?: MultipartUploadSession; // For large files
   error?: string;
-  validationErrors?: ValidationError[];
+  validationErrors?: FileValidationError[];
 }
 
-export interface ValidationError {
+export interface FileValidationError {
   field: string;
   message: string;
   code: string;

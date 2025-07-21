@@ -47,7 +47,7 @@ export interface User extends Metadata {
   // Platform-specific settings
   preferredLanguage: Language;
   availabilityStatus: AvailabilityStatus;
-  notificationPreferences?: NotificationPreferences;
+  notificationPreferences?: BasicNotificationPreferences;
 
   // Verification and security
   emailVerified: boolean;
@@ -84,8 +84,8 @@ export interface User extends Metadata {
   referralApproved?: boolean;
 }
 
-// Notification preferences
-export interface NotificationPreferences {
+// Basic notification preferences (embedded in User)
+export interface BasicNotificationPreferences {
   email: {
     newCases: boolean;
     caseResponses: boolean;
@@ -219,20 +219,6 @@ export interface UserActivity {
   timestamp: Timestamp;
 }
 
-// User achievement
-export interface UserAchievement {
-  id: ID;
-  userId: ID;
-  achievementType: string;
-  title: string;
-  description: string;
-  iconUrl?: URL;
-  pointsAwarded: number;
-  badgeLevel?: "bronze" | "silver" | "gold" | "platinum";
-  achievementData?: Record<string, unknown>;
-  earnedAt: Timestamp;
-  isVisible: boolean;
-}
 
 // Derived types for specific use cases
 

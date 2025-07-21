@@ -228,7 +228,7 @@ export class R2StorageHelper {
   }
 
   // Generate a signed URL for direct browser uploads (would need to be implemented on the server side)
-  generateUploadUrl(key: string, expiresIn: number = 3600): string {
+  generateUploadUrl(_key: string, _expiresIn: number = 3600): string {
     // This would need to be implemented with R2's presigned URL functionality
     // For now, return a placeholder
     throw new Error(

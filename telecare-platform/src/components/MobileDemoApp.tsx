@@ -77,7 +77,7 @@ const dummyPendingRegistrations: Array<Partial<User> & { id: string }> = [
     lastName: "Mansour",
     email: "k.mansour@gaza-med.ps",
     role: "gaza_clinician",
-    specialties: ["surgery", "trauma"],
+    specialties: ["surgery", "emergency_medicine"],
     institution: "Gaza European Hospital",
     yearsOfExperience: 6,
     status: "pending",
@@ -102,7 +102,7 @@ const dummyReviewedRegistrations: Array<
     lastName: "Ahmed",
     email: "sarah.ahmed@nhs.uk",
     role: "uk_specialist",
-    specialties: ["neurology", "stroke_care"],
+    specialties: ["neurology", "cardiology"],
     gmcNumber: "7567890",
     institution: "St. Bartholomew's Hospital",
     yearsOfExperience: 15,
@@ -794,7 +794,7 @@ export default function MobileDemoApp() {
               <>
                 لقد ساعدت{" "}
                 <span className="font-bold">
-                  {currentUser.totalCasesHandled || 0}
+                  {Math.floor((currentUser.points || 0) / 10)}
                 </span>{" "}
                 مريضاً حتى الآن!
               </>
@@ -802,7 +802,7 @@ export default function MobileDemoApp() {
               <>
                 You have helped{" "}
                 <span className="font-bold">
-                  {currentUser.totalCasesHandled || 0}
+                  {Math.floor((currentUser.points || 0) / 10)}
                 </span>{" "}
                 patients so far!
               </>
@@ -950,45 +950,12 @@ export default function MobileDemoApp() {
       critical: <ExclamationTriangleIcon className="h-4 w-4" />,
     };
 
-    const specialtyColors = {
-      cardiology:
-        "bg-red-50 dark:bg-red-950 text-red-700 dark:text-red-300 border-red-200 dark:border-red-800",
-      emergency_medicine:
-        "bg-orange-50 dark:bg-orange-950 text-orange-700 dark:text-orange-300 border-orange-200 dark:border-orange-800",
-      orthopedics:
-        "bg-blue-50 dark:bg-blue-950 text-blue-700 dark:text-blue-300 border-blue-200 dark:border-blue-800",
-      neurology:
-        "bg-purple-50 dark:bg-purple-950 text-purple-700 dark:text-purple-300 border-purple-200 dark:border-purple-800",
-      pediatrics:
-        "bg-pink-50 dark:bg-pink-950 text-pink-700 dark:text-pink-300 border-pink-200 dark:border-pink-800",
-      general_medicine:
-        "bg-gray-50 dark:bg-gray-800 text-gray-700 dark:text-gray-300 border-gray-200 dark:border-gray-600",
-      surgery:
-        "bg-indigo-50 dark:bg-indigo-950 text-indigo-700 dark:text-indigo-300 border-indigo-200 dark:border-indigo-800",
-      psychiatry:
-        "bg-teal-50 dark:bg-teal-950 text-teal-700 dark:text-teal-300 border-teal-200 dark:border-teal-800",
-      default:
-        "bg-gray-50 dark:bg-gray-800 text-gray-700 dark:text-gray-300 border-gray-200 dark:border-gray-600",
-    };
-
-    const _getSpecialtyColor = (specialty: string) => {
-      const normalizedSpecialty = specialty
-        .toLowerCase()
-        .replace(/[^a-z]/g, "_");
-      return (
-        specialtyColors[normalizedSpecialty as keyof typeof specialtyColors] ||
-        specialtyColors.default
-      );
-    };
-
     const statusColors = {
       open: "text-green-600 bg-green-100 dark:bg-green-950",
       in_progress: "text-purple-600 bg-purple-100 dark:bg-purple-950",
       resolved: "text-green-600 bg-green-100 dark:bg-green-950",
       closed: "text-gray-600 bg-gray-100 dark:bg-gray-950",
     };
-
-    const _creator = getUserById(case_.createdBy);
 
     return (
       <div
@@ -1404,7 +1371,7 @@ export default function MobileDemoApp() {
     // Status change functionality
     const changeStatus = async (
       newStatus: "open" | "in_progress" | "resolved" | "closed",
-      reason: string = ""
+      _reason: string = ""
     ) => {
       if (!selectedCase) return;
 
@@ -1415,15 +1382,6 @@ export default function MobileDemoApp() {
           ...selectedCase,
           status: newStatus,
           updatedAt: new Date().toISOString(),
-          statusHistory: [
-            ...(selectedCase.statusHistory || []),
-            {
-              status: newStatus,
-              changedBy: currentUser.id,
-              changedAt: new Date().toISOString(),
-              reason: reason.trim() || undefined,
-            },
-          ],
         };
 
         // Update the selected case
@@ -1599,7 +1557,7 @@ export default function MobileDemoApp() {
 
     // Create new response
     const createResponse = async () => {
-      if (!newResponse.trim() || !currentUser) return;
+      if (!newResponse.trim() || !currentUser || !selectedCase) return;
 
       setIsSubmittingResponse(true);
       try {
@@ -1795,6 +1753,16 @@ export default function MobileDemoApp() {
       }));
     };
 
+    if (!selectedCase) {
+      return (
+        <div className="p-4 text-center">
+          <p className="text-gray-500 dark:text-gray-400">
+            {language === "ar" ? "لم يتم العثور على الحالة" : "Case not found"}
+          </p>
+        </div>
+      );
+    }
+
     return (
       <div className="p-4 space-y-6">
         {/* Header with Back Button */}
@@ -1923,55 +1891,6 @@ export default function MobileDemoApp() {
               )}
             </div>
           )}
-
-          {/* Status History */}
-          {selectedCase.statusHistory &&
-            selectedCase.statusHistory.length > 0 && (
-              <details className="mb-4">
-                <summary className="cursor-pointer text-sm font-medium text-gray-600 dark:text-gray-300 hover:text-gray-800 dark:hover:text-gray-100 mb-2">
-                  {language === "ar"
-                    ? "تاريخ تغييرات الحالة"
-                    : "Status Change History"}
-                </summary>
-                <div className="pl-4 space-y-2">
-                  {selectedCase.statusHistory.map((change, idx) => {
-                    const changer = getUserById(change.changedBy);
-                    return (
-                      <div
-                        key={idx}
-                        className="text-sm text-gray-600 dark:text-gray-300 pb-2 border-b border-gray-100 dark:border-zinc-700 last:border-b-0"
-                      >
-                        <div className="flex items-center justify-between">
-                          <span className="font-medium">
-                            {language === "ar"
-                              ? change.status === "open"
-                                ? "مفتوحة"
-                                : change.status === "in_progress"
-                                  ? "قيد المعالجة"
-                                  : change.status === "resolved"
-                                    ? "محلولة"
-                                    : "مغلقة"
-                              : change.status.replace("_", " ")}
-                          </span>
-                          <span className="text-xs text-gray-500">
-                            {new Date(change.changedAt).toLocaleDateString()}
-                          </span>
-                        </div>
-                        <div className="text-xs text-gray-500">
-                          {language === "ar" ? "بواسطة" : "by"}{" "}
-                          {changer?.displayName || "Unknown"}
-                          {change.reason && (
-                            <span className="ml-2 italic">
-                              - {change.reason}
-                            </span>
-                          )}
-                        </div>
-                      </div>
-                    );
-                  })}
-                </div>
-              </details>
-            )}
 
           <h2 className="text-xl font-bold dark:text-white mb-2">
             {selectedCase.title}
@@ -2590,7 +2509,7 @@ export default function MobileDemoApp() {
                     <div className="mt-4 pt-4 border-t border-gray-200 dark:border-zinc-700">
                       <div className="flex items-start space-x-3">
                         <div className="w-8 h-8 bg-green-950 rounded-full flex items-center justify-center text-white text-xs font-bold">
-                          {currentUser.displayName.charAt(0)}
+                          {currentUser.displayName?.charAt(0) || "U"}
                         </div>
                         <div className="flex-1">
                           <textarea
@@ -2641,7 +2560,7 @@ export default function MobileDemoApp() {
                               className="flex items-start space-x-3"
                             >
                               <div className="w-6 h-6 bg-gray-400 rounded-full flex items-center justify-center text-white text-xs font-bold flex-shrink-0">
-                                {replyUser?.displayName.charAt(0) || "U"}
+                                {replyUser?.displayName?.charAt(0) || "U"}
                               </div>
                               <div className="flex-1">
                                 <div className="flex items-center space-x-2 mb-1">
@@ -3016,10 +2935,14 @@ export default function MobileDemoApp() {
       case "registration-requests":
         return (
           <AdminRegistrationModal
-            pendingRequests={pendingRequests}
-            reviewedRequests={reviewedRequests}
-            setPendingRequests={setPendingRequests}
-            setReviewedRequests={setReviewedRequests}
+            pendingRequests={
+              pendingRequests.filter((req) => req.role !== "admin") as any
+            }
+            reviewedRequests={
+              reviewedRequests.filter((req) => req.role !== "admin") as any
+            }
+            setPendingRequests={setPendingRequests as any}
+            setReviewedRequests={setReviewedRequests as any}
             language={language}
             viewMode={viewMode}
           />
@@ -3363,7 +3286,7 @@ export default function MobileDemoApp() {
                   id: `case_${Date.now()}`,
                   title: newCaseTitle,
                   description: newCaseDescription,
-                  specialty: newCaseSpecialty,
+                  specialty: newCaseSpecialty as any,
                   urgency: newCaseUrgency,
                   status: "open" as const,
                   createdBy: currentUserId,
@@ -3373,8 +3296,13 @@ export default function MobileDemoApp() {
                   likeCount: 0,
                   patientAge: patientAge ? parseInt(patientAge) : undefined,
                   patientGender: patientGender,
-                  testResults: testResults.length > 0 ? testResults : undefined,
+                  testResults:
+                    testResults.length > 0 ? (testResults as any) : undefined,
                   images: newCaseImages.length > 0 ? newCaseImages : undefined,
+                  symptoms: [],
+                  language: "en",
+                  isAnonymized: false,
+                  updatedAt: new Date().toISOString(),
                 };
 
                 // Add to cases list

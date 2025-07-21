@@ -310,13 +310,7 @@ export default function EnhancedRegistrationModal({
       try {
         // Use Tesseract.js for OCR
         // Create a worker with inline initialization to avoid CSP issues
-        const worker = await Tesseract.createWorker({
-          logger: (m) => console.warn(m),
-          errorHandler: (err) => console.error(err),
-        });
-
-        await worker.loadLanguage("eng");
-        await worker.initialize("eng");
+        const worker = await Tesseract.createWorker("eng");
 
         const {
           data: { text },
@@ -386,7 +380,11 @@ export default function EnhancedRegistrationModal({
         console.error("OCR Error:", error);
 
         // If OCR fails due to CSP or other issues, show skip option prominently
-        if (error.message && error.message.includes("worker")) {
+        if (
+          error instanceof Error &&
+          error.message &&
+          error.message.includes("worker")
+        ) {
           // CSP issue - just mark as uploaded and let user skip
           setIdVerificationStatus("failed");
           setError(
@@ -1284,11 +1282,7 @@ export default function EnhancedRegistrationModal({
                 ) : (
                   <label
                     htmlFor="id-upload"
-                    className={`w-full block text-center py-3 rounded-lg font-medium cursor-pointer transition-colors ${
-                      idVerificationStatus === "verified"
-                        ? "bg-green-600 text-white"
-                        : "bg-gray-100 dark:bg-zinc-800 text-gray-700 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-zinc-700"
-                    }`}
+                    className="w-full block text-center py-3 rounded-lg font-medium cursor-pointer transition-colors bg-gray-100 dark:bg-zinc-800 text-gray-700 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-zinc-700"
                   >
                     {idVerificationStatus === "verifying"
                       ? language === "ar"

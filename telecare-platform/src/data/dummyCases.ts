@@ -124,7 +124,6 @@ export const dummyCases: MedicalCase[] = [
     // Metadata
     createdAt: "2025-01-20T14:00:00Z",
     updatedAt: "2025-01-20T16:30:00Z",
-    createdBy: "gaza_001",
   },
 
   {
@@ -219,7 +218,6 @@ export const dummyCases: MedicalCase[] = [
     // Metadata
     createdAt: "2025-01-19T10:00:00Z",
     updatedAt: "2025-01-19T16:30:00Z",
-    createdBy: "gaza_002",
   },
 
   {
@@ -321,7 +319,6 @@ export const dummyCases: MedicalCase[] = [
     // Metadata
     createdAt: "2025-01-18T19:30:00Z",
     updatedAt: "2025-01-18T23:00:00Z",
-    createdBy: "gaza_003",
   },
 ];
 

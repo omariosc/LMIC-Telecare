@@ -59,7 +59,7 @@ export default function RegistrationModal({
   >("pending");
 
   // ID verification states
-  const [idImage, setIdImage] = useState<File | null>(null);
+  const [_idImage, setIdImage] = useState<File | null>(null);
   const [idImagePreview, setIdImagePreview] = useState<string | null>(null);
   const [isVerifyingID, setIsVerifyingID] = useState(false);
   const [idVerificationStatus, setIdVerificationStatus] = useState<
@@ -556,10 +556,10 @@ export default function RegistrationModal({
     setRegistrationStep(registrationStep + 1);
   };
 
-  const handleRegistrationBack = () => {
-    setRegistrationStep(Math.max(1, registrationStep - 1));
-    setRegistrationError("");
-  };
+  // const handleRegistrationBack = () => {
+  //   setRegistrationStep(Math.max(1, registrationStep - 1));
+  //   setRegistrationError("");
+  // };
 
   const handleRegistrationSubmit = () => {
     // All validation is done in step 1 now
