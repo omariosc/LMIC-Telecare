@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState, useRef, useEffect } from "react";
+import React, { useState, useRef, useEffect, useCallback } from "react";
 import {
   Camera,
   Upload,
@@ -118,7 +118,7 @@ const RegistrationPage = () => {
           faceapi.nets.faceExpressionNet.loadFromUri(MODEL_URL),
         ]);
         setModelsLoaded(true);
-      } catch (error) {
+      } catch {
         console.warn(
           "Face detection models not available. Face verification will be simulated."
         );
@@ -232,44 +232,47 @@ const RegistrationPage = () => {
     }
   };
 
-  const compareFaces = async (passportImgUrl: string, liveImgUrl: string) => {
-    if (!modelsLoaded) {
-      // Simulate face verification for demo purposes
-      return { match: true, confidence: 0.85 };
-    }
-
-    try {
-      const passportImg = await faceapi.fetchImage(passportImgUrl);
-      const liveImg = await faceapi.fetchImage(liveImgUrl);
-
-      const passportDetections = await faceapi
-        .detectSingleFace(passportImg, new faceapi.TinyFaceDetectorOptions())
-        .withFaceLandmarks()
-        .withFaceDescriptor();
-      const liveDetections = await faceapi
-        .detectSingleFace(liveImg, new faceapi.TinyFaceDetectorOptions())
-        .withFaceLandmarks()
-        .withFaceDescriptor();
-
-      if (!passportDetections || !liveDetections) {
-        return { match: false, confidence: 0 };
+  const compareFaces = useCallback(
+    async (passportImgUrl: string, liveImgUrl: string) => {
+      if (!modelsLoaded) {
+        // Simulate face verification for demo purposes
+        return { match: true, confidence: 0.85 };
       }
 
-      const faceMatcher = new faceapi.FaceMatcher(
-        passportDetections.descriptor
-      );
-      const bestMatch = faceMatcher.findBestMatch(liveDetections.descriptor);
+      try {
+        const passportImg = await faceapi.fetchImage(passportImgUrl);
+        const liveImg = await faceapi.fetchImage(liveImgUrl);
 
-      return {
-        match: bestMatch.label === "person 1",
-        confidence: 1 - bestMatch.distance,
-      };
-    } catch (error) {
-      console.error("Face comparison error:", error);
-      // Fallback to simulated verification
-      return { match: true, confidence: 0.8 };
-    }
-  };
+        const passportDetections = await faceapi
+          .detectSingleFace(passportImg, new faceapi.TinyFaceDetectorOptions())
+          .withFaceLandmarks()
+          .withFaceDescriptor();
+        const liveDetections = await faceapi
+          .detectSingleFace(liveImg, new faceapi.TinyFaceDetectorOptions())
+          .withFaceLandmarks()
+          .withFaceDescriptor();
+
+        if (!passportDetections || !liveDetections) {
+          return { match: false, confidence: 0 };
+        }
+
+        const faceMatcher = new faceapi.FaceMatcher(
+          passportDetections.descriptor
+        );
+        const bestMatch = faceMatcher.findBestMatch(liveDetections.descriptor);
+
+        return {
+          match: bestMatch.label === "person 1",
+          confidence: 1 - bestMatch.distance,
+        };
+      } catch (error) {
+        console.error("Face comparison error:", error);
+        // Fallback to simulated verification
+        return { match: true, confidence: 0.8 };
+      }
+    },
+    [modelsLoaded]
+  );
 
   const handlePassportUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
@@ -341,7 +344,7 @@ const RegistrationPage = () => {
     );
   };
 
-  const processVerification = async () => {
+  const processVerification = useCallback(async () => {
     if (!passportImage || !livePhoto) return;
 
     setStep("processing");
@@ -378,7 +381,14 @@ const RegistrationPage = () => {
     } finally {
       setIsProcessing(false);
     }
-  };
+  }, [
+    passportImage,
+    livePhoto,
+    gmcName,
+    setIsProcessing,
+    compareFaces,
+    moveToNextStep,
+  ]);
 
   const sendVerificationEmail = async () => {
     if (!email) {
@@ -424,7 +434,7 @@ const RegistrationPage = () => {
     setVerificationResult({ verified: true });
   };
 
-  const moveToNextStep = () => {
+  const moveToNextStep = useCallback(() => {
     const currentIndex = STEPS.findIndex((s) => s.id === step);
     const nextIndex = currentIndex + 1;
 
@@ -432,7 +442,7 @@ const RegistrationPage = () => {
       setStep(STEPS[nextIndex].id as RegistrationStep);
       setStepIndex(nextIndex);
     }
-  };
+  }, [step]);
 
   const moveToStep = (targetStep: RegistrationStep) => {
     const targetIndex = STEPS.findIndex((s) => s.id === targetStep);

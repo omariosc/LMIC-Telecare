@@ -1,7 +1,9 @@
 import { NextResponse } from "next/server";
 
 // Simple OCR simulation - in production, you'd use a service like Google Vision API or Tesseract.js
-const extractTextFromImage = async (_imageBuffer: Buffer): Promise<string[]> => {
+const extractTextFromImage = async (
+  _imageBuffer: Buffer
+): Promise<string[]> => {
   // For demo purposes, we'll simulate OCR extraction
   // In a real implementation, you would:
   // 1. Use Tesseract.js for client-side OCR, or

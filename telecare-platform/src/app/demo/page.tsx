@@ -4,7 +4,7 @@ import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { useLanguage } from "@/hooks/useLanguage";
 import EnhancedRegistrationModal from "@/components/EnhancedRegistrationModal";
-import { UserIcon, HeartIcon, UserPlusIcon } from "@heroicons/react/24/outline";
+import { UserIcon, UserPlusIcon } from "@heroicons/react/24/outline";
 
 export default function DemoPage() {
   const router = useRouter();
@@ -14,10 +14,7 @@ export default function DemoPage() {
     "choice" | "login" | "role"
   >("choice");
 
-  const openRegistrationModal = () => {
-    setInitialModalPage("choice");
-    setRegistrationModalOpen(true);
-  };
+  // Removed unused openRegistrationModal function
 
   const openLoginModal = () => {
     setInitialModalPage("login");

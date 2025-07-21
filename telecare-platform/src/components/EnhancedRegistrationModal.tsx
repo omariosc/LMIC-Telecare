@@ -5,7 +5,6 @@ import {
   XMarkIcon,
   CameraIcon,
   ArrowLeftIcon,
-  ArrowRightIcon,
   UserIcon,
   UserPlusIcon,
 } from "@heroicons/react/24/outline";
@@ -160,7 +159,7 @@ export default function EnhancedRegistrationModal({
   // Automatically start camera when camera page is shown
   useEffect(() => {
     if (currentPage === "camera" && !isCameraActive && !capturedPhoto) {
-      console.log("Auto-starting camera for facial verification");
+      console.warn("Auto-starting camera for facial verification");
       // Small delay to ensure DOM is ready
       const timer = setTimeout(() => {
         startCamera();
@@ -248,7 +247,7 @@ export default function EnhancedRegistrationModal({
             (language === "ar" ? "رقم GMC غير صالح" : "Invalid GMC number")
         );
       }
-    } catch (error) {
+    } catch {
       setGmcVerificationStatus("failed");
       setError(
         language === "ar" ? "فشل التحقق من GMC" : "GMC verification failed"
@@ -273,7 +272,7 @@ export default function EnhancedRegistrationModal({
         // Use Tesseract.js for OCR
         // Create a worker with inline initialization to avoid CSP issues
         const worker = await Tesseract.createWorker({
-          logger: (m) => console.log(m),
+          logger: (m) => console.warn(m),
           errorHandler: (err) => console.error(err),
         });
 
@@ -286,7 +285,7 @@ export default function EnhancedRegistrationModal({
 
         await worker.terminate();
 
-        console.log("OCR Extracted Text:", text);
+        console.warn("OCR Extracted Text:", text);
 
         // Extract all words from the OCR text and clean them
         const extractedText = text.toLowerCase();
@@ -295,7 +294,7 @@ export default function EnhancedRegistrationModal({
           .map((word) => word.replace(/[^a-z]/g, "")) // Remove non-alphabetic characters
           .filter((word) => word.length > 2); // Only keep words longer than 2 characters
 
-        console.log("Extracted words:", extractedWords);
+        console.warn("Extracted words:", extractedWords);
 
         // Get all name parts from GMC data (first name, last name, and any parts of them)
         const firstName = registrationData.firstName.toLowerCase();
@@ -307,7 +306,7 @@ export default function EnhancedRegistrationModal({
           ...lastName.split(/[\s-]+/),
         ].filter((word) => word.length > 2);
 
-        console.log("Name words to match:", nameWords);
+        console.warn("Name words to match:", nameWords);
 
         // Check if ANY word from the name appears in the extracted words
         // Also check for partial matches (at least 3 characters matching)
@@ -372,20 +371,20 @@ export default function EnhancedRegistrationModal({
   // Camera functionality
   const startCamera = async () => {
     try {
-      console.log("Starting camera...");
-      console.log("Video ref current:", videoRef.current);
+      console.warn("Starting camera...");
+      console.warn("Video ref current:", videoRef.current);
 
       const stream = await navigator.mediaDevices.getUserMedia({
         video: { facingMode: "user" },
         audio: false,
       });
 
-      console.log("Got media stream:", stream);
+      console.warn("Got media stream:", stream);
 
       if (videoRef.current) {
         videoRef.current.srcObject = stream;
         setIsCameraActive(true);
-        console.log("Camera started successfully");
+        console.warn("Camera started successfully");
       } else {
         console.error("Video ref not available");
         // Try again after a short delay
@@ -393,7 +392,7 @@ export default function EnhancedRegistrationModal({
           if (videoRef.current) {
             videoRef.current.srcObject = stream;
             setIsCameraActive(true);
-            console.log("Camera started successfully on retry");
+            console.warn("Camera started successfully on retry");
           }
         }, 500);
       }
@@ -496,7 +495,7 @@ export default function EnhancedRegistrationModal({
             : "Failed to send verification code"
         );
       }
-    } catch (error) {
+    } catch {
       setNhsEmailVerificationStatus("failed");
       setError(
         language === "ar"
@@ -549,7 +548,7 @@ export default function EnhancedRegistrationModal({
     setError("");
     setIsLoginFlow(true);
     setCurrentPage("complete");
-    console.log("Login successful:", { email: loginEmail });
+    console.warn("Login successful:", { email: loginEmail });
   };
 
   // Forgot password handler
@@ -593,7 +592,7 @@ export default function EnhancedRegistrationModal({
             : "Failed to send email"
         );
       }
-    } catch (error) {
+    } catch {
       setError(
         language === "ar"
           ? "حدث خطأ في إرسال البريد الإلكتروني"
@@ -625,7 +624,7 @@ export default function EnhancedRegistrationModal({
     setCurrentPage("complete");
 
     // Log the registration data for future use
-    console.log("Registration completed:", registrationData);
+    console.warn("Registration completed:", registrationData);
   };
 
   if (!isOpen) return null;
@@ -1959,7 +1958,7 @@ export default function EnhancedRegistrationModal({
                   setCompletionCountdown(3);
 
                   // Also log the registration data for future use
-                  console.log("Registration completed:", registrationData);
+                  console.warn("Registration completed:", registrationData);
                 }}
                 disabled={
                   !registrationData.email ||

@@ -1,24 +1,17 @@
 "use client";
 
 import React, { useState, useEffect } from "react";
+import Image from "next/image";
 import {
   UserIcon,
-  CalendarIcon,
-  VideoCameraIcon,
   ChatBubbleLeftRightIcon,
-  BellIcon,
-  Cog6ToothIcon,
-  DocumentTextIcon,
   UsersIcon,
   ChartBarIcon,
-  Bars3Icon,
   XMarkIcon,
   PlusIcon,
   PaperAirplaneIcon,
   StarIcon,
-  TrophyIcon,
   BoltIcon,
-  FunnelIcon,
   EyeIcon,
   HandThumbUpIcon,
   ChatBubbleOvalLeftIcon,
@@ -31,7 +24,6 @@ import {
   ClockIcon,
   CheckCircleIcon,
   ExclamationTriangleIcon,
-  ArrowUpTrayIcon,
   DevicePhoneMobileIcon,
   ComputerDesktopIcon,
   HomeIcon,
@@ -45,21 +37,11 @@ import {
   getUserById,
   getAvailableSpecialists,
 } from "@/data/dummyUsers";
-import {
-  dummyCases,
-  dummyResponses,
-  getCaseById,
-  getResponsesByCase,
-} from "@/data/dummyCases";
-import type {
-  PublicUserProfile,
-  MedicalCase,
-  CaseResponse,
-  User,
-} from "@/types";
+import { dummyCases } from "@/data/dummyCases";
+import type { MedicalCase, CaseResponse, User } from "@/types";
 import EnhancedRegistrationModal from "./EnhancedRegistrationModal";
 import AdminRegistrationModal from "./AdminRegistrationModal";
-import { uploadToCloudflare, getOptimizedImageUrl } from "@/utils/imageUpload";
+import { uploadToCloudflare } from "@/utils/imageUpload";
 
 // Dummy data for pending registrations
 const dummyPendingRegistrations: Array<Partial<User> & { id: string }> = [
@@ -230,7 +212,7 @@ export default function MobileDemoApp() {
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const [selectedCase, setSelectedCase] = useState<MedicalCase | null>(null);
   const [isOffline, setIsOffline] = useState(false);
-  const [notifications, setNotifications] = useState(3);
+  const [_notifications] = useState(3);
   const [viewMode, setViewMode] = useState<"mobile" | "desktop">("mobile");
   const [showResolvedCases, setShowResolvedCases] = useState(false);
   const [activeSpecialtyFilter, setActiveSpecialtyFilter] =
@@ -295,9 +277,7 @@ export default function MobileDemoApp() {
   const [caseLikes, setCaseLikes] = useState<
     Record<string, { likes: number; userLiked: boolean }>
   >({});
-  const [aiSummaryLikes, setAiSummaryLikes] = useState<
-    Record<string, { liked: boolean }>
-  >({});
+  const [_aiSummaryLikes] = useState<Record<string, { liked: boolean }>>({});
   const [aiSummaries, setAiSummaries] = useState<Record<string, string>>({});
 
   const currentUser = getUserById(currentUserId) || dummyPublicUsers[0];
@@ -490,9 +470,11 @@ export default function MobileDemoApp() {
               className="flex items-center space-x-2 cursor-pointer"
             >
               <div className="w-8 h-8 rounded-lg overflow-hidden">
-                <img
+                <Image
                   src="/app-icon.png"
                   alt="Jusur"
+                  width={32}
+                  height={32}
                   className="w-full h-full object-cover"
                 />
               </div>
@@ -568,9 +550,11 @@ export default function MobileDemoApp() {
           className="flex items-center space-x-2 cursor-pointer"
         >
           <div className="w-8 h-8 rounded-lg overflow-hidden">
-            <img
+            <Image
               src="/app-icon.png"
               alt="Jusur"
+              width={32}
+              height={32}
               className="w-full h-full object-cover"
             />
           </div>
@@ -733,7 +717,7 @@ export default function MobileDemoApp() {
     view,
     isActive = false,
     disabled = false,
-    badgeCount,
+    badgeCount: _badgeCount,
     href,
   }) => (
     <button
@@ -987,7 +971,7 @@ export default function MobileDemoApp() {
         "bg-gray-50 dark:bg-gray-800 text-gray-700 dark:text-gray-300 border-gray-200 dark:border-gray-600",
     };
 
-    const getSpecialtyColor = (specialty: string) => {
+    const _getSpecialtyColor = (specialty: string) => {
       const normalizedSpecialty = specialty
         .toLowerCase()
         .replace(/[^a-z]/g, "_");
@@ -1004,7 +988,7 @@ export default function MobileDemoApp() {
       closed: "text-gray-600 bg-gray-100 dark:bg-gray-950",
     };
 
-    const creator = getUserById(case_.createdBy);
+    const _creator = getUserById(case_.createdBy);
 
     return (
       <div
@@ -1387,28 +1371,12 @@ export default function MobileDemoApp() {
   );
 
   const CaseDetailView = () => {
-    if (!selectedCase) {
-      return (
-        <div className="p-4">
-          <h2 className="text-xl font-bold dark:text-white mb-4">
-            {language === "ar" ? "تفاصيل الحالة" : "Case Details"}
-          </h2>
-          <p className="text-gray-600 dark:text-gray-300">
-            {language === "ar" ? "لم يتم اختيار حالة" : "No case selected"}
-          </p>
-        </div>
-      );
-    }
-
-    const creator = getUserById(selectedCase.createdBy);
-    const [responses, setResponses] = useState(() =>
-      getResponsesByCase(selectedCase.id)
-    );
+    // All hooks must be called before any conditional returns
+    const [responses, setResponses] = useState<CaseResponse[]>([]);
     const [newResponse, setNewResponse] = useState("");
     const [showResponseForm, setShowResponseForm] = useState(false);
     const [uploadedImages, setUploadedImages] = useState<string[]>([]);
     const [isLoadingSummary, setIsLoadingSummary] = useState(false);
-    const aiSummary = aiSummaries[selectedCase?.id || ""] || "";
     const [editingResponse, setEditingResponse] = useState<string | null>(null);
     const [editingContent, setEditingContent] = useState("");
     const [responseDiagnosis, setResponseDiagnosis] = useState("");
@@ -1578,7 +1546,7 @@ export default function MobileDemoApp() {
         "bg-gray-50 dark:bg-gray-800 text-gray-700 dark:text-gray-300 border-gray-200 dark:border-gray-600",
     };
 
-    const getSpecialtyColor = (specialty: string) => {
+    const _getSpecialtyColor = (specialty: string) => {
       const normalizedSpecialty = specialty
         .toLowerCase()
         .replace(/[^a-z]/g, "_");
@@ -1626,7 +1594,7 @@ export default function MobileDemoApp() {
       if (selectedCase && !aiSummaries[selectedCase.id]) {
         generateAISummary();
       }
-    }, [selectedCase?.id]);
+    }, [selectedCase]);
 
     // Create new response
     const createResponse = async () => {
@@ -2415,15 +2383,19 @@ export default function MobileDemoApp() {
                       {currentUser?.id !== response.createdBy && (
                         <div className="w-10 h-10 bg-green-950 rounded-full flex items-center justify-center text-white relative overflow-hidden">
                           {responder?.role === "gaza_clinician" ? (
-                            <img
+                            <Image
                               src="/images/gaza-flag.png"
                               alt="Gaza Flag"
+                              width={40}
+                              height={40}
                               className="w-full h-full object-cover"
                             />
                           ) : responder?.role === "uk_specialist" ? (
-                            <img
+                            <Image
                               src="/images/uk-flag.jpg"
                               alt="UK Flag"
+                              width={40}
+                              height={40}
                               className="w-full h-full object-cover"
                             />
                           ) : (
@@ -2825,15 +2797,19 @@ export default function MobileDemoApp() {
           <div className="flex items-center space-x-4 mb-6">
             <div className="w-16 h-16 bg-green-950 rounded-full flex items-center justify-center text-white relative overflow-hidden">
               {currentUserType === "gaza_clinician" ? (
-                <img
+                <Image
                   src="/images/gaza-flag.png"
                   alt="Gaza Flag"
+                  width={64}
+                  height={64}
                   className="w-full h-full object-cover"
                 />
               ) : currentUserType === "uk_specialist" ? (
-                <img
+                <Image
                   src="/images/uk-flag.jpg"
                   alt="UK Flag"
+                  width={64}
+                  height={64}
                   className="w-full h-full object-cover"
                 />
               ) : (
@@ -3061,9 +3037,11 @@ export default function MobileDemoApp() {
         <div className="bg-white dark:bg-zinc-900 rounded-lg shadow-lg p-8 w-full max-w-md">
           <div className="text-center mb-8">
             <div className="w-20 h-20 rounded-lg mx-auto mb-4 flex items-center justify-center">
-              <img
+              <Image
                 src="/app-icon.png"
                 alt="Jusur"
+                width={64}
+                height={64}
                 className="w-16 h-16 object-cover rounded"
               />
             </div>

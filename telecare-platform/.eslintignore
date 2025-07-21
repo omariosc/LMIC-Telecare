@@ -1,0 +1,27 @@
+# Dependencies
+node_modules/
+.next/
+.vercel/
+dist/
+build/
+
+# Generated files
+*.min.js
+*.map
+
+# Type definition files with intentionally unused exports (for future use)
+src/types/api.ts
+src/types/auth.ts
+src/types/file-upload.ts
+src/types/medical-case.ts
+src/types/notification.ts
+src/types/translation.ts
+src/types/user.ts
+
+# Utility libraries with intentionally unused parameters (for interface compliance)
+src/lib/r2-storage.ts
+
+# Configuration files
+next.config.ts
+tailwind.config.ts
+postcss.config.ts

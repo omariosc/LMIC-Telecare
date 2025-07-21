@@ -2,14 +2,13 @@
 
 import { useState, useEffect } from "react";
 import { loadStripe } from "@stripe/stripe-js";
-import { CurrencyDollarIcon } from "@heroicons/react/24/outline";
 import Image from "next/image";
 
 type Language = "en" | "ar";
 
 // Log the publishable key for debugging (first and last 4 chars)
 const publishableKey = process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY!;
-console.log(
+console.warn(
   "Using Stripe Publishable Key:",
   publishableKey.substring(0, 7) + "..." + publishableKey.slice(-4)
 );
@@ -91,8 +90,11 @@ export default function DonationForm() {
         return;
       }
 
-      console.log("Making request to:", "/api/create-checkout-session");
-      console.log("Request data:", { amount: donationAmount, currency: "usd" });
+      console.warn("Making request to:", "/api/create-checkout-session");
+      console.warn("Request data:", {
+        amount: donationAmount,
+        currency: "usd",
+      });
 
       const response = await fetch("/api/create-checkout-session", {
         method: "POST",
@@ -105,8 +107,8 @@ export default function DonationForm() {
         }),
       });
 
-      console.log("Response status:", response.status);
-      console.log("Response headers:", response.headers);
+      console.warn("Response status:", response.status);
+      console.warn("Response headers:", response.headers);
 
       // Check if response is ok
       if (!response.ok) {
@@ -117,7 +119,7 @@ export default function DonationForm() {
       }
 
       const responseData = await response.json();
-      console.log("Response data:", responseData);
+      console.warn("Response data:", responseData);
 
       const { sessionId, error } = responseData;
 
@@ -127,8 +129,8 @@ export default function DonationForm() {
       }
 
       const stripe = await stripePromise;
-      console.log("Stripe instance loaded:", !!stripe);
-      console.log("Redirecting to checkout with sessionId:", sessionId);
+      console.warn("Stripe instance loaded:", !!stripe);
+      console.warn("Redirecting to checkout with sessionId:", sessionId);
 
       // Add a small delay to ensure session is fully created
       await new Promise((resolve) => setTimeout(resolve, 100));

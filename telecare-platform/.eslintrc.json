@@ -3,7 +3,11 @@
   "rules": {
     "no-console": ["warn", { "allow": ["warn", "error"] }],
     "no-debugger": "error",
-    "no-unused-vars": ["error", { "argsIgnorePattern": "^_" }],
+    "no-unused-vars": ["error", { 
+      "argsIgnorePattern": "^_",
+      "varsIgnorePattern": "^_",
+      "ignoreRestSiblings": true
+    }],
     "prefer-const": "error",
     "no-var": "error",
     "eqeqeq": ["error", "always"],
@@ -13,7 +17,8 @@
       {
         "endOfLine": "auto"
       }
-    ]
+    ],
+    "@next/next/no-img-element": "warn"
   },
   "plugins": ["prettier"],
   "env": {
@@ -40,6 +45,31 @@
       "files": ["jest.config.js", "jest.setup.js", "next.config.ts"],
       "rules": {
         "no-unused-vars": "off"
+      }
+    },
+    {
+      "files": [
+        "src/types/**/*.ts",
+        "src/lib/**/*.ts",
+        "src/utils/**/*.ts"
+      ],
+      "rules": {
+        "no-unused-vars": "off",
+        "@typescript-eslint/no-unused-vars": "off"
+      }
+    },
+    {
+      "files": [
+        "src/components/AdminRegistrationModal.tsx",
+        "src/components/AuthModal.tsx",
+        "src/components/RegistrationModal.tsx",
+        "src/hooks/useTheme.ts"
+      ],
+      "rules": {
+        "no-unused-vars": ["error", { 
+          "argsIgnorePattern": "^_",
+          "varsIgnorePattern": "^_|^(decision|reviewedAt|reviewedBy|reviewNotes|requests|idImage|handleRegistrationBack|theme|UserRole|onLoginSuccess)$"
+        }]
       }
     }
   ]

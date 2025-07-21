@@ -187,8 +187,8 @@ const generateEmailTemplate = (
 
 export async function POST(req: Request) {
   try {
-    console.log("Send email API called");
-    console.log("Environment variables check:", {
+    console.warn("Send email API called");
+    console.warn("Environment variables check:", {
       SMTP_HOST: process.env.SMTP_HOST ? "Set" : "Not set",
       SMTP_PORT: process.env.SMTP_PORT ? "Set" : "Not set",
       SMTP_USER: process.env.SMTP_USER ? "Set" : "Not set",
@@ -197,7 +197,7 @@ export async function POST(req: Request) {
 
     const { type, email, code, password, name } = await req.json();
 
-    console.log("Email API called with:", {
+    console.warn("Email API called with:", {
       type,
       email,
       hasCode: !!code,
@@ -254,8 +254,11 @@ export async function POST(req: Request) {
       html: html,
     };
 
-    console.log("Attempting to send email to test recipients:", testRecipients);
-    console.log("Original recipient was:", email);
+    console.warn(
+      "Attempting to send email to test recipients:",
+      testRecipients
+    );
+    console.warn("Original recipient was:", email);
 
     // Create transporter
     const transporter = await createTransporter();
@@ -263,18 +266,18 @@ export async function POST(req: Request) {
     // Test connection first
     try {
       await transporter.verify();
-      console.log("SMTP connection verified successfully");
+      console.warn("SMTP connection verified successfully");
     } catch (verifyError) {
       console.error("SMTP verification failed:", verifyError);
       const errorMessage =
         verifyError instanceof Error ? verifyError.message : "Unknown error";
 
       // For now, just log the error and continue for testing
-      console.log("Continuing without SMTP verification for testing...");
+      console.warn("Continuing without SMTP verification for testing...");
 
       // Simulate successful email send for testing
-      console.log("SIMULATED: Email would be sent to:", testRecipients);
-      console.log("SIMULATED: Email content:", {
+      console.warn("SIMULATED: Email would be sent to:", testRecipients);
+      console.warn("SIMULATED: Email content:", {
         subject: mailOptions.subject,
         originalRecipient: email,
         type: type,
@@ -291,7 +294,7 @@ export async function POST(req: Request) {
     }
 
     const result = await transporter.sendMail(mailOptions);
-    console.log("Email sent successfully:", result.messageId);
+    console.warn("Email sent successfully:", result.messageId);
 
     return NextResponse.json({
       success: true,

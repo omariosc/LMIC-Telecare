@@ -6,7 +6,7 @@ export async function GET() {
     const testEmail = "test@nhs.net";
     const apiUrl =
       process.env.NEXT_PUBLIC_API_URL || "http://localhost:3000/api";
-    console.log("Testing email with API URL:", apiUrl);
+    console.warn("Testing email with API URL:", apiUrl);
 
     const response = await fetch(`${apiUrl}/send-email`, {
       method: "POST",

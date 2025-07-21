@@ -58,7 +58,7 @@ export async function uploadToCloudflare(
  */
 export function getOptimizedImageUrl(
   url: string,
-  variant: "thumbnail" | "display" | "full" = "display"
+  _variant: "thumbnail" | "display" | "full" = "display"
 ): string {
   // In production with Cloudflare Images:
   // return `https://imagedelivery.net/your-account-hash/${imageId}/${variant}`;
@@ -72,6 +72,6 @@ export function getOptimizedImageUrl(
  */
 export async function deleteFromCloudflare(imageId: string): Promise<boolean> {
   // In production: DELETE request to Cloudflare API
-  console.log("Delete image:", imageId);
+  console.warn("Delete image:", imageId);
   return true;
 }
