@@ -1,5 +1,5 @@
 // Dummy user data for demo purposes
-import type { User, PublicUserProfile } from '../types';
+import type { User, PublicUserProfile } from "../types";
 
 export const dummyUsers: User[] = [
   // Gaza Clinicians
@@ -21,7 +21,7 @@ export const dummyUsers: User[] = [
       city: "Gaza City",
       region: "Gaza Strip",
       country: "Palestine",
-      timezone: "Asia/Gaza"
+      timezone: "Asia/Gaza",
     },
     preferredLanguage: "ar",
     availabilityStatus: "available",
@@ -41,7 +41,7 @@ export const dummyUsers: User[] = [
     referralCode: "GZA001",
     referralApproved: true,
     createdAt: "2024-12-15T08:00:00Z",
-    updatedAt: "2025-01-20T14:30:00Z"
+    updatedAt: "2025-01-20T14:30:00Z",
   },
   {
     id: "gaza_002",
@@ -61,7 +61,7 @@ export const dummyUsers: User[] = [
       city: "Gaza City",
       region: "Gaza Strip",
       country: "Palestine",
-      timezone: "Asia/Gaza"
+      timezone: "Asia/Gaza",
     },
     preferredLanguage: "ar",
     availabilityStatus: "busy",
@@ -81,7 +81,7 @@ export const dummyUsers: User[] = [
     referralCode: "GZA002",
     referralApproved: true,
     createdAt: "2024-11-20T10:00:00Z",
-    updatedAt: "2025-01-20T16:15:00Z"
+    updatedAt: "2025-01-20T16:15:00Z",
   },
   {
     id: "gaza_003",
@@ -101,7 +101,7 @@ export const dummyUsers: User[] = [
       city: "Khan Yunis",
       region: "Gaza Strip",
       country: "Palestine",
-      timezone: "Asia/Gaza"
+      timezone: "Asia/Gaza",
     },
     preferredLanguage: "ar",
     availabilityStatus: "offline",
@@ -121,7 +121,7 @@ export const dummyUsers: User[] = [
     referralCode: "GZA003",
     referralApproved: true,
     createdAt: "2024-10-05T12:00:00Z",
-    updatedAt: "2025-01-20T12:00:00Z"
+    updatedAt: "2025-01-20T12:00:00Z",
   },
 
   // UK Specialists
@@ -144,7 +144,7 @@ export const dummyUsers: User[] = [
       city: "London",
       region: "England",
       country: "United Kingdom",
-      timezone: "Europe/London"
+      timezone: "Europe/London",
     },
     preferredLanguage: "en",
     availabilityStatus: "available",
@@ -162,7 +162,7 @@ export const dummyUsers: User[] = [
     points: 2840,
     volunteerHours: 156,
     createdAt: "2024-09-12T09:00:00Z",
-    updatedAt: "2025-01-20T17:00:00Z"
+    updatedAt: "2025-01-20T17:00:00Z",
   },
   {
     id: "uk_002",
@@ -183,7 +183,7 @@ export const dummyUsers: User[] = [
       city: "London",
       region: "England",
       country: "United Kingdom",
-      timezone: "Europe/London"
+      timezone: "Europe/London",
     },
     preferredLanguage: "en",
     availabilityStatus: "available",
@@ -201,7 +201,7 @@ export const dummyUsers: User[] = [
     points: 2420,
     volunteerHours: 134,
     createdAt: "2024-08-20T10:00:00Z",
-    updatedAt: "2025-01-20T16:45:00Z"
+    updatedAt: "2025-01-20T16:45:00Z",
   },
   {
     id: "uk_003",
@@ -222,7 +222,7 @@ export const dummyUsers: User[] = [
       city: "London",
       region: "England",
       country: "United Kingdom",
-      timezone: "Europe/London"
+      timezone: "Europe/London",
     },
     preferredLanguage: "en",
     availabilityStatus: "busy",
@@ -240,7 +240,7 @@ export const dummyUsers: User[] = [
     points: 3180,
     volunteerHours: 178,
     createdAt: "2024-07-15T11:00:00Z",
-    updatedAt: "2025-01-20T18:20:00Z"
+    updatedAt: "2025-01-20T18:20:00Z",
   },
   {
     id: "uk_004",
@@ -261,7 +261,7 @@ export const dummyUsers: User[] = [
       city: "London",
       region: "England",
       country: "United Kingdom",
-      timezone: "Europe/London"
+      timezone: "Europe/London",
     },
     preferredLanguage: "en",
     availabilityStatus: "offline",
@@ -279,7 +279,7 @@ export const dummyUsers: User[] = [
     points: 1820,
     volunteerHours: 98,
     createdAt: "2024-06-10T08:30:00Z",
-    updatedAt: "2025-01-20T15:00:00Z"
+    updatedAt: "2025-01-20T15:00:00Z",
   },
 
   // Admin
@@ -305,12 +305,12 @@ export const dummyUsers: User[] = [
     points: 0,
     volunteerHours: 0,
     createdAt: "2024-01-01T00:00:00Z",
-    updatedAt: "2025-01-20T18:00:00Z"
-  }
+    updatedAt: "2025-01-20T18:00:00Z",
+  },
 ];
 
 // Convert to public profiles for safe use in UI
-export const dummyPublicUsers: PublicUserProfile[] = dummyUsers.map(user => ({
+export const dummyPublicUsers: PublicUserProfile[] = dummyUsers.map((user) => ({
   id: user.id,
   firstName: user.firstName,
   lastName: user.lastName,
@@ -328,26 +328,29 @@ export const dummyPublicUsers: PublicUserProfile[] = dummyUsers.map(user => ({
   availabilityStatus: user.availabilityStatus,
   preferredLanguage: user.preferredLanguage,
   isOnline: user.availabilityStatus === "available",
-  lastActiveAt: user.lastActiveAt
+  lastActiveAt: user.lastActiveAt,
 }));
 
 // Helper functions for getting specific user types
-export const getGazaClinicians = (): PublicUserProfile[] => 
-  dummyPublicUsers.filter(user => user.role === "gaza_clinician");
+export const getGazaClinicians = (): PublicUserProfile[] =>
+  dummyPublicUsers.filter((user) => user.role === "gaza_clinician");
 
-export const getUKSpecialists = (): PublicUserProfile[] => 
-  dummyPublicUsers.filter(user => user.role === "uk_specialist");
+export const getUKSpecialists = (): PublicUserProfile[] =>
+  dummyPublicUsers.filter((user) => user.role === "uk_specialist");
 
-export const getAdmins = (): PublicUserProfile[] => 
-  dummyPublicUsers.filter(user => user.role === "admin");
+export const getAdmins = (): PublicUserProfile[] =>
+  dummyPublicUsers.filter((user) => user.role === "admin");
 
-export const getUserById = (id: string): PublicUserProfile | undefined => 
-  dummyPublicUsers.find(user => user.id === id);
+export const getUserById = (id: string): PublicUserProfile | undefined =>
+  dummyPublicUsers.find((user) => user.id === id);
 
-export const getUsersBySpecialty = (specialty: string): PublicUserProfile[] => 
-  dummyPublicUsers.filter(user => user.specialties?.includes(specialty as any));
+export const getUsersBySpecialty = (specialty: string): PublicUserProfile[] =>
+  dummyPublicUsers.filter((user) =>
+    user.specialties?.includes(specialty as any)
+  );
 
-export const getAvailableSpecialists = (): PublicUserProfile[] => 
-  dummyPublicUsers.filter(user => 
-    user.role === "uk_specialist" && user.availabilityStatus === "available"
+export const getAvailableSpecialists = (): PublicUserProfile[] =>
+  dummyPublicUsers.filter(
+    (user) =>
+      user.role === "uk_specialist" && user.availabilityStatus === "available"
   );

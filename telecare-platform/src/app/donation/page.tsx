@@ -60,7 +60,7 @@ export default function DonationPage() {
     return value || fallback;
   };
   return (
-    <div 
+    <div
       className={`min-h-screen bg-gray-50 ${
         currentLanguage === "ar" ? "text-right" : "text-left"
       }`}
@@ -88,7 +88,10 @@ export default function DonationPage() {
             {t("donation.supportTitle", "Support Jusur (جسور)")}
           </h1>
           <p className="text-xl text-gray-600 max-w-3xl mx-auto">
-            {t("donation.supportSubtitle", "Your donation directly funds critical medical equipment, platform development, and infrastructure to connect UK specialists with Gaza clinicians.")}
+            {t(
+              "donation.supportSubtitle",
+              "Your donation directly funds critical medical equipment, platform development, and infrastructure to connect UK specialists with Gaza clinicians."
+            )}
           </p>
         </div>
 
@@ -99,7 +102,10 @@ export default function DonationPage() {
               {t("donation.transparencyTitle", "100% Transparency")}
             </h3>
             <p className="text-blue-800">
-              {t("donation.transparencyDesc", "Every donation is tracked and reported. We will publish quarterly impact reports showing exactly how funds are used to support Gaza.")}
+              {t(
+                "donation.transparencyDesc",
+                "Every donation is tracked and reported. We will publish quarterly impact reports showing exactly how funds are used to support Gaza."
+              )}
             </p>
           </div>
 
@@ -108,7 +114,10 @@ export default function DonationPage() {
               {t("donation.securityTitle", "Secure & Trusted")}
             </h3>
             <p className="text-green-800">
-              {t("donation.securityDesc", "We never store your payment information. All donations are processed in accordance with international humanitarian aid guidelines.")}
+              {t(
+                "donation.securityDesc",
+                "We never store your payment information. All donations are processed in accordance with international humanitarian aid guidelines."
+              )}
             </p>
           </div>
         </div>
@@ -128,19 +137,28 @@ export default function DonationPage() {
               <div className="bg-white p-6 rounded-lg border border-gray-200">
                 <h3 className="font-bold text-lg text-green-600 mb-2">£25</h3>
                 <p className="text-gray-600">
-                  {t("donation.impact25", "Funds one emergency consultation session between a Gaza clinician and UK specialist")}
+                  {t(
+                    "donation.impact25",
+                    "Funds one emergency consultation session between a Gaza clinician and UK specialist"
+                  )}
                 </p>
               </div>
               <div className="bg-white p-6 rounded-lg border border-gray-200">
                 <h3 className="font-bold text-lg text-green-600 mb-2">£100</h3>
                 <p className="text-gray-600">
-                  {t("donation.impact100", "Supports platform infrastructure for a week, enabling 24/7 connectivity")}
+                  {t(
+                    "donation.impact100",
+                    "Supports platform infrastructure for a week, enabling 24/7 connectivity"
+                  )}
                 </p>
               </div>
               <div className="bg-white p-6 rounded-lg border border-gray-200">
                 <h3 className="font-bold text-lg text-green-600 mb-2">£500</h3>
                 <p className="text-gray-600">
-                  {t("donation.impact500", "Helps fund essential medical equipment through our verified aid partners (once we can get aid into Gaza إن شاء الله)")}
+                  {t(
+                    "donation.impact500",
+                    "Helps fund essential medical equipment through our verified aid partners (once we can get aid into Gaza إن شاء الله)"
+                  )}
                 </p>
               </div>
             </div>

@@ -10,8 +10,8 @@ import type {
   MedicalSpecialty,
   DeviceInfo,
   Location,
-} from './common';
-import type { User, PublicUserProfile } from './user';
+} from "./common";
+import type { User, PublicUserProfile } from "./user";
 
 // Authentication request types
 export interface LoginRequest {
@@ -28,7 +28,7 @@ export interface RegisterRequest {
   firstName: string;
   lastName: string;
   role: UserRole;
-  
+
   // Optional fields
   specialties?: MedicalSpecialty[];
   gmcNumber?: string; // For UK specialists
@@ -38,7 +38,7 @@ export interface RegisterRequest {
   bio?: string;
   preferredLanguage?: Language;
   timezone?: string;
-  
+
   // Terms and conditions
   acceptedTerms: boolean;
   acceptedPrivacyPolicy: boolean;
@@ -139,11 +139,11 @@ export interface AuthState {
   expiresAt: Timestamp | null;
   isLoading: boolean;
   error: string | null;
-  
+
   // 2FA state
   requires2FA: boolean;
   tempToken: string | null;
-  
+
   // Email verification state
   requiresEmailVerification: boolean;
   emailVerificationSent: boolean;
@@ -159,7 +159,7 @@ export interface JWTPayload {
   exp: number; // Expires at
   iss: string; // Issuer
   aud: string; // Audience
-  
+
   // Custom claims
   emailVerified: boolean;
   identityVerified: boolean;
@@ -181,20 +181,20 @@ export interface AuthSession {
   lastUsedAt: Timestamp;
   createdAt: Timestamp;
   expiresAt: Timestamp;
-  
+
   // Security flags
   isSuspicious: boolean;
   riskScore?: number;
-  
+
   // Session metadata
-  loginMethod: 'password' | 'social' | 'sso' | '2fa';
+  loginMethod: "password" | "social" | "sso" | "2fa";
   deviceTrusted: boolean;
   sessionName?: string; // User-defined name for the session
 }
 
 // Social authentication (for future use)
 export interface SocialAuthRequest {
-  provider: 'google' | 'microsoft' | 'apple';
+  provider: "google" | "microsoft" | "apple";
   token: string;
   additionalData?: {
     firstName?: string;
@@ -249,30 +249,30 @@ export interface SecurityQuestion {
 // Account verification for professionals
 export interface ProfessionalVerification {
   userId: ID;
-  verificationType: 'gmc' | 'medical_license' | 'institution' | 'referee';
-  status: 'pending' | 'in_review' | 'approved' | 'rejected' | 'expired';
-  
+  verificationType: "gmc" | "medical_license" | "institution" | "referee";
+  status: "pending" | "in_review" | "approved" | "rejected" | "expired";
+
   // Submitted data
   submittedData: Record<string, unknown>;
   documents: string[]; // Document URLs
-  
+
   // Verification process
   submittedAt: Timestamp;
   reviewStartedAt?: Timestamp;
   reviewedAt?: Timestamp;
   reviewedBy?: ID; // Admin who reviewed
   reviewNotes?: string;
-  
+
   // Auto-verification (e.g., GMC API check)
   autoVerificationAttempted: boolean;
-  autoVerificationResult?: 'success' | 'failed' | 'inconclusive';
+  autoVerificationResult?: "success" | "failed" | "inconclusive";
   autoVerificationData?: Record<string, unknown>;
-  
+
   // Manual verification
   requiresManualReview: boolean;
   verificationScore?: number; // 0-100
   riskFlags?: string[];
-  
+
   // Expiration and renewal
   expiresAt?: Timestamp;
   renewalReminderSent?: boolean;
@@ -291,8 +291,13 @@ export interface RateLimitInfo {
 export interface SecurityEvent {
   id: ID;
   userId?: ID;
-  eventType: 'failed_login' | 'successful_login' | 'password_change' | 'suspicious_activity' | 'account_locked';
-  severity: 'low' | 'medium' | 'high' | 'critical';
+  eventType:
+    | "failed_login"
+    | "successful_login"
+    | "password_change"
+    | "suspicious_activity"
+    | "account_locked";
+  severity: "low" | "medium" | "high" | "critical";
   ipAddress?: string;
   userAgent?: string;
   location?: Location;

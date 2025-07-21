@@ -20,7 +20,7 @@ const LoginPage = () => {
     }
 
     setIsLoading(true);
-    
+
     // Simulate login process
     setTimeout(() => {
       setIsLoading(false);
@@ -37,7 +37,7 @@ const LoginPage = () => {
 
     // For demo purposes, always reset password to "Password"
     setResetSent(true);
-    
+
     // Simulate API call
     setTimeout(() => {
       alert("Your password has been reset to: Password");
@@ -52,25 +52,34 @@ const LoginPage = () => {
 
   if (showForgotPassword) {
     return (
-      <div className="min-h-screen flex items-center justify-center py-12 px-4 sm:px-6 lg:px-8" style={{ backgroundColor: "var(--light-gray)" }}>
+      <div
+        className="min-h-screen flex items-center justify-center py-12 px-4 sm:px-6 lg:px-8"
+        style={{ backgroundColor: "var(--light-gray)" }}
+      >
         <div className="max-w-md w-full space-y-8">
           <div className="bg-white rounded-lg shadow-lg p-8">
             <div className="text-center mb-8">
               <div className="w-12 h-12 bg-blue-100 rounded-full flex items-center justify-center mx-auto mb-4">
                 <Mail className="w-6 h-6 text-blue-600" />
               </div>
-              <h2 className="text-2xl font-bold" style={{ color: "var(--primary-blue)" }}>
+              <h2
+                className="text-2xl font-bold"
+                style={{ color: "var(--primary-blue)" }}
+              >
                 Reset Password
               </h2>
               <p className="text-gray-600 mt-2">
-                Enter your email address and we'll reset your password
+                Enter your email address and we&apos;ll reset your password
               </p>
             </div>
 
             {!resetSent ? (
               <div className="space-y-6">
                 <div>
-                  <label htmlFor="forgot-email" className="block text-sm font-medium text-gray-700 mb-2">
+                  <label
+                    htmlFor="forgot-email"
+                    className="block text-sm font-medium text-gray-700 mb-2"
+                  >
                     Email Address
                   </label>
                   <input
@@ -88,9 +97,9 @@ const LoginPage = () => {
                     onClick={handleForgotPassword}
                     disabled={!forgotEmail}
                     className="w-full py-3 px-4 rounded-lg font-medium transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
-                    style={{ 
-                      backgroundColor: "var(--accent-green)", 
-                      color: "white" 
+                    style={{
+                      backgroundColor: "var(--accent-green)",
+                      color: "white",
                     }}
                   >
                     Reset Password
@@ -112,16 +121,17 @@ const LoginPage = () => {
                     Password Reset Sent
                   </h3>
                   <p className="text-gray-600">
-                    Your password has been reset. Check the alert message for your new temporary password.
+                    Your password has been reset. Check the alert message for
+                    your new temporary password.
                   </p>
                 </div>
-                
+
                 <button
                   onClick={resetForgotPassword}
                   className="w-full py-3 px-4 rounded-lg font-medium transition-colors"
-                  style={{ 
-                    backgroundColor: "var(--primary-blue)", 
-                    color: "white" 
+                  style={{
+                    backgroundColor: "var(--primary-blue)",
+                    color: "white",
                   }}
                 >
                   Return to Login
@@ -135,24 +145,31 @@ const LoginPage = () => {
   }
 
   return (
-    <div className="min-h-screen flex items-center justify-center py-12 px-4 sm:px-6 lg:px-8" style={{ backgroundColor: "var(--light-gray)" }}>
+    <div
+      className="min-h-screen flex items-center justify-center py-12 px-4 sm:px-6 lg:px-8"
+      style={{ backgroundColor: "var(--light-gray)" }}
+    >
       <div className="max-w-md w-full space-y-8">
         <div className="bg-white rounded-lg shadow-lg p-8">
           <div className="text-center mb-8">
             <div className="w-12 h-12 bg-blue-100 rounded-full flex items-center justify-center mx-auto mb-4">
               <Lock className="w-6 h-6 text-blue-600" />
             </div>
-            <h2 className="text-3xl font-bold" style={{ color: "var(--primary-blue)" }}>
+            <h2
+              className="text-3xl font-bold"
+              style={{ color: "var(--primary-blue)" }}
+            >
               Welcome Back
             </h2>
-            <p className="text-gray-600 mt-2">
-              Sign in to your Jusur account
-            </p>
+            <p className="text-gray-600 mt-2">Sign in to your Jusur account</p>
           </div>
 
           <div className="space-y-6">
             <div>
-              <label htmlFor="email" className="block text-sm font-medium text-gray-700 mb-2">
+              <label
+                htmlFor="email"
+                className="block text-sm font-medium text-gray-700 mb-2"
+              >
                 Email Address
               </label>
               <input
@@ -167,7 +184,10 @@ const LoginPage = () => {
             </div>
 
             <div>
-              <label htmlFor="password" className="block text-sm font-medium text-gray-700 mb-2">
+              <label
+                htmlFor="password"
+                className="block text-sm font-medium text-gray-700 mb-2"
+              >
                 Password
               </label>
               <div className="relative">
@@ -204,9 +224,9 @@ const LoginPage = () => {
               onClick={handleLogin}
               disabled={!email || !password || isLoading}
               className="w-full py-3 px-4 rounded-lg font-medium transition-colors disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center"
-              style={{ 
-                backgroundColor: "var(--accent-green)", 
-                color: "white" 
+              style={{
+                backgroundColor: "var(--accent-green)",
+                color: "white",
               }}
             >
               {isLoading ? (
@@ -224,9 +244,9 @@ const LoginPage = () => {
 
             <div className="text-center">
               <p className="text-gray-600">
-                Don't have an account?{" "}
-                <Link 
-                  href="/register" 
+                Don&apos;t have an account?{" "}
+                <Link
+                  href="/register"
                   className="text-blue-600 hover:text-blue-800 font-medium transition-colors"
                 >
                   Register as a medical professional

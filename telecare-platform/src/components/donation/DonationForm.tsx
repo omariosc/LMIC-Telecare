@@ -9,7 +9,10 @@ type Language = "en" | "ar";
 
 // Log the publishable key for debugging (first and last 4 chars)
 const publishableKey = process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY!;
-console.log("Using Stripe Publishable Key:", publishableKey.substring(0, 7) + "..." + publishableKey.slice(-4));
+console.log(
+  "Using Stripe Publishable Key:",
+  publishableKey.substring(0, 7) + "..." + publishableKey.slice(-4)
+);
 
 const stripePromise = loadStripe(publishableKey);
 
@@ -79,7 +82,12 @@ export default function DonationForm() {
       const donationAmount = isCustom ? parseFloat(customAmount) : amount;
 
       if (!donationAmount || donationAmount < 1) {
-        alert(t("donation.minAmount", "Please enter a valid donation amount (minimum £1)"));
+        alert(
+          t(
+            "donation.minAmount",
+            "Please enter a valid donation amount (minimum £1)"
+          )
+        );
         return;
       }
 
@@ -110,7 +118,7 @@ export default function DonationForm() {
 
       const responseData = await response.json();
       console.log("Response data:", responseData);
-      
+
       const { sessionId, error } = responseData;
 
       if (error) {
@@ -121,14 +129,14 @@ export default function DonationForm() {
       const stripe = await stripePromise;
       console.log("Stripe instance loaded:", !!stripe);
       console.log("Redirecting to checkout with sessionId:", sessionId);
-      
+
       // Add a small delay to ensure session is fully created
-      await new Promise(resolve => setTimeout(resolve, 100));
-      
+      await new Promise((resolve) => setTimeout(resolve, 100));
+
       if (!stripe) {
         throw new Error("Stripe failed to load");
       }
-      
+
       const { error: stripeError } = await stripe.redirectToCheckout({
         sessionId,
       });
@@ -146,7 +154,7 @@ export default function DonationForm() {
   };
 
   return (
-    <div 
+    <div
       className={`bg-white p-8 rounded-xl shadow-lg max-w-md mx-auto ${
         currentLanguage === "ar" ? "text-right" : "text-left"
       }`}
@@ -166,7 +174,10 @@ export default function DonationForm() {
           {t("donation.formTitle", "Support Jusur (جسور)")}
         </h3>
         <p className="text-gray-600">
-          {t("donation.formDescription", "Your donation helps fund platform development")}
+          {t(
+            "donation.formDescription",
+            "Your donation helps fund platform development"
+          )}
         </p>
       </div>
 
@@ -284,7 +295,8 @@ export default function DonationForm() {
                   className="rounded-full"
                 />
               </div>
-              {t("donation.donateButton", "Donate")} £{isCustom ? customAmount || "0" : amount}
+              {t("donation.donateButton", "Donate")} £
+              {isCustom ? customAmount || "0" : amount}
             </>
           )}
         </button>

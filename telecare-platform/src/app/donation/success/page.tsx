@@ -67,7 +67,7 @@ export default function DonationSuccess() {
     try {
       const shareUrl = "https://jusur.org.uk";
       const shareText = t(
-        "donationSuccess.shareText", 
+        "donationSuccess.shareText",
         "I just donated to Jusur (جسور) - a platform connecting UK medical specialists with Gaza clinicians. Join me in supporting this vital healthcare bridge: "
       );
 
@@ -91,7 +91,7 @@ export default function DonationSuccess() {
   };
   return (
     <div className="min-h-screen bg-gray-50 flex items-center justify-center px-4">
-      <div 
+      <div
         className={`max-w-md w-full bg-white rounded-xl shadow-lg p-8 text-center ${
           currentLanguage === "ar" ? "text-right" : "text-left"
         }`}
@@ -106,21 +106,32 @@ export default function DonationSuccess() {
         </h1>
 
         <p className="text-gray-600 mb-6 text-center">
-          {t("donationSuccess.description", "Your generous contribution will help fund critical medical equipment and support our platform development to serve the people of Gaza.")}
+          {t(
+            "donationSuccess.description",
+            "Your generous contribution will help fund critical medical equipment and support our platform development to serve the people of Gaza."
+          )}
         </p>
 
         <div className="bg-green-50 border border-green-200 rounded-lg p-4 mb-6">
           <div className="flex items-center justify-center gap-2 text-green-800">
             <HeartIcon className="h-5 w-5" />
-            <span className="font-semibold">{t("donationSuccess.impactTitle", "Your impact matters")}</span>
+            <span className="font-semibold">
+              {t("donationSuccess.impactTitle", "Your impact matters")}
+            </span>
           </div>
           <p className="text-green-700 text-sm mt-2 text-center">
-            {t("donationSuccess.impactDesc", "Every dollar helps bridge the healthcare gap and saves lives in Gaza.")}
+            {t(
+              "donationSuccess.impactDesc",
+              "Every dollar helps bridge the healthcare gap and saves lives in Gaza."
+            )}
           </p>
         </div>
 
         <p className="text-sm text-gray-500 mb-6 text-center">
-          {t("donationSuccess.receiptNote", "You will receive a confirmation email shortly with your donation receipt.")}
+          {t(
+            "donationSuccess.receiptNote",
+            "You will receive a confirmation email shortly with your donation receipt."
+          )}
         </p>
 
         <div className="space-y-3">
@@ -140,7 +151,9 @@ export default function DonationSuccess() {
             }`}
           >
             <LinkIcon className="h-4 w-4" />
-            {copied ? t("donationSuccess.linkCopied", "Link Copied!") : t("donationSuccess.shareCause", "Share This Cause")}
+            {copied
+              ? t("donationSuccess.linkCopied", "Link Copied!")
+              : t("donationSuccess.shareCause", "Share This Cause")}
           </button>
         </div>
       </div>

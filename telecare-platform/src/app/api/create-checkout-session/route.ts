@@ -7,7 +7,7 @@ const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!, {
 
 export async function POST(request: NextRequest) {
   console.log("API Route Called: /api/create-checkout-session");
-  
+
   try {
     // Check if Stripe is properly configured
     if (!process.env.STRIPE_SECRET_KEY) {
@@ -20,7 +20,10 @@ export async function POST(request: NextRequest) {
 
     // Log partial key for debugging (first and last 4 chars)
     const secretKey = process.env.STRIPE_SECRET_KEY;
-    console.log("Using Stripe Secret Key:", secretKey.substring(0, 7) + "..." + secretKey.slice(-4));
+    console.log(
+      "Using Stripe Secret Key:",
+      secretKey.substring(0, 7) + "..." + secretKey.slice(-4)
+    );
 
     const { amount, currency = "usd" } = await request.json();
     console.log("Request data:", { amount, currency });
@@ -41,9 +44,10 @@ export async function POST(request: NextRequest) {
             currency,
             product_data: {
               name: "Jusur (جسور) Platform Donation",
-              description:
-                "Support platform development for Gaza healthcare",
-              images: [`${process.env.NEXT_PUBLIC_APP_URL || 'https://jusur.org.uk'}/images/jusur-logo.png`],
+              description: "Support platform development for Gaza healthcare",
+              images: [
+                `${process.env.NEXT_PUBLIC_APP_URL || "https://jusur.org.uk"}/images/jusur-logo.png`,
+              ],
             },
             unit_amount: amount * 100, // Stripe expects amount in cents
           },

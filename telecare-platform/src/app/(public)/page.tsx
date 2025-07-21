@@ -34,7 +34,7 @@ export default function Home() {
   const [showSmallScreenWarning, setShowSmallScreenWarning] = useState(false);
   const [isClient, setIsClient] = useState(false);
   const [showDropdown, setShowDropdown] = useState(false);
-  const [showDemoDropdown, setShowDemoDropdown] = useState(false);
+  const [, setShowDemoDropdown] = useState(false);
   const [authModal, setAuthModal] = useState<{
     isOpen: boolean;
     userType: "gaza-clinician" | "uk-clinician" | "register-uk";
@@ -286,9 +286,9 @@ export default function Home() {
                     our knowledge to people who need it the <em>most</em>.
                   </span>
                   <span data-lang-ar="" className="hidden">
-                    <strong>جسور</strong> كلمة عربية تعني الجسور.
-                    مجرد أننا لا نستطيع إدخال المساعدات المادية إلى غزة، لا يعني
-                    أننا لا نستطيع تقديم الدعم لهم، وربط معرفتنا بالأشخاص الذين
+                    <strong>جسور</strong> كلمة عربية تعني الجسور. مجرد أننا لا
+                    نستطيع إدخال المساعدات المادية إلى غزة، لا يعني أننا لا
+                    نستطيع تقديم الدعم لهم، وربط معرفتنا بالأشخاص الذين
                     يحتاجونها <em>أكثر من غيرهم</em>.
                   </span>
                 </p>
@@ -383,11 +383,11 @@ export default function Home() {
                 <span data-lang-ar="" className="hidden">
                   في غزة، المستشفيات مكتظة وتعمل بأكثر من{" "}
                   <strong className="text-red-500">350%&nbsp;</strong>
-                  من طاقتها مع نقص حاد في الأطباء الأخصائيين. يتم الفرز، ولكن بدون الخبرة
-                  المناسبة لتوجيه العلاجات المعقدة،{" "}
-                  <strong>تُفقد أرواح كان يمكن إنقاذها</strong>.
-                  عندما لا تتمكن المساعدات المادية من الدخول، تكون
-                  المعرفة هي <em>أقوى</em> مورد يمكننا إرساله.
+                  من طاقتها مع نقص حاد في الأطباء الأخصائيين. يتم الفرز، ولكن
+                  بدون الخبرة المناسبة لتوجيه العلاجات المعقدة،{" "}
+                  <strong>تُفقد أرواح كان يمكن إنقاذها</strong>. عندما لا تتمكن
+                  المساعدات المادية من الدخول، تكون المعرفة هي <em>أقوى</em>{" "}
+                  مورد يمكننا إرساله.
                 </span>
               </p>
               <div className="mt-10 flex flex-col sm:flex-row justify-center items-center gap-4">

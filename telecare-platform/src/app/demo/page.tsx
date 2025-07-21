@@ -10,7 +10,9 @@ export default function DemoPage() {
   const router = useRouter();
   const { language } = useLanguage();
   const [registrationModalOpen, setRegistrationModalOpen] = useState(false);
-  const [initialModalPage, setInitialModalPage] = useState<"choice" | "login" | "role">("choice");
+  const [initialModalPage, setInitialModalPage] = useState<
+    "choice" | "login" | "role"
+  >("choice");
 
   const openRegistrationModal = () => {
     setInitialModalPage("choice");

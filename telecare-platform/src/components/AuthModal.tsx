@@ -34,7 +34,6 @@ export default function AuthModal({
     }
   }, [isOpen, userType]);
 
-
   // Read language from localStorage and listen for changes
   useEffect(() => {
     if (!isOpen) return; // Only update when modal is actually open
@@ -140,168 +139,180 @@ export default function AuthModal({
                 <div className="mb-6">
                   <p className="text-sm text-gray-600 dark:text-gray-300 leading-relaxed">
                     {lastUserType === "register-uk"
-                      ? (currentLanguage === "ar"
-                          ? "للانضمام كطبيب متطوع بريطاني، يرجى إكمال عملية التسجيل والتحقق من هويتك. ستحتاج إلى رقم GMC الخاص بك وجواز السفر للتحقق من الهوية."
-                          : "To join as a UK volunteer clinician, please complete the registration and identity verification process. You'll need your GMC number and passport for identity verification.")
-                      : (currentLanguage === "ar"
-                          ? "للوصول إلى منصة جسور الطبية، يرجى تحميل التطبيق على هاتفك. التطبيق مصمم خصيصاً للعمل في بيئات ذات اتصال محدود بالإنترنت."
-                          : "To access the Jusur medical platform, please download the app on your phone. The app is specifically designed to work in low-bandwidth environments.")}
+                      ? currentLanguage === "ar"
+                        ? "للانضمام كطبيب متطوع بريطاني، يرجى إكمال عملية التسجيل والتحقق من هويتك. ستحتاج إلى رقم GMC الخاص بك وجواز السفر للتحقق من الهوية."
+                        : "To join as a UK volunteer clinician, please complete the registration and identity verification process. You'll need your GMC number and passport for identity verification."
+                      : currentLanguage === "ar"
+                        ? "للوصول إلى منصة جسور الطبية، يرجى تحميل التطبيق على هاتفك. التطبيق مصمم خصيصاً للعمل في بيئات ذات اتصال محدود بالإنترنت."
+                        : "To access the Jusur medical platform, please download the app on your phone. The app is specifically designed to work in low-bandwidth environments."}
                   </p>
                 </div>
 
                 {/* PWA Installation Instructions - Only show for non-registration types */}
                 {lastUserType !== "register-uk" && (
                   <div className="space-y-4">
-                  {/* Android Instructions */}
-                  <div className="border border-gray-200 dark:border-gray-600 rounded-lg p-4 bg-gray-50 dark:bg-green-950">
-                    <h4 className="font-semibold text-gray-900 dark:text-white mb-3 flex items-center gap-2">
-                      <DevicePhoneMobileIcon className="h-5 w-5 text-green-600" />
-                      {currentLanguage === "ar"
-                        ? "للهواتف الذكية (أندرويد/أيفون)"
-                        : "For Smartphones (Android/iPhone)"}
-                    </h4>
-                    <ol className="space-y-3 text-sm text-gray-700 dark:text-gray-300">
-                      <li className="flex items-start gap-3">
-                        <span className="flex-shrink-0 w-6 h-6 bg-green-100 dark:bg-green-900 text-green-600 dark:text-green-300 rounded-full flex items-center justify-center text-xs font-bold">
-                          1
-                        </span>
-                        <span>
-                          {currentLanguage === "ar"
-                            ? "افتح هذا الموقع في متصفح هاتفك المحمول"
-                            : "Open this website in your mobile browser"}
-                        </span>
-                      </li>
-                      <li className="flex items-start gap-3">
-                        <span className="flex-shrink-0 w-6 h-6 bg-green-100 dark:bg-green-900 text-green-600 dark:text-green-300 rounded-full flex items-center justify-center text-xs font-bold">
-                          2
-                        </span>
-                        <div className="space-y-2">
+                    {/* Android Instructions */}
+                    <div className="border border-gray-200 dark:border-gray-600 rounded-lg p-4 bg-gray-50 dark:bg-green-950">
+                      <h4 className="font-semibold text-gray-900 dark:text-white mb-3 flex items-center gap-2">
+                        <DevicePhoneMobileIcon className="h-5 w-5 text-green-600" />
+                        {currentLanguage === "ar"
+                          ? "للهواتف الذكية (أندرويد/أيفون)"
+                          : "For Smartphones (Android/iPhone)"}
+                      </h4>
+                      <ol className="space-y-3 text-sm text-gray-700 dark:text-gray-300">
+                        <li className="flex items-start gap-3">
+                          <span className="flex-shrink-0 w-6 h-6 bg-green-100 dark:bg-green-900 text-green-600 dark:text-green-300 rounded-full flex items-center justify-center text-xs font-bold">
+                            1
+                          </span>
                           <span>
                             {currentLanguage === "ar"
-                              ? "اضغط على زر المشاركة:"
-                              : "Tap the share button:"}
+                              ? "افتح هذا الموقع في متصفح هاتفك المحمول"
+                              : "Open this website in your mobile browser"}
                           </span>
-                          <div className={`flex gap-4 mt-2 ${
-                            currentLanguage === "ar" ? "" : ""
-                          }`}>
-                            <div className="text-center">
-                              <ShareIcon className="h-6 w-6 mx-auto text-green-600" />
-                              <span className="text-xs text-gray-500 dark:text-gray-400">
-                                {currentLanguage === "ar" ? "أيفون" : "iPhone"}
-                              </span>
-                            </div>
-                            <div className="text-center">
-                              <CursorArrowRaysIcon className="h-6 w-6 mx-auto text-green-600" />
-                              <span className="text-xs text-gray-500 dark:text-gray-400">
-                                {currentLanguage === "ar"
-                                  ? "أندرويد"
-                                  : "Android"}
-                              </span>
-                            </div>
-                          </div>
-                        </div>
-                      </li>
-                      <li className="flex items-start gap-3">
-                        <span className="flex-shrink-0 w-6 h-6 bg-green-100 dark:bg-green-900 text-green-600 dark:text-green-300 rounded-full flex items-center justify-center text-xs font-bold">
-                          3
-                        </span>
-                        <div>
-                          <span>
-                            {currentLanguage === "ar"
-                              ? 'اختر "إضافة إلى الشاشة الرئيسية" أو "تثبيت التطبيق"'
-                              : 'Select "Add to Home Screen" or "Install App"'}
+                        </li>
+                        <li className="flex items-start gap-3">
+                          <span className="flex-shrink-0 w-6 h-6 bg-green-100 dark:bg-green-900 text-green-600 dark:text-green-300 rounded-full flex items-center justify-center text-xs font-bold">
+                            2
                           </span>
-                          <div className={`mt-1 flex items-center gap-2 text-xs text-gray-500 dark:text-gray-400 ${
-                            currentLanguage === "ar" ? "" : ""
-                          }`}>
-                            <PlusIcon className="h-4 w-4" />
+                          <div className="space-y-2">
                             <span>
                               {currentLanguage === "ar"
-                                ? "إضافة إلى الشاشة الرئيسية"
-                                : "Add to Home Screen"}
+                                ? "اضغط على زر المشاركة:"
+                                : "Tap the share button:"}
                             </span>
+                            <div
+                              className={`flex gap-4 mt-2 ${
+                                currentLanguage === "ar" ? "" : ""
+                              }`}
+                            >
+                              <div className="text-center">
+                                <ShareIcon className="h-6 w-6 mx-auto text-green-600" />
+                                <span className="text-xs text-gray-500 dark:text-gray-400">
+                                  {currentLanguage === "ar"
+                                    ? "أيفون"
+                                    : "iPhone"}
+                                </span>
+                              </div>
+                              <div className="text-center">
+                                <CursorArrowRaysIcon className="h-6 w-6 mx-auto text-green-600" />
+                                <span className="text-xs text-gray-500 dark:text-gray-400">
+                                  {currentLanguage === "ar"
+                                    ? "أندرويد"
+                                    : "Android"}
+                                </span>
+                              </div>
+                            </div>
                           </div>
-                        </div>
-                      </li>
-                      <li className="flex items-start gap-3">
-                        <span className="flex-shrink-0 w-6 h-6 bg-green-100 dark:bg-green-900 text-green-600 dark:text-green-300 rounded-full flex items-center justify-center text-xs font-bold">
-                          4
-                        </span>
-                        <span>
-                          {currentLanguage === "ar"
-                            ? 'اضغط "إضافة" أو "تثبيت" لتأكيد التحميل'
-                            : 'Tap "Add" or "Install" to confirm'}
-                        </span>
-                      </li>
-                    </ol>
-                  </div>
-
-                  {/* Benefits */}
-                  <div className="bg-green-50 dark:bg-green-900/20 border border-green-200 dark:border-green-800 rounded-lg p-4">
-                    <h4 className="font-semibold text-green-800 dark:text-green-300 mb-2">
-                      {currentLanguage === "ar"
-                        ? "فوائد التطبيق:"
-                        : "App Benefits:"}
-                    </h4>
-                    <ul className="text-sm text-green-700 dark:text-green-300 space-y-1">
-                      <li className={`flex items-center gap-2 ${
-                        currentLanguage === "ar" ? "" : ""
-                      }`}>
-                        <div className="w-2 h-2 bg-green-500 dark:bg-green-400 rounded-full"></div>
-                        {currentLanguage === "ar"
-                          ? "يعمل دون اتصال بالإنترنت"
-                          : "Works offline"}
-                      </li>
-                      <li className={`flex items-center gap-2 ${
-                        currentLanguage === "ar" ? "" : ""
-                      }`}>
-                        <div className="w-2 h-2 bg-green-500 dark:bg-green-400 rounded-full"></div>
-                        {currentLanguage === "ar"
-                          ? "محسن للاتصال المحدود"
-                          : "Optimized for limited connectivity"}
-                      </li>
-                      <li className={`flex items-center gap-2 ${
-                        currentLanguage === "ar" ? "" : ""
-                      }`}>
-                        <div className="w-2 h-2 bg-green-500 dark:bg-green-400 rounded-full"></div>
-                        {currentLanguage === "ar"
-                          ? "إشعارات فورية للحالات الطارئة"
-                          : "Instant notifications for emergencies"}
-                      </li>
-                    </ul>
-                  </div>
-
-                  {/* Demo Access */}
-                  <div className="text-center pt-4 border-t border-gray-200 dark:border-gray-600">
-                    <p className="text-xs text-gray-500 dark:text-gray-400 mb-3">
-                      {currentLanguage === "ar"
-                        ? "تريد تجربة المنصة أولاً؟"
-                        : "Want to try the platform first?"}
-                    </p>
-                    <button
-                      onClick={() => {
-                        // Navigate to demo page with login options
-                        window.location.href = "/demo";
-                        onClose();
-                      }}
-                      className="inline-flex items-center gap-2 bg-green-600 text-white px-4 py-2 rounded-md text-sm font-medium hover:bg-green-700 transition-colors mb-2"
-                    >
-                      <DevicePhoneMobileIcon className="h-4 w-4" />
-                      {currentLanguage === "ar"
-                        ? "تجربة المنصة (بدون تحميل)"
-                        : "Try Demo (No Install Required)"}
-                    </button>
-                    <div className="mt-2">
-                      <a
-                        href="mailto:support@jusur.org.uk"
-                        className="text-green-600 hover:text-green-800 text-xs underline"
-                      >
-                        {currentLanguage === "ar"
-                          ? "اتصل بفريق الدعم (support@jusur.org.uk)"
-                          : "Contact Support Team (support@jusur.org.uk)"}
-                      </a>
+                        </li>
+                        <li className="flex items-start gap-3">
+                          <span className="flex-shrink-0 w-6 h-6 bg-green-100 dark:bg-green-900 text-green-600 dark:text-green-300 rounded-full flex items-center justify-center text-xs font-bold">
+                            3
+                          </span>
+                          <div>
+                            <span>
+                              {currentLanguage === "ar"
+                                ? 'اختر "إضافة إلى الشاشة الرئيسية" أو "تثبيت التطبيق"'
+                                : 'Select "Add to Home Screen" or "Install App"'}
+                            </span>
+                            <div
+                              className={`mt-1 flex items-center gap-2 text-xs text-gray-500 dark:text-gray-400 ${
+                                currentLanguage === "ar" ? "" : ""
+                              }`}
+                            >
+                              <PlusIcon className="h-4 w-4" />
+                              <span>
+                                {currentLanguage === "ar"
+                                  ? "إضافة إلى الشاشة الرئيسية"
+                                  : "Add to Home Screen"}
+                              </span>
+                            </div>
+                          </div>
+                        </li>
+                        <li className="flex items-start gap-3">
+                          <span className="flex-shrink-0 w-6 h-6 bg-green-100 dark:bg-green-900 text-green-600 dark:text-green-300 rounded-full flex items-center justify-center text-xs font-bold">
+                            4
+                          </span>
+                          <span>
+                            {currentLanguage === "ar"
+                              ? 'اضغط "إضافة" أو "تثبيت" لتأكيد التحميل'
+                              : 'Tap "Add" or "Install" to confirm'}
+                          </span>
+                        </li>
+                      </ol>
                     </div>
-                  </div>
+
+                    {/* Benefits */}
+                    <div className="bg-green-50 dark:bg-green-900/20 border border-green-200 dark:border-green-800 rounded-lg p-4">
+                      <h4 className="font-semibold text-green-800 dark:text-green-300 mb-2">
+                        {currentLanguage === "ar"
+                          ? "فوائد التطبيق:"
+                          : "App Benefits:"}
+                      </h4>
+                      <ul className="text-sm text-green-700 dark:text-green-300 space-y-1">
+                        <li
+                          className={`flex items-center gap-2 ${
+                            currentLanguage === "ar" ? "" : ""
+                          }`}
+                        >
+                          <div className="w-2 h-2 bg-green-500 dark:bg-green-400 rounded-full"></div>
+                          {currentLanguage === "ar"
+                            ? "يعمل دون اتصال بالإنترنت"
+                            : "Works offline"}
+                        </li>
+                        <li
+                          className={`flex items-center gap-2 ${
+                            currentLanguage === "ar" ? "" : ""
+                          }`}
+                        >
+                          <div className="w-2 h-2 bg-green-500 dark:bg-green-400 rounded-full"></div>
+                          {currentLanguage === "ar"
+                            ? "محسن للاتصال المحدود"
+                            : "Optimized for limited connectivity"}
+                        </li>
+                        <li
+                          className={`flex items-center gap-2 ${
+                            currentLanguage === "ar" ? "" : ""
+                          }`}
+                        >
+                          <div className="w-2 h-2 bg-green-500 dark:bg-green-400 rounded-full"></div>
+                          {currentLanguage === "ar"
+                            ? "إشعارات فورية للحالات الطارئة"
+                            : "Instant notifications for emergencies"}
+                        </li>
+                      </ul>
+                    </div>
+
+                    {/* Demo Access */}
+                    <div className="text-center pt-4 border-t border-gray-200 dark:border-gray-600">
+                      <p className="text-xs text-gray-500 dark:text-gray-400 mb-3">
+                        {currentLanguage === "ar"
+                          ? "تريد تجربة المنصة أولاً؟"
+                          : "Want to try the platform first?"}
+                      </p>
+                      <button
+                        onClick={() => {
+                          // Navigate to demo page with login options
+                          window.location.href = "/demo";
+                          onClose();
+                        }}
+                        className="inline-flex items-center gap-2 bg-green-600 text-white px-4 py-2 rounded-md text-sm font-medium hover:bg-green-700 transition-colors mb-2"
+                      >
+                        <DevicePhoneMobileIcon className="h-4 w-4" />
+                        {currentLanguage === "ar"
+                          ? "تجربة المنصة (بدون تحميل)"
+                          : "Try Demo (No Install Required)"}
+                      </button>
+                      <div className="mt-2">
+                        <a
+                          href="mailto:support@jusur.org.uk"
+                          className="text-green-600 hover:text-green-800 text-xs underline"
+                        >
+                          {currentLanguage === "ar"
+                            ? "اتصل بفريق الدعم (support@jusur.org.uk)"
+                            : "Contact Support Team (support@jusur.org.uk)"}
+                        </a>
+                      </div>
+                    </div>
                   </div>
                 )}
 
@@ -349,42 +360,62 @@ export default function AuthModal({
                           : "Registration Process (5 Steps):"}
                       </h4>
                       <ol className="text-sm text-green-700 dark:text-green-300 space-y-1">
-                        <li className={`flex items-start gap-2 ${
-                          currentLanguage === "ar" ? "" : ""
-                        }`}>
-                          <span className="text-xs bg-green-200 dark:bg-green-800 text-green-800 dark:text-green-200 rounded-full w-5 h-5 flex items-center justify-center font-bold">1</span>
+                        <li
+                          className={`flex items-start gap-2 ${
+                            currentLanguage === "ar" ? "" : ""
+                          }`}
+                        >
+                          <span className="text-xs bg-green-200 dark:bg-green-800 text-green-800 dark:text-green-200 rounded-full w-5 h-5 flex items-center justify-center font-bold">
+                            1
+                          </span>
                           {currentLanguage === "ar"
                             ? "التحقق من رقم GMC"
                             : "GMC Number Verification"}
                         </li>
-                        <li className={`flex items-start gap-2 ${
-                          currentLanguage === "ar" ? "" : ""
-                        }`}>
-                          <span className="text-xs bg-green-200 dark:bg-green-800 text-green-800 dark:text-green-200 rounded-full w-5 h-5 flex items-center justify-center font-bold">2</span>
+                        <li
+                          className={`flex items-start gap-2 ${
+                            currentLanguage === "ar" ? "" : ""
+                          }`}
+                        >
+                          <span className="text-xs bg-green-200 dark:bg-green-800 text-green-800 dark:text-green-200 rounded-full w-5 h-5 flex items-center justify-center font-bold">
+                            2
+                          </span>
                           {currentLanguage === "ar"
                             ? "رفع صورة جواز السفر"
                             : "Passport Photo Upload"}
                         </li>
-                        <li className={`flex items-start gap-2 ${
-                          currentLanguage === "ar" ? "" : ""
-                        }`}>
-                          <span className="text-xs bg-green-200 dark:bg-green-800 text-green-800 dark:text-green-200 rounded-full w-5 h-5 flex items-center justify-center font-bold">3</span>
+                        <li
+                          className={`flex items-start gap-2 ${
+                            currentLanguage === "ar" ? "" : ""
+                          }`}
+                        >
+                          <span className="text-xs bg-green-200 dark:bg-green-800 text-green-800 dark:text-green-200 rounded-full w-5 h-5 flex items-center justify-center font-bold">
+                            3
+                          </span>
                           {currentLanguage === "ar"
                             ? "التحقق من الهوية بالكاميرا"
                             : "Live Face Verification"}
                         </li>
-                        <li className={`flex items-start gap-2 ${
-                          currentLanguage === "ar" ? "" : ""
-                        }`}>
-                          <span className="text-xs bg-green-200 dark:bg-green-800 text-green-800 dark:text-green-200 rounded-full w-5 h-5 flex items-center justify-center font-bold">4</span>
+                        <li
+                          className={`flex items-start gap-2 ${
+                            currentLanguage === "ar" ? "" : ""
+                          }`}
+                        >
+                          <span className="text-xs bg-green-200 dark:bg-green-800 text-green-800 dark:text-green-200 rounded-full w-5 h-5 flex items-center justify-center font-bold">
+                            4
+                          </span>
                           {currentLanguage === "ar"
                             ? "التحقق من البريد الإلكتروني"
                             : "Email Verification"}
                         </li>
-                        <li className={`flex items-start gap-2 ${
-                          currentLanguage === "ar" ? "" : ""
-                        }`}>
-                          <span className="text-xs bg-green-200 dark:bg-green-800 text-green-800 dark:text-green-200 rounded-full w-5 h-5 flex items-center justify-center font-bold">5</span>
+                        <li
+                          className={`flex items-start gap-2 ${
+                            currentLanguage === "ar" ? "" : ""
+                          }`}
+                        >
+                          <span className="text-xs bg-green-200 dark:bg-green-800 text-green-800 dark:text-green-200 rounded-full w-5 h-5 flex items-center justify-center font-bold">
+                            5
+                          </span>
                           {currentLanguage === "ar"
                             ? "إنشاء كلمة المرور"
                             : "Account Setup"}

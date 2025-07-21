@@ -7,7 +7,9 @@ type ClientThemeProviderProps = {
   children: React.ReactNode;
 };
 
-export default function ClientThemeProvider({ children }: ClientThemeProviderProps) {
+export default function ClientThemeProvider({
+  children,
+}: ClientThemeProviderProps) {
   // Initialize theme system
   useTheme();
 
@@ -21,7 +23,8 @@ export default function ClientThemeProvider({ children }: ClientThemeProviderPro
 
     // Get stored theme or use system preference
     const storedTheme = localStorage.getItem("jusur-theme");
-    const shouldUseDark = storedTheme === "dark" || (storedTheme !== "light" && detectDarkMode());
+    const shouldUseDark =
+      storedTheme === "dark" || (storedTheme !== "light" && detectDarkMode());
 
     // Apply theme class to HTML element
     const root = document.documentElement;

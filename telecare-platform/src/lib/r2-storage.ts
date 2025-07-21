@@ -40,13 +40,22 @@ export interface R2Bucket {
   get(key: string, options?: R2GetOptions): Promise<R2Object | null>;
   put(
     key: string,
-    value: ReadableStream | ArrayBuffer | ArrayBufferView | string | null | Blob,
+    value:
+      | ReadableStream
+      | ArrayBuffer
+      | ArrayBufferView
+      | string
+      | null
+      | Blob,
     options?: R2PutOptions
   ): Promise<R2Object>;
   delete(keys: string | string[]): Promise<void>;
   list(options?: R2ListOptions): Promise<R2Objects>;
   head(key: string): Promise<R2Object | null>;
-  createMultipartUpload(key: string, options?: R2CreateMultipartUploadOptions): Promise<R2MultipartUpload>;
+  createMultipartUpload(
+    key: string,
+    options?: R2CreateMultipartUploadOptions
+  ): Promise<R2MultipartUpload>;
 }
 
 export interface R2GetOptions {
@@ -98,7 +107,10 @@ export interface R2MultipartUpload {
   key: string;
   complete(parts: R2UploadedPart[]): Promise<R2Object>;
   abort(): Promise<void>;
-  uploadPart(partNumber: number, value: ReadableStream | ArrayBuffer | ArrayBufferView | string | Blob): Promise<R2UploadedPart>;
+  uploadPart(
+    partNumber: number,
+    value: ReadableStream | ArrayBuffer | ArrayBufferView | string | Blob
+  ): Promise<R2UploadedPart>;
 }
 
 export interface R2UploadedPart {
@@ -135,7 +147,7 @@ export class R2StorageHelper {
     imageType: string = "image/jpeg"
   ): Promise<string> {
     const key = `profile-images/${userId}/${Date.now()}.${imageType.split("/")[1]}`;
-    
+
     await this.uploadFile(key, imageFile, {
       contentType: imageType,
       metadata: {
@@ -157,7 +169,7 @@ export class R2StorageHelper {
   ): Promise<string> {
     const sanitizedFileName = fileName.replace(/[^a-zA-Z0-9.-]/g, "_");
     const key = `case-attachments/${caseId}/${Date.now()}_${sanitizedFileName}`;
-    
+
     await this.uploadFile(key, file, {
       contentType,
       metadata: {
@@ -180,9 +192,10 @@ export class R2StorageHelper {
   ): Promise<string> {
     const sanitizedFileName = fileName.replace(/[^a-zA-Z0-9.-]/g, "_");
     const key = `verification-docs/${userId}/${documentType}_${Date.now()}_${sanitizedFileName}`;
-    
+
     await this.uploadFile(key, file, {
-      contentType: file instanceof File ? file.type : "application/octet-stream",
+      contentType:
+        file instanceof File ? file.type : "application/octet-stream",
       metadata: {
         purpose: "verification_document",
         userId: userId,
@@ -218,7 +231,9 @@ export class R2StorageHelper {
   generateUploadUrl(key: string, expiresIn: number = 3600): string {
     // This would need to be implemented with R2's presigned URL functionality
     // For now, return a placeholder
-    throw new Error("Presigned URLs not implemented - use direct uploads through the application");
+    throw new Error(
+      "Presigned URLs not implemented - use direct uploads through the application"
+    );
   }
 
   // Get download URL (for public access)

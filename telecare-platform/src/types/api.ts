@@ -7,7 +7,7 @@ import type {
   PaginationParams,
   ValidationError,
   ErrorInfo,
-} from './common';
+} from "./common";
 
 // Generic API response wrapper
 export interface ApiResponse<T = unknown> {
@@ -21,7 +21,8 @@ export interface ApiResponse<T = unknown> {
 }
 
 // Paginated API response
-export interface PaginatedApiResponse<T = unknown> extends ApiResponse<PaginatedResponse<T>> {
+export interface PaginatedApiResponse<T = unknown>
+  extends ApiResponse<PaginatedResponse<T>> {
   data: PaginatedResponse<T>;
 }
 
@@ -57,10 +58,10 @@ export interface ApiRequestOptions {
 // Authentication headers
 export interface AuthHeaders {
   Authorization?: string; // Bearer token
-  'X-API-Key'?: string; // API key for service-to-service
-  'X-Session-ID'?: string; // Session identifier
-  'X-Request-ID'?: string; // Unique request identifier
-  'X-Client-Version'?: string; // Client application version
+  "X-API-Key"?: string; // API key for service-to-service
+  "X-Session-ID"?: string; // Session identifier
+  "X-Request-ID"?: string; // Unique request identifier
+  "X-Client-Version"?: string; // Client application version
 }
 
 // Standard request metadata
@@ -74,21 +75,21 @@ export interface RequestMetadata {
 
 // Health check response
 export interface HealthCheckResponse {
-  status: 'healthy' | 'degraded' | 'unhealthy';
+  status: "healthy" | "degraded" | "unhealthy";
   timestamp: Timestamp;
   version: string;
   uptime: number; // Seconds since startup
-  
+
   // Service dependencies
   dependencies: {
     [serviceName: string]: {
-      status: 'healthy' | 'degraded' | 'unhealthy';
+      status: "healthy" | "degraded" | "unhealthy";
       responseTime?: number; // milliseconds
       lastChecked: Timestamp;
       error?: string;
     };
   };
-  
+
   // System metrics
   metrics?: {
     memoryUsage?: number; // bytes
@@ -244,8 +245,8 @@ export interface WebhookDelivery {
   eventType: string;
   payload: unknown;
   url: string;
-  httpMethod: 'POST' | 'PUT' | 'PATCH';
-  status: 'pending' | 'delivered' | 'failed' | 'retrying';
+  httpMethod: "POST" | "PUT" | "PATCH";
+  status: "pending" | "delivered" | "failed" | "retrying";
   attempts: number;
   maxAttempts: number;
   lastAttemptAt?: Timestamp;
@@ -259,18 +260,18 @@ export interface WebhookDelivery {
 // API metrics and monitoring
 export interface ApiMetrics {
   endpoint: string;
-  method: 'GET' | 'POST' | 'PUT' | 'PATCH' | 'DELETE';
+  method: "GET" | "POST" | "PUT" | "PATCH" | "DELETE";
   timeframe: {
     startTime: Timestamp;
     endTime: Timestamp;
   };
-  
+
   // Request metrics
   totalRequests: number;
   successfulRequests: number;
   failedRequests: number;
   errorRate: number; // percentage
-  
+
   // Response time metrics
   averageResponseTime: number; // milliseconds
   p50ResponseTime: number;
@@ -278,12 +279,12 @@ export interface ApiMetrics {
   p99ResponseTime: number;
   maxResponseTime: number;
   minResponseTime: number;
-  
+
   // Status code breakdown
   statusCodes: {
     [statusCode: string]: number;
   };
-  
+
   // Error breakdown
   errors: {
     [errorCode: string]: {
@@ -292,16 +293,16 @@ export interface ApiMetrics {
       lastOccurrence: Timestamp;
     };
   };
-  
+
   // Rate limiting
   rateLimitHits: number;
   throttledRequests: number;
-  
+
   // Geographic distribution (if applicable)
   requestsByRegion?: {
     [region: string]: number;
   };
-  
+
   // User agent breakdown
   requestsByUserAgent?: {
     [userAgent: string]: number;
@@ -319,36 +320,36 @@ export interface ApiConfig {
     requestsPerMinute: number;
     burstLimit: number;
   };
-  
+
   // Authentication
   authentication: {
-    type: 'bearer' | 'api_key' | 'basic' | 'oauth2';
+    type: "bearer" | "api_key" | "basic" | "oauth2";
     headerName?: string;
     tokenPrefix?: string;
   };
-  
+
   // Request/response handling
   defaultHeaders: Record<string, string>;
   responseInterceptors: string[]; // Names of registered interceptors
   requestInterceptors: string[];
-  
+
   // Error handling
   retryableStatusCodes: number[];
   retryableErrorCodes: string[];
   maxRetryDelay: number; // milliseconds
-  
+
   // Caching
   caching: {
     enabled: boolean;
     defaultTtl: number; // seconds
     maxSize: number; // maximum cache entries
   };
-  
+
   // Monitoring
   monitoring: {
     enabled: boolean;
     metricsEndpoint?: string;
-    logLevel: 'debug' | 'info' | 'warn' | 'error';
+    logLevel: "debug" | "info" | "warn" | "error";
   };
 }
 
@@ -356,27 +357,46 @@ export interface ApiConfig {
 export interface ApiClient {
   // HTTP methods
   get<T>(url: string, options?: ApiRequestOptions): Promise<ApiResponse<T>>;
-  post<T>(url: string, data?: unknown, options?: ApiRequestOptions): Promise<ApiResponse<T>>;
-  put<T>(url: string, data?: unknown, options?: ApiRequestOptions): Promise<ApiResponse<T>>;
-  patch<T>(url: string, data?: unknown, options?: ApiRequestOptions): Promise<ApiResponse<T>>;
+  post<T>(
+    url: string,
+    data?: unknown,
+    options?: ApiRequestOptions
+  ): Promise<ApiResponse<T>>;
+  put<T>(
+    url: string,
+    data?: unknown,
+    options?: ApiRequestOptions
+  ): Promise<ApiResponse<T>>;
+  patch<T>(
+    url: string,
+    data?: unknown,
+    options?: ApiRequestOptions
+  ): Promise<ApiResponse<T>>;
   delete<T>(url: string, options?: ApiRequestOptions): Promise<ApiResponse<T>>;
-  
+
   // Specialized methods
-  upload(file: File, endpoint: string, options?: ApiRequestOptions): Promise<ApiResponse<unknown>>;
+  upload(
+    file: File,
+    endpoint: string,
+    options?: ApiRequestOptions
+  ): Promise<ApiResponse<unknown>>;
   download(url: string, options?: ApiRequestOptions): Promise<Blob>;
-  
+
   // Batch operations
-  batch<T>(requests: BatchRequest<T>, options?: ApiRequestOptions): Promise<BatchResponse<T>>;
-  
+  batch<T>(
+    requests: BatchRequest<T>,
+    options?: ApiRequestOptions
+  ): Promise<BatchResponse<T>>;
+
   // Configuration
   setAuthToken(token: string): void;
   setDefaultHeader(name: string, value: string): void;
   removeDefaultHeader(name: string): void;
-  
+
   // Interceptors
   addRequestInterceptor(interceptor: RequestInterceptor): void;
   addResponseInterceptor(interceptor: ResponseInterceptor): void;
-  
+
   // Utilities
   isOnline(): boolean;
   getMetrics(): ApiMetrics[];
@@ -456,7 +476,7 @@ export interface PerformanceMetrics {
 // API documentation types
 export interface ApiEndpoint {
   path: string;
-  method: 'GET' | 'POST' | 'PUT' | 'PATCH' | 'DELETE';
+  method: "GET" | "POST" | "PUT" | "PATCH" | "DELETE";
   summary: string;
   description?: string;
   parameters?: ApiParameter[];
@@ -471,7 +491,7 @@ export interface ApiEndpoint {
 
 export interface ApiParameter {
   name: string;
-  in: 'query' | 'path' | 'header' | 'cookie';
+  in: "query" | "path" | "header" | "cookie";
   required: boolean;
   type: string;
   description?: string;

@@ -25,7 +25,7 @@ type ReviewedRequest = {
   reviewNotes?: string;
 };
 
-type PendingRequest = Partial<ReviewedRequest> & { 
+type PendingRequest = Partial<ReviewedRequest> & {
   id: string;
   status?: string;
 };
@@ -62,7 +62,7 @@ export default function AdminRegistrationModal({
       decision: "approved" as const,
       reviewedAt: new Date().toISOString(),
       reviewedBy: "admin_001",
-      reviewNotes: "Approved by admin"
+      reviewNotes: "Approved by admin",
     };
 
     const newPending = pendingRequests.filter((r: any) => r.id !== requestId);
@@ -73,7 +73,10 @@ export default function AdminRegistrationModal({
 
     if (typeof window !== "undefined") {
       localStorage.setItem("pendingRegistrations", JSON.stringify(newPending));
-      localStorage.setItem("reviewedRegistrations", JSON.stringify(newReviewed));
+      localStorage.setItem(
+        "reviewedRegistrations",
+        JSON.stringify(newReviewed)
+      );
     }
   };
 
@@ -90,7 +93,7 @@ export default function AdminRegistrationModal({
       decision: "rejected" as const,
       reviewedAt: new Date().toISOString(),
       reviewedBy: "admin_001",
-      reviewNotes: "Rejected by admin"
+      reviewNotes: "Rejected by admin",
     };
 
     const newPending = pendingRequests.filter((r: any) => r.id !== requestId);
@@ -101,7 +104,10 @@ export default function AdminRegistrationModal({
 
     if (typeof window !== "undefined") {
       localStorage.setItem("pendingRegistrations", JSON.stringify(newPending));
-      localStorage.setItem("reviewedRegistrations", JSON.stringify(newReviewed));
+      localStorage.setItem(
+        "reviewedRegistrations",
+        JSON.stringify(newReviewed)
+      );
     }
   };
 
@@ -110,10 +116,11 @@ export default function AdminRegistrationModal({
     if (!request) return;
 
     // Remove decision-related properties to move back to pending
-    const { decision, reviewedAt, reviewedBy, reviewNotes, ...pendingRequest } = request;
+    const { decision, reviewedAt, reviewedBy, reviewNotes, ...pendingRequest } =
+      request;
     const restoredRequest = {
       ...pendingRequest,
-      status: "pending"
+      status: "pending",
     };
 
     const newReviewed = reviewedRequests.filter((r: any) => r.id !== requestId);
@@ -123,7 +130,10 @@ export default function AdminRegistrationModal({
     setPendingRequests(newPending);
 
     if (typeof window !== "undefined") {
-      localStorage.setItem("reviewedRegistrations", JSON.stringify(newReviewed));
+      localStorage.setItem(
+        "reviewedRegistrations",
+        JSON.stringify(newReviewed)
+      );
       localStorage.setItem("pendingRegistrations", JSON.stringify(newPending));
     }
   };
@@ -227,9 +237,7 @@ export default function AdminRegistrationModal({
                   {request.role === "gaza_clinician" && (
                     <div className="flex justify-between">
                       <span className="font-medium text-gray-600 dark:text-gray-300">
-                        {language === "ar"
-                          ? "رمز الإحالة:"
-                          : "Referral Code:"}
+                        {language === "ar" ? "رمز الإحالة:" : "Referral Code:"}
                       </span>
                       <span className="dark:text-white font-mono">
                         {request.referralCode || "N/A"}
@@ -292,9 +300,7 @@ export default function AdminRegistrationModal({
       {reviewedRequests.length > 0 && (
         <div className="border-t border-gray-200 dark:border-zinc-700 pt-6">
           <button
-            onClick={() =>
-              setReviewedSectionExpanded(!reviewedSectionExpanded)
-            }
+            onClick={() => setReviewedSectionExpanded(!reviewedSectionExpanded)}
             className="flex items-center justify-between w-full mb-4 p-3 bg-gray-100 dark:bg-zinc-800 rounded-lg hover:bg-gray-150 dark:hover:bg-zinc-700 transition-colors cursor-pointer"
           >
             <h2 className="text-lg font-semibold dark:text-white">
@@ -369,9 +375,7 @@ export default function AdminRegistrationModal({
                     <div className="space-y-3 text-sm">
                       <div className="flex justify-between">
                         <span className="font-medium text-gray-600 dark:text-gray-300">
-                          {language === "ar"
-                            ? "تاريخ المراجعة:"
-                            : "Reviewed:"}
+                          {language === "ar" ? "تاريخ المراجعة:" : "Reviewed:"}
                         </span>
                         <span className="dark:text-white">
                           {new Date(request.reviewedAt).toLocaleDateString()}

@@ -25,7 +25,7 @@ const applyTheme = (theme: Theme) => {
   if (typeof window === "undefined") return;
 
   const root = document.documentElement;
-  
+
   // Remove existing theme classes
   root.classList.remove("dark", "light");
 
@@ -53,14 +53,19 @@ export const useTheme = (): UseThemeReturn => {
 
     // Get stored theme or use default
     const stored = localStorage.getItem(STORAGE_KEY) as Theme;
-    const initialTheme = stored && ["light", "dark", "system"].includes(stored) ? stored : DEFAULT_THEME;
-    
+    const initialTheme =
+      stored && ["light", "dark", "system"].includes(stored)
+        ? stored
+        : DEFAULT_THEME;
+
     setThemeState(initialTheme);
-    
+
     // Calculate if dark mode should be active
-    const shouldBeDark = initialTheme === "dark" || (initialTheme === "system" && detectDarkMode());
+    const shouldBeDark =
+      initialTheme === "dark" ||
+      (initialTheme === "system" && detectDarkMode());
     setIsDark(shouldBeDark);
-    
+
     // Apply theme to document
     applyTheme(initialTheme);
   }, []);
@@ -70,7 +75,7 @@ export const useTheme = (): UseThemeReturn => {
     if (typeof window === "undefined") return;
 
     const mediaQuery = window.matchMedia("(prefers-color-scheme: dark)");
-    
+
     const handleChange = () => {
       if (theme === "system") {
         const shouldBeDark = detectDarkMode();
@@ -85,20 +90,23 @@ export const useTheme = (): UseThemeReturn => {
 
   const setTheme = (newTheme: Theme) => {
     setThemeState(newTheme);
-    
+
     // Calculate if dark mode should be active
-    const shouldBeDark = newTheme === "dark" || (newTheme === "system" && detectDarkMode());
+    const shouldBeDark =
+      newTheme === "dark" || (newTheme === "system" && detectDarkMode());
     setIsDark(shouldBeDark);
-    
+
     // Store in localStorage
     localStorage.setItem(STORAGE_KEY, newTheme);
-    
+
     // Apply to document
     applyTheme(newTheme);
 
     // Dispatch custom event for components that need to know about theme changes
     window.dispatchEvent(
-      new CustomEvent("themeChanged", { detail: { theme: newTheme, isDark: shouldBeDark } })
+      new CustomEvent("themeChanged", {
+        detail: { theme: newTheme, isDark: shouldBeDark },
+      })
     );
   };
 

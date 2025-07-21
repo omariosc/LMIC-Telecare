@@ -59,7 +59,7 @@ export default function DonationCancelled() {
   };
   return (
     <div className="min-h-screen bg-gray-50 flex items-center justify-center px-4">
-      <div 
+      <div
         className={`max-w-md w-full bg-white rounded-xl shadow-lg p-8 text-center ${
           currentLanguage === "ar" ? "text-right" : "text-left"
         }`}
@@ -72,11 +72,17 @@ export default function DonationCancelled() {
         </h1>
 
         <p className="text-gray-600 mb-6 text-center">
-          {t("donationCancelled.description", "Your donation was cancelled. No payment has been processed.")}
+          {t(
+            "donationCancelled.description",
+            "Your donation was cancelled. No payment has been processed."
+          )}
         </p>
 
         <p className="text-gray-500 text-sm mb-6 text-center">
-          {t("donationCancelled.note", "We understand that donating is a personal decision. If you change your mind, you can always return to make a donation later.")}
+          {t(
+            "donationCancelled.note",
+            "We understand that donating is a personal decision. If you change your mind, you can always return to make a donation later."
+          )}
         </p>
 
         <div className="space-y-3">

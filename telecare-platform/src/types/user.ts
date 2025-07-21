@@ -14,7 +14,7 @@ import type {
   MedicalSpecialty,
   Metadata,
   Location,
-} from './common';
+} from "./common";
 
 // Core User interface
 export interface User extends Metadata {
@@ -25,59 +25,59 @@ export interface User extends Metadata {
   displayName?: string; // Computed: firstName + lastName
   role: UserRole;
   status: UserStatus;
-  
+
   // Profile information
   bio?: string;
   profileImageUrl?: URL;
   specialties?: MedicalSpecialty[];
-  
+
   // Professional credentials
   gmcNumber?: string; // UK General Medical Council number
   licenseNumber?: string; // Medical license number
   institution?: string; // Hospital or clinic affiliation
   department?: string; // Department within institution
   yearsOfExperience?: number;
-  
+
   // Contact and location
   phoneNumber?: PhoneNumber;
   alternateEmail?: EmailAddress;
   location?: Location;
   timezone?: string;
-  
+
   // Platform-specific settings
   preferredLanguage: Language;
   availabilityStatus: AvailabilityStatus;
   notificationPreferences?: NotificationPreferences;
-  
+
   // Verification and security
   emailVerified: boolean;
   phoneVerified: boolean;
   identityVerified: boolean;
   backgroundCheckCompleted: boolean;
-  
+
   // Professional verification
   verificationDocuments?: string[]; // Array of document URLs
   verificationNotes?: string;
   verifiedBy?: ID; // Admin who verified the user
-  
+
   // Platform engagement
   points: number;
   volunteerHours: number;
   totalCasesHandled?: number;
   averageResponseTime?: number; // in minutes
   satisfactionRating?: number; // 1-5 scale
-  
+
   // Activity tracking
   lastLoginAt?: Timestamp;
   lastActiveAt?: Timestamp;
   joinedAt: Timestamp;
-  
+
   // Account management
   isActive: boolean;
   suspensionReason?: string;
   suspendedBy?: ID;
   suspendedAt?: Timestamp;
-  
+
   // Referral system (for Gaza clinicians)
   referralCode?: string;
   referredBy?: ID;
@@ -161,15 +161,15 @@ export interface UserStats {
 // User preferences
 export interface UserPreferences {
   userId: ID;
-  theme: 'light' | 'dark' | 'auto';
+  theme: "light" | "dark" | "auto";
   language: Language;
-  dateFormat: 'DD/MM/YYYY' | 'MM/DD/YYYY' | 'YYYY-MM-DD';
-  timeFormat: '12h' | '24h';
+  dateFormat: "DD/MM/YYYY" | "MM/DD/YYYY" | "YYYY-MM-DD";
+  timeFormat: "12h" | "24h";
   timezone: string;
   autoTranslate: boolean;
   compactMode: boolean;
   soundEnabled: boolean;
-  emailDigestFrequency: 'daily' | 'weekly' | 'monthly' | 'never';
+  emailDigestFrequency: "daily" | "weekly" | "monthly" | "never";
   caseFilters: {
     specialties?: MedicalSpecialty[];
     urgency?: string[];
@@ -182,14 +182,18 @@ export interface UserPreferences {
 export interface VerificationData {
   id: ID;
   userId: ID;
-  verificationType: 'identity' | 'medical_license' | 'employment' | 'background_check';
+  verificationType:
+    | "identity"
+    | "medical_license"
+    | "employment"
+    | "background_check";
   documentType: string; // e.g., 'passport', 'medical_license', 'employment_letter'
   documentUrl: URL;
   documentNumber?: string;
   issuedBy?: string; // Issuing authority
   issuedAt?: Timestamp;
   expiresAt?: Timestamp;
-  verificationStatus: 'pending' | 'approved' | 'rejected' | 'expired';
+  verificationStatus: "pending" | "approved" | "rejected" | "expired";
   verifiedBy?: ID; // Admin who verified
   verificationNotes?: string;
   submittedAt: Timestamp;
@@ -200,8 +204,14 @@ export interface VerificationData {
 export interface UserActivity {
   id: ID;
   userId: ID;
-  action: 'login' | 'logout' | 'case_created' | 'case_responded' | 'profile_updated' | 'file_uploaded';
-  resourceType?: 'case' | 'response' | 'user' | 'file';
+  action:
+    | "login"
+    | "logout"
+    | "case_created"
+    | "case_responded"
+    | "profile_updated"
+    | "file_uploaded";
+  resourceType?: "case" | "response" | "user" | "file";
   resourceId?: ID;
   metadata?: Record<string, unknown>;
   ipAddress?: string;
@@ -218,7 +228,7 @@ export interface UserAchievement {
   description: string;
   iconUrl?: URL;
   pointsAwarded: number;
-  badgeLevel?: 'bronze' | 'silver' | 'gold' | 'platinum';
+  badgeLevel?: "bronze" | "silver" | "gold" | "platinum";
   achievementData?: Record<string, unknown>;
   earnedAt: Timestamp;
   isVisible: boolean;
@@ -229,22 +239,22 @@ export interface UserAchievement {
 // Public user profile (safe for display)
 export type PublicUserProfile = Pick<
   User,
-  | 'id'
-  | 'firstName'
-  | 'lastName'
-  | 'displayName'
-  | 'role'
-  | 'specialties'
-  | 'bio'
-  | 'profileImageUrl'
-  | 'institution'
-  | 'yearsOfExperience'
-  | 'points'
-  | 'volunteerHours'
-  | 'satisfactionRating'
-  | 'joinedAt'
-  | 'availabilityStatus'
-  | 'preferredLanguage'
+  | "id"
+  | "firstName"
+  | "lastName"
+  | "displayName"
+  | "role"
+  | "specialties"
+  | "bio"
+  | "profileImageUrl"
+  | "institution"
+  | "yearsOfExperience"
+  | "points"
+  | "volunteerHours"
+  | "satisfactionRating"
+  | "joinedAt"
+  | "availabilityStatus"
+  | "preferredLanguage"
 > & {
   isOnline: boolean;
   lastActiveAt?: Timestamp;
@@ -253,18 +263,18 @@ export type PublicUserProfile = Pick<
 // User profile for listings (minimal info)
 export type UserListItem = Pick<
   User,
-  | 'id'
-  | 'firstName'
-  | 'lastName'
-  | 'role'
-  | 'specialties'
-  | 'profileImageUrl'
-  | 'availabilityStatus'
-  | 'points'
+  | "id"
+  | "firstName"
+  | "lastName"
+  | "role"
+  | "specialties"
+  | "profileImageUrl"
+  | "availabilityStatus"
+  | "points"
 >;
 
 // User profile for admin management
-export type AdminUserView = Omit<User, 'verificationDocuments'> & {
+export type AdminUserView = Omit<User, "verificationDocuments"> & {
   verificationDocuments: VerificationData[];
   stats: UserStats;
   recentActivity: UserActivity[];

@@ -374,14 +374,14 @@ export default function EnhancedRegistrationModal({
     try {
       console.log("Starting camera...");
       console.log("Video ref current:", videoRef.current);
-      
+
       const stream = await navigator.mediaDevices.getUserMedia({
         video: { facingMode: "user" },
         audio: false,
       });
-      
+
       console.log("Got media stream:", stream);
-      
+
       if (videoRef.current) {
         videoRef.current.srcObject = stream;
         setIsCameraActive(true);

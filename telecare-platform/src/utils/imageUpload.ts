@@ -13,14 +13,16 @@ export interface UploadedImage {
  * In production, this would use the Cloudflare Images API
  * For demo purposes, we'll return the original URL
  */
-export async function uploadToCloudflare(file: File | string): Promise<UploadedImage> {
+export async function uploadToCloudflare(
+  file: File | string
+): Promise<UploadedImage> {
   // If it's already a URL, return it as is
-  if (typeof file === 'string' && file.startsWith('http')) {
+  if (typeof file === "string" && file.startsWith("http")) {
     return {
       id: `img_${Date.now()}`,
       url: file,
       thumbnailUrl: file,
-      uploadedAt: new Date().toISOString()
+      uploadedAt: new Date().toISOString(),
     };
   }
 
@@ -28,7 +30,7 @@ export async function uploadToCloudflare(file: File | string): Promise<UploadedI
   // 1. Convert File to FormData
   // 2. POST to Cloudflare Images API endpoint
   // 3. Return the CDN URLs
-  
+
   // Demo implementation - convert to data URL
   if (file instanceof File) {
     return new Promise((resolve) => {
@@ -39,14 +41,14 @@ export async function uploadToCloudflare(file: File | string): Promise<UploadedI
           id: `img_${Date.now()}`,
           url: dataUrl,
           thumbnailUrl: dataUrl,
-          uploadedAt: new Date().toISOString()
+          uploadedAt: new Date().toISOString(),
         });
       };
       reader.readAsDataURL(file);
     });
   }
 
-  throw new Error('Invalid file type');
+  throw new Error("Invalid file type");
 }
 
 /**
@@ -54,10 +56,13 @@ export async function uploadToCloudflare(file: File | string): Promise<UploadedI
  * @param url Original image URL
  * @param variant Size variant (thumbnail, display, full)
  */
-export function getOptimizedImageUrl(url: string, variant: 'thumbnail' | 'display' | 'full' = 'display'): string {
+export function getOptimizedImageUrl(
+  url: string,
+  variant: "thumbnail" | "display" | "full" = "display"
+): string {
   // In production with Cloudflare Images:
   // return `https://imagedelivery.net/your-account-hash/${imageId}/${variant}`;
-  
+
   // For demo, return original URL
   return url;
 }
@@ -67,6 +72,6 @@ export function getOptimizedImageUrl(url: string, variant: 'thumbnail' | 'displa
  */
 export async function deleteFromCloudflare(imageId: string): Promise<boolean> {
   // In production: DELETE request to Cloudflare API
-  console.log('Delete image:', imageId);
+  console.log("Delete image:", imageId);
   return true;
 }

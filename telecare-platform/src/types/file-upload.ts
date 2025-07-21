@@ -10,8 +10,8 @@ import type {
   FileType,
   MimeType,
   Metadata,
-} from './common';
-import type { PublicUserProfile } from './user';
+} from "./common";
+import type { PublicUserProfile } from "./user";
 
 // Core file interface
 export interface FileRecord extends Metadata {
@@ -21,46 +21,46 @@ export interface FileRecord extends Metadata {
   fileSize: number; // in bytes
   mimeType: MimeType;
   fileType: FileType;
-  
+
   // Storage information
-  storageProvider: 'r2' | 'local' | 's3';
+  storageProvider: "r2" | "local" | "s3";
   bucketName?: string;
   storageKey: string; // Internal storage path/key
   publicUrl?: URL; // Public access URL if available
-  
+
   // Upload context
   purpose: UploadPurpose;
   uploadedBy: ID;
-  associatedResourceType?: 'case' | 'response' | 'user' | 'verification';
+  associatedResourceType?: "case" | "response" | "user" | "verification";
   associatedResourceId?: ID;
-  
+
   // File metadata
   checksum?: string; // For integrity verification
   contentLength?: number;
   lastModified?: Timestamp;
   etag?: string;
-  
+
   // Access control
   isPublic: boolean;
-  accessLevel: 'public' | 'authenticated' | 'restricted' | 'private';
+  accessLevel: "public" | "authenticated" | "restricted" | "private";
   allowedRoles?: string[];
   expiresAt?: Timestamp; // For temporary files
-  
+
   // Processing status
-  processingStatus: 'pending' | 'processing' | 'completed' | 'failed';
+  processingStatus: "pending" | "processing" | "completed" | "failed";
   processingError?: string;
   thumbnailUrl?: URL; // For images
   previewUrl?: URL; // For documents/videos
-  
+
   // Virus scanning and security
-  scanStatus: 'pending' | 'clean' | 'infected' | 'error';
+  scanStatus: "pending" | "clean" | "infected" | "error";
   scanResult?: ScanResult;
   quarantined: boolean;
-  
+
   // Usage tracking
   downloadCount?: number;
   lastAccessedAt?: Timestamp;
-  
+
   // Cleanup and lifecycle
   isTemporary: boolean;
   deleteAfter?: Timestamp;
@@ -82,7 +82,7 @@ export interface ScanResult {
 export interface FileUploadRequest {
   file: File; // Browser File object
   purpose: UploadPurpose;
-  associatedResourceType?: 'case' | 'response' | 'user' | 'verification';
+  associatedResourceType?: "case" | "response" | "user" | "verification";
   associatedResourceId?: ID;
   isPublic?: boolean;
   expiresAt?: Timestamp;
@@ -96,7 +96,7 @@ export interface MultipartUploadRequest {
   mimeType: MimeType;
   purpose: UploadPurpose;
   chunkSize?: number; // Default 5MB
-  associatedResourceType?: 'case' | 'response' | 'user' | 'verification';
+  associatedResourceType?: "case" | "response" | "user" | "verification";
   associatedResourceId?: ID;
   checksum?: string;
 }
@@ -112,7 +112,7 @@ export interface MultipartUploadSession {
   signedUrls: { [chunkNumber: number]: string };
   expiresAt: Timestamp;
   createdAt: Timestamp;
-  status: 'active' | 'completed' | 'aborted' | 'expired';
+  status: "active" | "completed" | "aborted" | "expired";
 }
 
 // File upload response
@@ -134,9 +134,9 @@ export interface ValidationError {
 // Signed URL request
 export interface SignedUrlRequest {
   fileId: ID;
-  operation: 'download' | 'upload' | 'delete';
+  operation: "download" | "upload" | "delete";
   expiresIn?: number; // Seconds, default 3600 (1 hour)
-  responseType?: 'json' | 'redirect';
+  responseType?: "json" | "redirect";
 }
 
 export interface SignedUrlResponse {
@@ -149,9 +149,9 @@ export interface SignedUrlResponse {
 export interface FileMetadataUpdate {
   fileName?: string;
   isPublic?: boolean;
-  accessLevel?: 'public' | 'authenticated' | 'restricted' | 'private';
+  accessLevel?: "public" | "authenticated" | "restricted" | "private";
   expiresAt?: Timestamp;
-  associatedResourceType?: 'case' | 'response' | 'user' | 'verification';
+  associatedResourceType?: "case" | "response" | "user" | "verification";
   associatedResourceId?: ID;
   metadata?: Record<string, unknown>;
 }
@@ -159,7 +159,7 @@ export interface FileMetadataUpdate {
 // Bulk operations
 export interface BulkFileOperation {
   fileIds: ID[];
-  operation: 'delete' | 'move' | 'copy' | 'updateAccess';
+  operation: "delete" | "move" | "copy" | "updateAccess";
   parameters?: Record<string, unknown>;
 }
 
@@ -190,8 +190,8 @@ export interface FileSearchFilters {
   uploadedBefore?: Timestamp;
   sizeMin?: number; // bytes
   sizeMax?: number; // bytes
-  scanStatus?: ('pending' | 'clean' | 'infected' | 'error')[];
-  processingStatus?: ('pending' | 'processing' | 'completed' | 'failed')[];
+  scanStatus?: ("pending" | "clean" | "infected" | "error")[];
+  processingStatus?: ("pending" | "processing" | "completed" | "failed")[];
   query?: string; // Search in filename
 }
 
@@ -213,7 +213,12 @@ export interface FileAnalytics {
   filesByType: { type: FileType; count: number; size: number }[];
   filesByPurpose: { purpose: UploadPurpose; count: number; size: number }[];
   uploadsByDate: { date: string; count: number; size: number }[];
-  topUploaders: { userId: ID; user: PublicUserProfile; count: number; size: number }[];
+  topUploaders: {
+    userId: ID;
+    user: PublicUserProfile;
+    count: number;
+    size: number;
+  }[];
   storageUsage: {
     used: number; // bytes
     available: number; // bytes
@@ -233,18 +238,18 @@ export interface FileAnalytics {
 // File list item (for file listings)
 export type FileListItem = Pick<
   FileRecord,
-  | 'id'
-  | 'fileName'
-  | 'fileSize'
-  | 'mimeType'
-  | 'fileType'
-  | 'purpose'
-  | 'uploadedBy'
-  | 'createdAt'
-  | 'isPublic'
-  | 'thumbnailUrl'
-  | 'scanStatus'
-  | 'processingStatus'
+  | "id"
+  | "fileName"
+  | "fileSize"
+  | "mimeType"
+  | "fileType"
+  | "purpose"
+  | "uploadedBy"
+  | "createdAt"
+  | "isPublic"
+  | "thumbnailUrl"
+  | "scanStatus"
+  | "processingStatus"
 > & {
   uploader: PublicUserProfile;
   downloadUrl?: string;
@@ -286,37 +291,37 @@ export interface UploadProgress {
   percentage: number; // 0-100
   speed?: number; // bytes per second
   eta?: number; // estimated time remaining in seconds
-  status: 'pending' | 'uploading' | 'processing' | 'completed' | 'error';
+  status: "pending" | "uploading" | "processing" | "completed" | "error";
   error?: string;
 }
 
 // Storage configuration
 export interface StorageConfig {
-  provider: 'r2' | 'local' | 's3';
+  provider: "r2" | "local" | "s3";
   bucket: string;
   region?: string;
   endpoint?: string;
   accessKeyId?: string;
   secretAccessKey?: string;
   publicUrlBase?: string;
-  
+
   // Upload limits
   maxFileSize: number; // bytes
   maxTotalSize: number; // bytes per user
   allowedMimeTypes: MimeType[];
   allowedFileTypes: FileType[];
-  
+
   // Security settings
   virusScanEnabled: boolean;
-  virusScanner?: 'clamav' | 'windows_defender';
+  virusScanner?: "clamav" | "windows_defender";
   quarantineInfected: boolean;
-  
+
   // Lifecycle settings
   defaultExpiration?: number; // days
   cleanupInterval: number; // hours
   enableCompression: boolean;
   generateThumbnails: boolean;
-  
+
   // Performance settings
   multipartThreshold: number; // bytes
   multipartChunkSize: number; // bytes
@@ -327,7 +332,13 @@ export interface StorageConfig {
 // File system events
 export interface FileEvent {
   id: ID;
-  type: 'uploaded' | 'downloaded' | 'deleted' | 'moved' | 'scanned' | 'accessed';
+  type:
+    | "uploaded"
+    | "downloaded"
+    | "deleted"
+    | "moved"
+    | "scanned"
+    | "accessed";
   fileId: ID;
   userId: ID;
   timestamp: Timestamp;
@@ -339,8 +350,8 @@ export interface FileEvent {
 // Cleanup and maintenance
 export interface CleanupJob {
   id: ID;
-  type: 'expired_files' | 'orphaned_files' | 'temp_files' | 'large_files';
-  status: 'pending' | 'running' | 'completed' | 'failed';
+  type: "expired_files" | "orphaned_files" | "temp_files" | "large_files";
+  status: "pending" | "running" | "completed" | "failed";
   startedAt?: Timestamp;
   completedAt?: Timestamp;
   filesProcessed: number;
