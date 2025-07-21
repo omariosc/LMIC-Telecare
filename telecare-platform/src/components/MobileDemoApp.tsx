@@ -37,9 +37,11 @@ import {
   HomeIcon,
 } from "@heroicons/react/24/outline";
 import { useLanguage } from "@/hooks/useLanguage";
+import { useCases, useAuth, type Case } from "@/hooks/useCases";
 import { dummyPublicUsers, getUserById, getAvailableSpecialists } from "@/data/dummyUsers";
 import { dummyCases, dummyResponses, getCaseById, getResponsesByCase } from "@/data/dummyCases";
 import type { PublicUserProfile, MedicalCase, CaseResponse, User } from "@/types";
+import { RealCaseCard } from "./RealCaseCard";
 
 // Dummy data for pending registrations
 const dummyPendingRegistrations: Array<Partial<User> & { id: string }> = [
@@ -112,6 +114,9 @@ const dummyIncidents = [
 
 export default function MobileDemoApp() {
   const { language } = useLanguage();
+  const { isAuthenticated, user, loading: authLoading } = useAuth();
+  const { cases, loading: casesLoading, error: casesError, refetch: refetchCases } = useCases();
+  
   const [activeView, setActiveView] = useState<
     | "dashboard"
     | "forum"
@@ -514,9 +519,30 @@ export default function MobileDemoApp() {
           </button>
         </div>
         <div className="space-y-3">
-          {dummyCases.slice(0, 3).map((case_) => (
-            <CaseCard key={case_.id} case_={case_} compact={true} />
-          ))}
+          {casesLoading ? (
+            <div className="flex justify-center py-4">
+              <div className="text-gray-500 dark:text-gray-400">
+                {language === "ar" ? "جاري التحميل..." : "Loading..."}
+              </div>
+            </div>
+          ) : casesError ? (
+            <div className="text-red-600 dark:text-red-400 text-center py-4">
+              {language === "ar" ? "خطأ في تحميل الحالات" : "Error loading cases"}
+            </div>
+          ) : cases.length > 0 ? (
+            cases.slice(0, 3).map((case_) => (
+              <RealCaseCard key={case_.id} case_={case_} compact={true} />
+            ))
+          ) : isAuthenticated ? (
+            <div className="text-gray-500 dark:text-gray-400 text-center py-4">
+              {language === "ar" ? "لا توجد حالات" : "No cases found"}
+            </div>
+          ) : (
+            // Show dummy data for demo users
+            dummyCases.slice(0, 3).map((case_) => (
+              <CaseCard key={case_.id} case_={case_} compact={true} />
+            ))
+          )}
         </div>
       </div>
     </div>
@@ -695,16 +721,67 @@ export default function MobileDemoApp() {
 
       {/* Cases List */}
       <div className="space-y-4">
-        {dummyCases.map((case_) => (
-          <CaseCard
-            key={case_.id}
-            case_={case_}
-            onClick={() => {
-              setSelectedCase(case_);
-              setActiveView("case-detail");
-            }}
-          />
-        ))}
+        {casesLoading ? (
+          <div className="flex justify-center py-8">
+            <div className="text-gray-500 dark:text-gray-400">
+              {language === "ar" ? "جاري التحميل..." : "Loading cases..."}
+            </div>
+          </div>
+        ) : casesError ? (
+          <div className="text-red-600 dark:text-red-400 text-center py-8">
+            {language === "ar" ? "خطأ في تحميل الحالات" : "Error loading cases"}
+            <div className="mt-2">
+              <button 
+                onClick={refetchCases}
+                className="text-green-600 hover:text-green-800 text-sm underline"
+              >
+                {language === "ar" ? "إعادة المحاولة" : "Try again"}
+              </button>
+            </div>
+          </div>
+        ) : cases.length > 0 ? (
+          cases.map((case_) => (
+            <RealCaseCard
+              key={case_.id}
+              case_={case_}
+              onClick={() => {
+                // Note: For now we still use dummy case detail since 
+                // we'd need to adapt CaseDetailView for real cases
+                console.log("Selected real case:", case_);
+                // TODO: Implement real case detail view
+              }}
+            />
+          ))
+        ) : isAuthenticated ? (
+          <div className="text-center py-8">
+            <ChatBubbleOvalLeftIcon className="h-12 w-12 text-gray-400 mx-auto mb-4" />
+            <h3 className="text-lg font-medium text-gray-600 dark:text-gray-300 mb-2">
+              {language === "ar" ? "لا توجد حالات" : "No Cases Found"}
+            </h3>
+            <p className="text-gray-500 dark:text-gray-400 mb-4">
+              {language === "ar" 
+                ? "لم يتم العثور على حالات. ابدأ بإضافة حالة جديدة."
+                : "No cases found. Start by posting a new case."}
+            </p>
+            {currentUserType === "gaza_clinician" && (
+              <button className="bg-green-950 text-white px-4 py-2 rounded-lg hover:bg-green-900 transition-colors">
+                {language === "ar" ? "إضافة حالة جديدة" : "Post New Case"}
+              </button>
+            )}
+          </div>
+        ) : (
+          // Show dummy data for demo users
+          dummyCases.map((case_) => (
+            <CaseCard
+              key={case_.id}
+              case_={case_}
+              onClick={() => {
+                setSelectedCase(case_);
+                setActiveView("case-detail");
+              }}
+            />
+          ))
+        )}
       </div>
     </div>
   );
