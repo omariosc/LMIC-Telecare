@@ -27,15 +27,19 @@ app.use('*', async (c, next) => {
       const allowedOrigins = c.env.ALLOWED_ORIGINS?.split(',') || [
         'http://localhost:3000',
         'https://telecare-platform.pages.dev',
-        'https://6f806039.telecare-platform.pages.dev'
+        'https://6f806039.telecare-platform.pages.dev',
+        'https://jusur.org.uk',
       ];
       
-      if (!origin) return true; // Allow requests with no origin (Postman, curl, etc.)
-      return allowedOrigins.some(allowed => 
+      if (!origin) return origin; // Allow requests with no origin (Postman, curl, etc.)
+      
+      const isAllowed = allowedOrigins.some(allowed => 
         allowed === '*' || 
         origin === allowed || 
         (allowed.includes('*') && origin.includes(allowed.replace('*', '')))
       );
+      
+      return isAllowed ? origin : null;
     },
     allowHeaders: [
       'Content-Type',

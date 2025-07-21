@@ -4,7 +4,7 @@ import { Hono } from 'hono';
 import { zValidator } from '@hono/zod-validator';
 import { z } from 'zod';
 import type { Env } from '../types/env';
-import type { ApiResponse, UpdateUserRequest, User } from '../types/api';
+import type { ApiResponse, UpdateUserRequest } from '../types/api';
 
 export const usersRoutes = new Hono<{ Bindings: Env }>();
 

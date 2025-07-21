@@ -2,9 +2,7 @@
 
 import type {
   ID,
-  UUID,
   Timestamp,
-  EmailAddress,
   NotificationType,
   AchievementType,
   Language,

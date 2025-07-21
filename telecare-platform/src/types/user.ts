@@ -2,7 +2,6 @@
 
 import type {
   ID,
-  UUID,
   Timestamp,
   EmailAddress,
   PhoneNumber,

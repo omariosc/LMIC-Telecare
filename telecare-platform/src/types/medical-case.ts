@@ -2,7 +2,6 @@
 
 import type {
   ID,
-  UUID,
   Timestamp,
   Language,
   CaseUrgency,
@@ -13,10 +12,9 @@ import type {
   AssignmentStatus,
   MedicalSpecialty,
   Metadata,
-  PaginationParams,
   SearchParams,
 } from "./common";
-import type { User, PublicUserProfile } from "./user";
+import type { PublicUserProfile } from "./user";
 
 // Core medical case interface
 export interface MedicalCase extends Metadata {
@@ -360,7 +358,7 @@ export type CaseListItem = Pick<
   | "assignedTo"
   | "createdAt"
   | "responseCount"
-  | "hasImages"
+  | "images"
   | "tags"
 > & {
   creator: PublicUserProfile;

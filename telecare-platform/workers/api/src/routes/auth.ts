@@ -302,7 +302,7 @@ authRoutes.post('/logout', async (c) => {
 
     const response: ApiResponse<{ sessionDestroyed: boolean }> = {
       success: true,
-      data: { sessionDestroyed: result.changes > 0 },
+      data: { sessionDestroyed: (result.changes ?? 0) > 0 },
       message: 'Logout successful',
       timestamp: new Date().toISOString(),
     };

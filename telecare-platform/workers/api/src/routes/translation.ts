@@ -9,7 +9,7 @@ export const translationRoutes = new Hono<{ Bindings: Env }>();
 // Translate text
 translationRoutes.post('/translate', async (c) => {
   try {
-    const { text, sourceLanguage, targetLanguage, context } = await c.req.json() as TranslationRequest & { context?: string };
+    const { text, sourceLanguage, targetLanguage } = await c.req.json() as TranslationRequest;
 
     // Check cache first
     const cacheKey = `translation:${sourceLanguage}:${targetLanguage}:${btoa(text)}`;
