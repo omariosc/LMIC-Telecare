@@ -3,16 +3,13 @@
 import { useEffect, useState } from "react";
 
 export type Language = "en" | "ar";
-export type Direction = "ltr" | "rtl";
 
 type LanguageState = {
   language: Language;
-  direction: Direction;
 };
 
 type UseLanguageReturn = {
   language: Language;
-  direction: Direction;
   setLanguage: (lang: Language) => void; // eslint-disable-line no-unused-vars
   toggleLanguage: () => void;
 };
@@ -73,17 +70,13 @@ export const useLanguage = (): UseLanguageReturn => {
   // Initialize with default to avoid hydration mismatch
   const [state, setState] = useState<LanguageState>({
     language: DEFAULT_LANGUAGE,
-    direction: "ltr",
   });
 
   // Detect and set language on client mount
   useEffect(() => {
     const detectedLang = detectLanguage();
-    const direction: Direction = detectedLang === "ar" ? "rtl" : "ltr";
-
     setState({
       language: detectedLang,
-      direction,
     });
   }, []);
 
@@ -91,27 +84,22 @@ export const useLanguage = (): UseLanguageReturn => {
   useEffect(() => {
     // Apply to document
     document.documentElement.lang = state.language;
-    document.documentElement.dir = state.direction;
 
     // Store in localStorage
     localStorage.setItem(STORAGE_KEY, state.language);
 
     // Update content visibility immediately
     updateContentVisibility(state.language);
-  }, [state.language, state.direction]);
+  }, [state.language]);
 
   const setLanguage = (lang: Language) => {
-    const direction: Direction = lang === "ar" ? "rtl" : "ltr";
-
     setState((prev) => ({
       ...prev,
       language: lang,
-      direction,
     }));
 
     // Apply to document
     document.documentElement.lang = lang;
-    document.documentElement.dir = direction;
 
     // Store in localStorage
     localStorage.setItem(STORAGE_KEY, lang);
@@ -132,7 +120,6 @@ export const useLanguage = (): UseLanguageReturn => {
 
   return {
     language: state.language,
-    direction: state.direction,
     setLanguage,
     toggleLanguage,
   };

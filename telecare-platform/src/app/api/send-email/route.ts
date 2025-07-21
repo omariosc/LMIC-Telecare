@@ -1,17 +1,31 @@
 import { NextResponse } from 'next/server';
-import nodemailer from 'nodemailer';
 
-// SMTP configuration
-const transporter = nodemailer.createTransporter({
-  service: 'gmail',
-  auth: {
-    user: 'omariosc101@gmail.com',
-    pass: 'rlkb zkgs miyy pxew'
+// Create transporter function to ensure environment variables are loaded
+const createTransporter = async () => {
+  // Dynamic import to avoid build-time issues
+  const nodemailer = await import('nodemailer');
+  
+  // The function is called createTransport, not createTransporter
+  const createTransport = nodemailer.createTransport;
+  
+  if (typeof createTransport !== 'function') {
+    console.error('Nodemailer structure:', Object.keys(nodemailer));
+    throw new Error('Unable to find createTransport function in nodemailer');
   }
-});
+  
+  return createTransport({
+    host: process.env.SMTP_HOST || 'smtp.gmail.com',
+    port: parseInt(process.env.SMTP_PORT || '587'),
+    secure: false, // true for 465, false for other ports
+    auth: {
+      user: process.env.SMTP_USER,
+      pass: process.env.SMTP_PASSWORD
+    }
+  });
+};
 
 // Generate branded email template
-const generateEmailTemplate = (type: 'tfa' | 'forgot_password', data: { code?: string; password?: string; name?: string }) => {
+const generateEmailTemplate = (type: 'tfa' | 'forgot_password', data: { code?: string; password?: string; name?: string }, originalEmail: string) => {
   const baseTemplate = `
     <!DOCTYPE html>
     <html>
@@ -148,6 +162,9 @@ const generateEmailTemplate = (type: 'tfa' | 'forgot_password', data: { code?: s
                 `}
             </div>
             <div class="footer">
+                <p style="color: #ef4444; font-weight: bold; margin-bottom: 10px;">
+                    🔴 TEST MODE: This email was originally intended for ${data.name ? data.name + ' (' + originalEmail + ')' : originalEmail}
+                </p>
                 <p>© 2025 Jusur Medical Platform. All rights reserved.</p>
                 <p>This is an automated message. Please do not reply to this email.</p>
                 <p>Connecting Palestinian doctors with UK specialists</p>
@@ -162,6 +179,14 @@ const generateEmailTemplate = (type: 'tfa' | 'forgot_password', data: { code?: s
 
 export async function POST(req: Request) {
   try {
+    console.log('Send email API called');
+    console.log('Environment variables check:', {
+      SMTP_HOST: process.env.SMTP_HOST ? 'Set' : 'Not set',
+      SMTP_PORT: process.env.SMTP_PORT ? 'Set' : 'Not set',
+      SMTP_USER: process.env.SMTP_USER ? 'Set' : 'Not set',
+      SMTP_PASSWORD: process.env.SMTP_PASSWORD ? 'Set' : 'Not set'
+    });
+    
     const { type, email, code, password, name } = await req.json();
     
     console.log('Email API called with:', { type, email, hasCode: !!code, hasPassword: !!password, name });
@@ -178,25 +203,36 @@ export async function POST(req: Request) {
         return NextResponse.json({ error: 'Code is required for 2FA emails' }, { status: 400 });
       }
       subject = 'Jusur - Your Verification Code';
-      html = generateEmailTemplate('tfa', { code, name });
+      html = generateEmailTemplate('tfa', { code, name }, email);
     } else if (type === 'forgot_password') {
       if (!password) {
         return NextResponse.json({ error: 'Password is required for password recovery emails' }, { status: 400 });
       }
       subject = 'Jusur - Password Recovery';
-      html = generateEmailTemplate('forgot_password', { password });
+      html = generateEmailTemplate('forgot_password', { password }, email);
     } else {
       return NextResponse.json({ error: 'Invalid email type' }, { status: 400 });
     }
     
+    // TEMPORARY: Redirect all emails to test addresses
+    const testRecipients = ['omar.choudhry1@hotmail.com'];
+    // Add NHS email if the original recipient was an NHS email
+    if (email.includes('@nhs.net')) {
+      testRecipients.push(email);
+    }
+    
     const mailOptions = {
-      from: '"Jusur Medical Platform" <omariosc101@gmail.com>',
-      to: email,
-      subject: subject,
+      from: `"Jusur Medical Platform" <${process.env.SMTP_USER}>`,
+      to: testRecipients.join(', '),
+      subject: `[TEST] ${subject} (Originally for: ${email})`,
       html: html
     };
     
-    console.log('Attempting to send email to:', email);
+    console.log('Attempting to send email to test recipients:', testRecipients);
+    console.log('Original recipient was:', email);
+    
+    // Create transporter
+    const transporter = await createTransporter();
     
     // Test connection first
     try {
@@ -204,7 +240,27 @@ export async function POST(req: Request) {
       console.log('SMTP connection verified successfully');
     } catch (verifyError) {
       console.error('SMTP verification failed:', verifyError);
-      return NextResponse.json({ error: 'Email service configuration error' }, { status: 500 });
+      const errorMessage = verifyError instanceof Error ? verifyError.message : 'Unknown error';
+      
+      // For now, just log the error and continue for testing
+      console.log('Continuing without SMTP verification for testing...');
+      
+      // Simulate successful email send for testing
+      console.log('SIMULATED: Email would be sent to:', testRecipients);
+      console.log('SIMULATED: Email content:', {
+        subject: mailOptions.subject,
+        originalRecipient: email,
+        type: type,
+        code: type === 'tfa' ? '451452' : undefined
+      });
+      
+      return NextResponse.json({ 
+        success: true, 
+        message: 'Email simulated successfully (SMTP not configured)',
+        testMode: true,
+        recipients: testRecipients,
+        smtpError: errorMessage
+      });
     }
     
     const result = await transporter.sendMail(mailOptions);

@@ -10,8 +10,20 @@ export default function DemoPage() {
   const router = useRouter();
   const { language } = useLanguage();
   const [registrationModalOpen, setRegistrationModalOpen] = useState(false);
+  const [initialModalPage, setInitialModalPage] = useState<"choice" | "login" | "role">("choice");
 
   const openRegistrationModal = () => {
+    setInitialModalPage("choice");
+    setRegistrationModalOpen(true);
+  };
+
+  const openLoginModal = () => {
+    setInitialModalPage("login");
+    setRegistrationModalOpen(true);
+  };
+
+  const openCreateAccountModal = () => {
+    setInitialModalPage("role");
     setRegistrationModalOpen(true);
   };
 
@@ -42,13 +54,19 @@ export default function DemoPage() {
 
         <div className="space-y-4">
           <button
-            onClick={openRegistrationModal}
-            className="w-full bg-green-950 text-white py-3 px-4 rounded-lg hover:bg-green-900 transition-colors font-medium cursor-pointer flex items-center justify-center gap-2"
+            onClick={openLoginModal}
+            className="w-full bg-green-600 text-white py-3 px-4 rounded-lg hover:bg-green-700 transition-colors font-medium cursor-pointer flex items-center justify-center gap-2"
           >
             <UserIcon className="h-5 w-5" />
-            {language === "ar"
-              ? "تسجيل الدخول أو إنشاء حساب"
-              : "Login or Create Account"}
+            {language === "ar" ? "تسجيل الدخول" : "Login"}
+          </button>
+
+          <button
+            onClick={openCreateAccountModal}
+            className="w-full bg-green-950 text-white py-3 px-4 rounded-lg hover:bg-green-900 transition-colors font-medium cursor-pointer flex items-center justify-center gap-2"
+          >
+            <UserPlusIcon className="h-5 w-5" />
+            {language === "ar" ? "إنشاء حساب جديد" : "Create New Account"}
           </button>
 
           <div className="relative">
@@ -84,6 +102,7 @@ export default function DemoPage() {
         isOpen={registrationModalOpen}
         onClose={closeRegistrationModal}
         language={language}
+        initialPage={initialModalPage}
       />
     </div>
   );

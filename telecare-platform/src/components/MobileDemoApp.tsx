@@ -292,8 +292,12 @@ export default function MobileDemoApp() {
   >([]);
   const [newTestName, setNewTestName] = useState("");
   const [newTestResult, setNewTestResult] = useState("");
-  const [caseLikes, setCaseLikes] = useState<Record<string, { likes: number; userLiked: boolean }>>({});
-  const [aiSummaryLikes, setAiSummaryLikes] = useState<Record<string, { liked: boolean }>>({});
+  const [caseLikes, setCaseLikes] = useState<
+    Record<string, { likes: number; userLiked: boolean }>
+  >({});
+  const [aiSummaryLikes, setAiSummaryLikes] = useState<
+    Record<string, { liked: boolean }>
+  >({});
   const [aiSummaries, setAiSummaries] = useState<Record<string, string>>({});
 
   const currentUser = getUserById(currentUserId) || dummyPublicUsers[0];
@@ -476,9 +480,7 @@ export default function MobileDemoApp() {
     return (
       <header
         className={`${
-          viewMode === "desktop"
-            ? "bg-green-950"
-            : "bg-white dark:bg-zinc-900"
+          viewMode === "desktop" ? "bg-green-950" : "bg-white dark:bg-zinc-900"
         } shadow-sm border-b border-gray-200 dark:border-zinc-700 h-16 flex items-center justify-between px-4 sticky top-0 z-40`}
       >
         <div className="flex items-center">
@@ -725,7 +727,15 @@ export default function MobileDemoApp() {
     disabled?: boolean;
     badgeCount?: number;
     href?: string;
-  }> = ({ icon, label, view, isActive = false, disabled = false, badgeCount, href }) => (
+  }> = ({
+    icon,
+    label,
+    view,
+    isActive = false,
+    disabled = false,
+    badgeCount,
+    href,
+  }) => (
     <button
       onClick={() => {
         if (href) {
@@ -1114,17 +1124,13 @@ export default function MobileDemoApp() {
   };
 
   const getActiveCases = (): MedicalCase[] => {
-    const activeCases = cases.filter(
-      (case_) => case_.status !== "resolved"
-    );
+    const activeCases = cases.filter((case_) => case_.status !== "resolved");
     const filteredCases = filterCasesBySpecialty(activeCases);
     return sortCasesByUrgency(filteredCases);
   };
 
   const getResolvedCases = (): MedicalCase[] => {
-    const resolvedCases = cases.filter(
-      (case_) => case_.status === "resolved"
-    );
+    const resolvedCases = cases.filter((case_) => case_.status === "resolved");
     const filteredCases = filterCasesBySpecialty(resolvedCases);
     return sortCasesByUrgency(filteredCases);
   };
@@ -1145,7 +1151,7 @@ export default function MobileDemoApp() {
                     className="bg-green-950 text-white px-6 py-3 rounded-lg hover:bg-green-900 transition-colors flex items-center space-x-2 cursor-pointer"
                   >
                     <PlusIcon className="h-5 w-5" />
-                    <span className="font-medium">
+                    <span className="font-medium cursor-pointer">
                       {language === "ar" ? "إضافة حالة" : "Post Case"}
                     </span>
                   </button>
@@ -1415,12 +1421,17 @@ export default function MobileDemoApp() {
     const [statusChangeReason, setStatusChangeReason] = useState("");
     const [replyingTo, setReplyingTo] = useState<string | null>(null);
     const [replyContent, setReplyContent] = useState("");
-    const [responseReplies, setResponseReplies] = useState<Record<string, Array<{
-      id: string;
-      content: string;
-      createdBy: string;
-      createdAt: string;
-    }>>>({});
+    const [responseReplies, setResponseReplies] = useState<
+      Record<
+        string,
+        Array<{
+          id: string;
+          content: string;
+          createdBy: string;
+          createdAt: string;
+        }>
+      >
+    >({});
 
     // Status change functionality
     const changeStatus = async (
@@ -1587,7 +1598,7 @@ export default function MobileDemoApp() {
     // Generate AI summary
     const generateAISummary = async () => {
       if (!selectedCase) return;
-      
+
       setIsLoadingSummary(true);
       try {
         const response = await fetch("/api/generate-summary", {
@@ -1596,15 +1607,15 @@ export default function MobileDemoApp() {
           body: JSON.stringify(selectedCase),
         });
         const data = await response.json();
-        setAiSummaries(prev => ({
+        setAiSummaries((prev) => ({
           ...prev,
-          [selectedCase.id]: data.summary
+          [selectedCase.id]: data.summary,
         }));
       } catch (error) {
         console.error("Failed to generate summary:", error);
-        setAiSummaries(prev => ({
+        setAiSummaries((prev) => ({
           ...prev,
-          [selectedCase.id]: "Unable to generate summary at this time."
+          [selectedCase.id]: "Unable to generate summary at this time.",
         }));
       }
       setIsLoadingSummary(false);
@@ -1739,7 +1750,9 @@ export default function MobileDemoApp() {
     };
 
     // Handle image upload
-    const handleImageUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const handleImageUpload = async (
+      e: React.ChangeEvent<HTMLInputElement>
+    ) => {
       const files = e.target.files;
       if (files) {
         const uploadPromises = Array.from(files).map(async (file) => {
@@ -1747,7 +1760,7 @@ export default function MobileDemoApp() {
             const uploadedImage = await uploadToCloudflare(file);
             return uploadedImage.url;
           } catch (error) {
-            console.error('Failed to upload image:', error);
+            console.error("Failed to upload image:", error);
             // Fallback to data URL
             return new Promise<string>((resolve) => {
               const reader = new FileReader();
@@ -1760,7 +1773,7 @@ export default function MobileDemoApp() {
             });
           }
         });
-        
+
         const newImages = await Promise.all(uploadPromises);
         setUploadedImages([...uploadedImages, ...newImages]);
       }
@@ -1769,19 +1782,19 @@ export default function MobileDemoApp() {
     // Handle reply submission
     const submitReply = (responseId: string) => {
       if (!replyContent.trim()) return;
-      
+
       const newReply = {
         id: `reply_${Date.now()}`,
         content: replyContent,
         createdBy: currentUser.id,
-        createdAt: new Date().toISOString()
+        createdAt: new Date().toISOString(),
       };
-      
-      setResponseReplies(prev => ({
+
+      setResponseReplies((prev) => ({
         ...prev,
-        [responseId]: [...(prev[responseId] || []), newReply]
+        [responseId]: [...(prev[responseId] || []), newReply],
       }));
-      
+
       setReplyContent("");
       setReplyingTo(null);
     };
@@ -2054,25 +2067,34 @@ export default function MobileDemoApp() {
             <div className="flex items-center space-x-2">
               <EyeIcon className="h-3.5 w-3.5" />
               <span>{selectedCase.viewCount}</span>
-              <button 
+              <button
                 onClick={() => {
-                  const currentLike = caseLikes[selectedCase.id] || { likes: selectedCase.likeCount, userLiked: false };
-                  setCaseLikes(prev => ({
+                  const currentLike = caseLikes[selectedCase.id] || {
+                    likes: selectedCase.likeCount,
+                    userLiked: false,
+                  };
+                  setCaseLikes((prev) => ({
                     ...prev,
                     [selectedCase.id]: {
-                      likes: currentLike.userLiked ? currentLike.likes - 1 : currentLike.likes + 1,
+                      likes: currentLike.userLiked
+                        ? currentLike.likes - 1
+                        : currentLike.likes + 1,
                       userLiked: !currentLike.userLiked,
-                    }
+                    },
                   }));
                 }}
                 className={`flex items-center space-x-1 ml-2 transition-colors cursor-pointer ${
-                  caseLikes[selectedCase.id]?.userLiked 
-                    ? "text-green-600 dark:text-green-400" 
+                  caseLikes[selectedCase.id]?.userLiked
+                    ? "text-green-600 dark:text-green-400"
                     : "text-gray-600 dark:text-gray-300 hover:text-green-600 dark:hover:text-green-400"
                 }`}
               >
-                <HandThumbUpIcon className={`h-3.5 w-3.5 ${caseLikes[selectedCase.id]?.userLiked ? "fill-current" : ""}`} />
-                <span>{caseLikes[selectedCase.id]?.likes || selectedCase.likeCount}</span>
+                <HandThumbUpIcon
+                  className={`h-3.5 w-3.5 ${caseLikes[selectedCase.id]?.userLiked ? "fill-current" : ""}`}
+                />
+                <span>
+                  {caseLikes[selectedCase.id]?.likes || selectedCase.likeCount}
+                </span>
               </button>
             </div>
           </div>
@@ -2411,10 +2433,13 @@ export default function MobileDemoApp() {
                       )}
                       <div>
                         <h4 className="font-medium dark:text-white">
-                          {currentUser?.id === response.createdBy 
-                            ? (language === "ar" ? "أنت" : "You")
-                            : (language === "ar" ? "طبيب" : "Doctor")
-                          }
+                          {currentUser?.id === response.createdBy
+                            ? language === "ar"
+                              ? "أنت"
+                              : "You"
+                            : language === "ar"
+                              ? "طبيب"
+                              : "Doctor"}
                         </h4>
                         <p className="text-sm text-gray-600 dark:text-gray-300">
                           {currentUser?.id !== response.createdBy &&
@@ -2563,13 +2588,19 @@ export default function MobileDemoApp() {
                         </span>
                       </button>
                       <button
-                        onClick={() => setReplyingTo(replyingTo === response.id ? null : response.id)}
+                        onClick={() =>
+                          setReplyingTo(
+                            replyingTo === response.id ? null : response.id
+                          )
+                        }
                         className="flex items-center space-x-1 text-gray-600 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400 transition-colors cursor-pointer"
                       >
                         <ChatBubbleOvalLeftIcon className="h-3.5 w-3.5" />
                         <span className="text-sm">
-                          {language === "ar" ? "رد" : "Reply"} 
-                          {responseReplies[response.id]?.length ? ` (${responseReplies[response.id].length})` : ""}
+                          {language === "ar" ? "رد" : "Reply"}
+                          {responseReplies[response.id]?.length
+                            ? ` (${responseReplies[response.id].length})`
+                            : ""}
                         </span>
                       </button>
                     </div>
@@ -2592,7 +2623,11 @@ export default function MobileDemoApp() {
                           <textarea
                             value={replyContent}
                             onChange={(e) => setReplyContent(e.target.value)}
-                            placeholder={language === "ar" ? "اكتب ردك..." : "Write a reply..."}
+                            placeholder={
+                              language === "ar"
+                                ? "اكتب ردك..."
+                                : "Write a reply..."
+                            }
                             className="w-full px-3 py-2 border border-gray-300 dark:border-zinc-600 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent dark:bg-zinc-800 dark:text-white resize-none"
                             rows={2}
                           />
@@ -2611,7 +2646,9 @@ export default function MobileDemoApp() {
                               disabled={!replyContent.trim()}
                               className="px-3 py-1 text-sm bg-green-950 text-white rounded hover:bg-green-900 disabled:opacity-50 disabled:cursor-not-allowed cursor-pointer"
                             >
-                              {language === "ar" ? "إرسال الرد" : "Submit Reply"}
+                              {language === "ar"
+                                ? "إرسال الرد"
+                                : "Submit Reply"}
                             </button>
                           </div>
                         </div>
@@ -2620,31 +2657,39 @@ export default function MobileDemoApp() {
                   )}
 
                   {/* Display Replies */}
-                  {responseReplies[response.id] && responseReplies[response.id].length > 0 && (
-                    <div className="mt-4 pt-4 border-t border-gray-200 dark:border-zinc-700 space-y-3">
-                      {responseReplies[response.id].map((reply) => {
-                        const replyUser = getUserById(reply.createdBy);
-                        return (
-                          <div key={reply.id} className="flex items-start space-x-3">
-                            <div className="w-6 h-6 bg-gray-400 rounded-full flex items-center justify-center text-white text-xs font-bold flex-shrink-0">
-                              {replyUser?.displayName.charAt(0) || "U"}
-                            </div>
-                            <div className="flex-1">
-                              <div className="flex items-center space-x-2 mb-1">
-                                <span className="text-sm font-medium text-gray-900 dark:text-white">
-                                  {replyUser?.displayName || "Unknown"}
-                                </span>
-                                <span className="text-xs text-gray-500 dark:text-gray-400">
-                                  {new Date(reply.createdAt).toLocaleTimeString()}
-                                </span>
+                  {responseReplies[response.id] &&
+                    responseReplies[response.id].length > 0 && (
+                      <div className="mt-4 pt-4 border-t border-gray-200 dark:border-zinc-700 space-y-3">
+                        {responseReplies[response.id].map((reply) => {
+                          const replyUser = getUserById(reply.createdBy);
+                          return (
+                            <div
+                              key={reply.id}
+                              className="flex items-start space-x-3"
+                            >
+                              <div className="w-6 h-6 bg-gray-400 rounded-full flex items-center justify-center text-white text-xs font-bold flex-shrink-0">
+                                {replyUser?.displayName.charAt(0) || "U"}
                               </div>
-                              <p className="text-sm text-gray-700 dark:text-gray-300">{reply.content}</p>
+                              <div className="flex-1">
+                                <div className="flex items-center space-x-2 mb-1">
+                                  <span className="text-sm font-medium text-gray-900 dark:text-white">
+                                    {replyUser?.displayName || "Unknown"}
+                                  </span>
+                                  <span className="text-xs text-gray-500 dark:text-gray-400">
+                                    {new Date(
+                                      reply.createdAt
+                                    ).toLocaleTimeString()}
+                                  </span>
+                                </div>
+                                <p className="text-sm text-gray-700 dark:text-gray-300">
+                                  {reply.content}
+                                </p>
+                              </div>
                             </div>
-                          </div>
-                        );
-                      })}
-                    </div>
-                  )}
+                          );
+                        })}
+                      </div>
+                    )}
                 </div>
               );
             })}
@@ -2866,7 +2911,7 @@ export default function MobileDemoApp() {
               </p>
             )}
             {tempLanguage === "ar" && (
-              <p className="text-xs text-green-600 dark:text-green-400 mt-2 text-right">
+              <p className="text-xs text-green-600 dark:text-green-400 mt-2 text-left">
                 لقد اخترت العربية
               </p>
             )}
@@ -3304,13 +3349,11 @@ export default function MobileDemoApp() {
 
       {/* Case Creation Modal */}
       {showCaseForm && (
-        <div
-          className="fixed inset-0 flex items-center justify-center p-2 sm:p-4 z-50 bg-zinc-900/50"
-        >
+        <div className="fixed inset-0 flex items-center justify-center p-2 sm:p-4 z-50 bg-zinc-900/50">
           <div
             className={`bg-white dark:bg-zinc-900 rounded-lg shadow-xl p-4 sm:p-6 overflow-y-auto ${
-              viewMode === "mobile" 
-                ? "w-[340px] h-[780px] max-w-[calc(100vw-1.5rem)] max-h-[calc(100vh-1rem)]" 
+              viewMode === "mobile"
+                ? "w-[340px] h-[780px] max-w-[calc(100vw-1.5rem)] max-h-[calc(100vh-1rem)]"
                 : "w-full max-w-2xl h-[90vh] max-h-[800px]"
             }`}
           >
@@ -3335,7 +3378,7 @@ export default function MobileDemoApp() {
             <form
               onSubmit={(e) => {
                 e.preventDefault();
-                
+
                 // Create new case
                 const newCase: MedicalCase = {
                   id: `case_${Date.now()}`,
@@ -3356,8 +3399,8 @@ export default function MobileDemoApp() {
                 };
 
                 // Add to cases list
-                setCases(prev => [newCase, ...prev]);
-                
+                setCases((prev) => [newCase, ...prev]);
+
                 // Clear form and close modal
                 setShowCaseForm(false);
                 setNewCaseTitle("");
@@ -3617,25 +3660,28 @@ export default function MobileDemoApp() {
                     onChange={async (e) => {
                       const files = e.target.files;
                       if (files) {
-                        const uploadPromises = Array.from(files).map(async (file) => {
-                          try {
-                            const uploadedImage = await uploadToCloudflare(file);
-                            return uploadedImage.url;
-                          } catch (error) {
-                            console.error('Failed to upload image:', error);
-                            // Fallback to data URL
-                            return new Promise<string>((resolve) => {
-                              const reader = new FileReader();
-                              reader.onload = (event) => {
-                                if (event.target?.result) {
-                                  resolve(event.target.result as string);
-                                }
-                              };
-                              reader.readAsDataURL(file);
-                            });
+                        const uploadPromises = Array.from(files).map(
+                          async (file) => {
+                            try {
+                              const uploadedImage =
+                                await uploadToCloudflare(file);
+                              return uploadedImage.url;
+                            } catch (error) {
+                              console.error("Failed to upload image:", error);
+                              // Fallback to data URL
+                              return new Promise<string>((resolve) => {
+                                const reader = new FileReader();
+                                reader.onload = (event) => {
+                                  if (event.target?.result) {
+                                    resolve(event.target.result as string);
+                                  }
+                                };
+                                reader.readAsDataURL(file);
+                              });
+                            }
                           }
-                        });
-                        
+                        );
+
                         const newImages = await Promise.all(uploadPromises);
                         setNewCaseImages([...newCaseImages, ...newImages]);
                       }

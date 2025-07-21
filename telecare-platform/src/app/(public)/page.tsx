@@ -45,7 +45,7 @@ export default function Home() {
   const dropdownRef = useRef<HTMLDivElement>(null);
   const demoDropdownRef = useRef<HTMLDivElement>(null);
 
-  const { language, direction, toggleLanguage } = useLanguage();
+  const { language, toggleLanguage } = useLanguage();
 
   const openAuthModal = (
     userType: "gaza-clinician" | "uk-clinician" | "register-uk"
@@ -121,7 +121,7 @@ export default function Home() {
   }
 
   return (
-    <div data-language={language} data-direction={direction}>
+    <div data-language={language}>
       {/* Header & Navigation - Fixed Top */}
       <header className="bg-green-950 dark:bg-black opacity-95 fixed top-0 left-0 right-0 z-50">
         <nav className="container mx-auto px-4 py-4 flex justify-between items-center min-h-[64px]">

@@ -102,7 +102,7 @@ export default function AuthModal({
           leaveFrom="opacity-100"
           leaveTo="opacity-80"
         >
-          <div className="fixed inset-0 bg-zinc-950/90 bg-opacity-50 dark:bg-white dark:bg-opacity-20" />
+          <div className="fixed inset-0 bg-zinc-950/90 bg-opacity-50 dark:bg-zinc-950/90 dark:bg-opacity-20" />
         </Transition.Child>
 
         <div className="fixed inset-0 overflow-y-auto">
