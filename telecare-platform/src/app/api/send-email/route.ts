@@ -329,3 +329,6 @@ export async function POST(req: Request) {
     );
   }
 }
+
+// Cannot use edge runtime with nodemailer due to Node.js dependencies
+// export const runtime = "edge";

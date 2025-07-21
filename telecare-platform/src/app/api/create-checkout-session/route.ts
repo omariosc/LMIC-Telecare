@@ -74,5 +74,4 @@ export async function POST(request: NextRequest) {
   }
 }
 
-// Removing edge runtime to troubleshoot Stripe API issues
-// export const runtime = "edge";
+export const runtime = "edge";

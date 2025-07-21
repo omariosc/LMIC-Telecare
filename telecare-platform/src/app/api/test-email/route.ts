@@ -64,3 +64,6 @@ export async function GET() {
     );
   }
 }
+
+// Cannot use edge runtime with email APIs that depend on send-email route
+// export const runtime = "edge";
