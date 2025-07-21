@@ -33,8 +33,8 @@ type PendingRequest = Partial<ReviewedRequest> & {
 type AdminRegistrationModalProps = {
   pendingRequests: PendingRequest[];
   reviewedRequests: ReviewedRequest[];
-  setPendingRequests: (requests: PendingRequest[]) => void;
-  setReviewedRequests: (requests: ReviewedRequest[]) => void;
+  setPendingRequests: (_requests: PendingRequest[]) => void;
+  setReviewedRequests: (_requests: ReviewedRequest[]) => void;
   language: "en" | "ar";
   viewMode: "mobile" | "desktop";
 };

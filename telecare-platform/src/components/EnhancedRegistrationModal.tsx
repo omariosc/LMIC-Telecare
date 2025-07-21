@@ -369,7 +369,7 @@ export default function EnhancedRegistrationModal({
   };
 
   // Camera functionality
-  const startCamera = async () => {
+  const startCamera = useCallback(async () => {
     try {
       console.warn("Starting camera...");
       console.warn("Video ref current:", videoRef.current);

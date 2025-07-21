@@ -1594,7 +1594,7 @@ export default function MobileDemoApp() {
       if (selectedCase && !aiSummaries[selectedCase.id]) {
         generateAISummary();
       }
-    }, [selectedCase]);
+    }, [selectedCase, aiSummaries, generateAISummary]);
 
     // Create new response
     const createResponse = async () => {

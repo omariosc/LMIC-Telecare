@@ -22,7 +22,7 @@ export default function AuthModal({
   isOpen,
   onClose,
   userType,
-  onLoginSuccess,
+  onLoginSuccess: _onLoginSuccess,
 }: AuthModalProps) {
   const [currentLanguage, setCurrentLanguage] = useState<Language>("en");
   const [lastUserType, setLastUserType] = useState(userType);
