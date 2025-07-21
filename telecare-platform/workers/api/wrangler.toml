@@ -3,7 +3,6 @@ name = "telecare-platform-api"
 main = "src/index.ts"
 compatibility_date = "2024-07-20"
 compatibility_flags = ["nodejs_compat"]
-account_id = "504b6f29747547b23c30c25e669f8af9"
 
 # D1 Database bindings
 [[d1_databases]]
