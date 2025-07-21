@@ -1847,7 +1847,7 @@ export default function MobileDemoApp() {
                 : selectedCase.status.replace("_", " ")}
             </span>
             <span
-              className={`px-3 py-1 rounded-full text-sm font-medium border ${getSpecialtyColor(selectedCase.specialty)}`}
+              className={`px-3 py-1 rounded-full text-sm font-medium border ${_getSpecialtyColor(selectedCase.specialty)}`}
             >
               {selectedCase.specialty}
             </span>

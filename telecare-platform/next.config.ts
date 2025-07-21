@@ -13,6 +13,33 @@ const nextConfig: NextConfig = {
   //   optimizeCss: true,
   // },
 
+  // Webpack configuration for face-api.js and Node.js polyfills
+  webpack: (config, { isServer }) => {
+    if (!isServer) {
+      // Client-side polyfills for Node.js modules
+      config.resolve.fallback = {
+        ...config.resolve.fallback,
+        fs: false,
+        path: false,
+        os: false,
+        crypto: false,
+        stream: false,
+        http: false,
+        https: false,
+        zlib: false,
+        encoding: false,
+      };
+    }
+
+    // Ignore specific problematic modules in face-api.js
+    config.externals = config.externals || [];
+    config.externals.push({
+      'encoding': 'encoding',
+    });
+
+    return config;
+  },
+
   // Image optimization configuration
   images: {
     formats: ["image/avif", "image/webp"],

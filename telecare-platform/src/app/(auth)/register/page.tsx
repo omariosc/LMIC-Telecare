@@ -151,13 +151,6 @@ const RegistrationPage = () => {
     }
   }, [step, cameraStream]);
 
-  // Auto-process verification when both images are ready
-  useEffect(() => {
-    if (passportImage && livePhoto && step !== "processing") {
-      processVerification();
-    }
-  }, [passportImage, livePhoto, step, processVerification]);
-
   const fetchGMCName = async (gmcNumber: string) => {
     setGmcLoading(true);
     try {
@@ -344,6 +337,16 @@ const RegistrationPage = () => {
     );
   };
 
+  const moveToNextStep = useCallback(() => {
+    const currentIndex = STEPS.findIndex((s) => s.id === step);
+    const nextIndex = currentIndex + 1;
+
+    if (nextIndex < STEPS.length) {
+      setStep(STEPS[nextIndex].id as RegistrationStep);
+      setStepIndex(nextIndex);
+    }
+  }, [step]);
+
   const processVerification = useCallback(async () => {
     if (!passportImage || !livePhoto) return;
 
@@ -358,8 +361,9 @@ const RegistrationPage = () => {
       );
 
       // For demo purposes, always verify if GMC number is correct
-      const verified =
-        gmcName && passportName !== "Unknown" && faceComparison.match;
+      const verified = Boolean(
+        gmcName && passportName !== "Unknown" && faceComparison.match
+      );
 
       setVerificationResult({
         verified,
@@ -389,6 +393,13 @@ const RegistrationPage = () => {
     compareFaces,
     moveToNextStep,
   ]);
+
+  // Auto-process verification when both images are ready
+  useEffect(() => {
+    if (passportImage && livePhoto && step !== "processing") {
+      processVerification();
+    }
+  }, [passportImage, livePhoto, step, processVerification]);
 
   const sendVerificationEmail = async () => {
     if (!email) {
@@ -433,16 +444,6 @@ const RegistrationPage = () => {
     setStep("result");
     setVerificationResult({ verified: true });
   };
-
-  const moveToNextStep = useCallback(() => {
-    const currentIndex = STEPS.findIndex((s) => s.id === step);
-    const nextIndex = currentIndex + 1;
-
-    if (nextIndex < STEPS.length) {
-      setStep(STEPS[nextIndex].id as RegistrationStep);
-      setStepIndex(nextIndex);
-    }
-  }, [step]);
 
   const moveToStep = (targetStep: RegistrationStep) => {
     const targetIndex = STEPS.findIndex((s) => s.id === targetStep);

@@ -9,7 +9,7 @@ import {
   PlusIcon,
   CursorArrowRaysIcon,
 } from "@heroicons/react/24/outline";
-import type { Language, UserRole } from "../types";
+import type { Language } from "../types";
 
 type AuthModalProps = {
   isOpen: boolean;

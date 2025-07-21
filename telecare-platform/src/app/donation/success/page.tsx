@@ -64,13 +64,13 @@ export default function DonationSuccess() {
   };
 
   const handleShare = async () => {
-    try {
-      const shareUrl = "https://jusur.org.uk";
-      const shareText = t(
-        "donationSuccess.shareText",
-        "I just donated to Jusur (جسور) - a platform connecting UK medical specialists with Gaza clinicians. Join me in supporting this vital healthcare bridge: "
-      );
+    const shareUrl = "https://jusur.org.uk";
+    const shareText = t(
+      "donationSuccess.shareText",
+      "I just donated to Jusur (جسور) - a platform connecting UK medical specialists with Gaza clinicians. Join me in supporting this vital healthcare bridge: "
+    );
 
+    try {
       await navigator.clipboard.writeText(shareText + shareUrl);
       setCopied(true);
 

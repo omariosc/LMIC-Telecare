@@ -137,6 +137,7 @@ export default function EnhancedRegistrationModal({
 
       return () => clearTimeout(timer);
     }
+    return undefined;
   }, [currentPage, completionCountdown]);
 
   // Countdown timer for resend code
@@ -154,7 +155,44 @@ export default function EnhancedRegistrationModal({
 
       return () => clearInterval(timer);
     }
+    return undefined;
   }, [resendCountdown]);
+
+  // Camera functionality
+  const startCamera = useCallback(async () => {
+    try {
+      console.warn("Starting camera...");
+      console.warn("Video ref current:", videoRef.current);
+
+      const stream = await navigator.mediaDevices.getUserMedia({
+        video: { facingMode: "user" },
+        audio: false,
+      });
+
+      console.warn("Got media stream:", stream);
+
+      if (videoRef.current) {
+        videoRef.current.srcObject = stream;
+        setIsCameraActive(true);
+        console.warn("Camera started successfully");
+      } else {
+        console.error("Video ref not available");
+        // Try again after a short delay
+        setTimeout(() => {
+          if (videoRef.current) {
+            videoRef.current.srcObject = stream;
+            setIsCameraActive(true);
+            console.warn("Camera started successfully on retry");
+          }
+        }, 500);
+      }
+    } catch (error) {
+      console.error("Camera error:", error);
+      setError(
+        language === "ar" ? "فشل الوصول للكاميرا" : "Failed to access camera"
+      );
+    }
+  }, [language]);
 
   // Automatically start camera when camera page is shown
   useEffect(() => {
@@ -167,6 +205,7 @@ export default function EnhancedRegistrationModal({
 
       return () => clearTimeout(timer);
     }
+    return undefined;
   }, [currentPage, isCameraActive, capturedPhoto, startCamera]);
 
   const resetAllStates = () => {
@@ -367,42 +406,6 @@ export default function EnhancedRegistrationModal({
     };
     reader.readAsDataURL(file);
   };
-
-  // Camera functionality
-  const startCamera = useCallback(async () => {
-    try {
-      console.warn("Starting camera...");
-      console.warn("Video ref current:", videoRef.current);
-
-      const stream = await navigator.mediaDevices.getUserMedia({
-        video: { facingMode: "user" },
-        audio: false,
-      });
-
-      console.warn("Got media stream:", stream);
-
-      if (videoRef.current) {
-        videoRef.current.srcObject = stream;
-        setIsCameraActive(true);
-        console.warn("Camera started successfully");
-      } else {
-        console.error("Video ref not available");
-        // Try again after a short delay
-        setTimeout(() => {
-          if (videoRef.current) {
-            videoRef.current.srcObject = stream;
-            setIsCameraActive(true);
-            console.warn("Camera started successfully on retry");
-          }
-        }, 500);
-      }
-    } catch (error) {
-      console.error("Camera error:", error);
-      setError(
-        language === "ar" ? "فشل الوصول للكاميرا" : "Failed to access camera"
-      );
-    }
-  }, [language]);
 
   const capturePhoto = async () => {
     if (videoRef.current && canvasRef.current) {
