@@ -2022,7 +2022,9 @@ export default function MobileDemoApp() {
               </div>
             ) : (
               <p className="text-sm text-gray-700 dark:text-gray-300 italic">
-                {aiSummary}
+                {selectedCase
+                  ? aiSummaries[selectedCase.id] || "No summary available."
+                  : "No summary available."}
               </p>
             )}
           </div>
@@ -2203,9 +2205,7 @@ export default function MobileDemoApp() {
                 className="bg-green-950 text-white px-4 py-2 rounded-lg hover:bg-green-900 transition-colors flex items-center space-x-2 cursor-pointer"
               >
                 <PlusIcon className="h-4 w-4" />
-                <span>
-                  {language === "ar" ? "إضافة استشارة" : "Add Response"}
-                </span>
+                <span>{language === "ar" ? "إضافة" : "Add"}</span>
               </button>
             )}
           </div>
