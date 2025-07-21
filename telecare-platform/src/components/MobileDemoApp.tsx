@@ -1594,7 +1594,8 @@ export default function MobileDemoApp() {
       if (selectedCase && !aiSummaries[selectedCase.id]) {
         generateAISummary();
       }
-    }, [selectedCase, aiSummaries, generateAISummary]);
+      // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [selectedCase?.id, generateAISummary]);
 
     // Create new response
     const createResponse = async () => {

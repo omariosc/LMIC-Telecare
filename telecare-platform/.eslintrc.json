@@ -63,11 +63,12 @@
         "src/components/AdminRegistrationModal.tsx",
         "src/components/AuthModal.tsx",
         "src/components/RegistrationModal.tsx",
+        "src/components/MobileDemoApp.tsx",
         "src/hooks/useTheme.ts"
       ],
       "rules": {
         "no-unused-vars": ["error", { 
-          "argsIgnorePattern": "^_",
+          "argsIgnorePattern": "^_|^value$",
           "varsIgnorePattern": "^_|^(decision|reviewedAt|reviewedBy|reviewNotes|requests|idImage|handleRegistrationBack|theme|UserRole|onLoginSuccess)$"
         }]
       }

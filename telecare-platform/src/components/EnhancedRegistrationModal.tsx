@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState, useEffect, useRef } from "react";
+import React, { useState, useEffect, useRef, useCallback } from "react";
 import {
   XMarkIcon,
   CameraIcon,
@@ -167,7 +167,7 @@ export default function EnhancedRegistrationModal({
 
       return () => clearTimeout(timer);
     }
-  }, [currentPage, isCameraActive, capturedPhoto]); // Remove startCamera to avoid initialization order issues
+  }, [currentPage, isCameraActive, capturedPhoto, startCamera]);
 
   const resetAllStates = () => {
     setRegistrationData({
@@ -402,7 +402,7 @@ export default function EnhancedRegistrationModal({
         language === "ar" ? "فشل الوصول للكاميرا" : "Failed to access camera"
       );
     }
-  };
+  }, [language]);
 
   const capturePhoto = async () => {
     if (videoRef.current && canvasRef.current) {

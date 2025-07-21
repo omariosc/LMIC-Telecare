@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useCallback } from "react";
 import { XMarkIcon } from "@heroicons/react/24/outline";
 
 type RegistrationData = {
@@ -23,8 +23,8 @@ type RegistrationModalProps = {
   onClose: () => void;
   pendingRequests: Array<Partial<any> & { id: string }>;
   reviewedRequests: Array<any>;
-  setPendingRequests: (requests: Array<Partial<any> & { id: string }>) => void;
-  setReviewedRequests: (requests: Array<any>) => void;
+  setPendingRequests: (_requests: Array<Partial<any> & { id: string }>) => void;
+  setReviewedRequests: (_requests: Array<any>) => void;
   language: "en" | "ar";
 };
 
@@ -111,46 +111,49 @@ export default function RegistrationModal({
   }, [isOpen]);
 
   // GMC verification function
-  const verifyGMCNumber = async (gmcNumber: string) => {
-    setIsVerifyingGMC(true);
-    setRegistrationError("");
-    setGmcVerificationStatus("pending");
+  const verifyGMCNumber = useCallback(
+    async (gmcNumber: string) => {
+      setIsVerifyingGMC(true);
+      setRegistrationError("");
+      setGmcVerificationStatus("pending");
 
-    try {
-      const response = await fetch(`/api/fetchGmcName?gmc=${gmcNumber}`);
-      const data = await response.json();
+      try {
+        const response = await fetch(`/api/fetchGmcName?gmc=${gmcNumber}`);
+        const data = await response.json();
 
-      if (!response.ok || data.error) {
+        if (!response.ok || data.error) {
+          setRegistrationError(
+            language === "ar" ? "رقم GMC غير صحيح" : "Invalid GMC"
+          );
+          setGmcVerificationStatus("failed");
+          return;
+        }
+
+        // Update registration data with extracted information
+        setRegistrationData((prev) => ({
+          ...prev,
+          firstName: data.firstName,
+          lastName: data.lastName,
+          institution: data.institution,
+          yearsOfExperience: data.yearsOfExperience,
+          specialties: data.specialties,
+        }));
+
+        setGmcVerificationStatus("verified");
+      } catch (error) {
+        console.error("GMC verification failed:", error);
         setRegistrationError(
-          language === "ar" ? "رقم GMC غير صحيح" : "Invalid GMC"
+          language === "ar"
+            ? "فشل في التحقق من رقم GMC"
+            : "Failed to verify GMC number"
         );
         setGmcVerificationStatus("failed");
-        return;
+      } finally {
+        setIsVerifyingGMC(false);
       }
-
-      // Update registration data with extracted information
-      setRegistrationData((prev) => ({
-        ...prev,
-        firstName: data.firstName,
-        lastName: data.lastName,
-        institution: data.institution,
-        yearsOfExperience: data.yearsOfExperience,
-        specialties: data.specialties,
-      }));
-
-      setGmcVerificationStatus("verified");
-    } catch (error) {
-      console.error("GMC verification failed:", error);
-      setRegistrationError(
-        language === "ar"
-          ? "فشل في التحقق من رقم GMC"
-          : "Failed to verify GMC number"
-      );
-      setGmcVerificationStatus("failed");
-    } finally {
-      setIsVerifyingGMC(false);
-    }
-  };
+    },
+    [language]
+  );
 
   // Trigger GMC verification when a valid 7-digit number is entered
   React.useEffect(() => {
@@ -161,7 +164,12 @@ export default function RegistrationModal({
     ) {
       verifyGMCNumber(registrationData.gmcNumber);
     }
-  }, [registrationData.gmcNumber, registrationData.role]);
+  }, [
+    registrationData.gmcNumber,
+    registrationData.role,
+    gmcVerificationStatus,
+    verifyGMCNumber,
+  ]);
 
   // ID verification with OCR
   const verifyIDDocument = async (file: File) => {

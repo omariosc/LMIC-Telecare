@@ -7,7 +7,7 @@ export type Theme = "light" | "dark" | "system";
 type UseThemeReturn = {
   theme: Theme;
   isDark: boolean;
-  setTheme: (theme: Theme) => void;
+  setTheme: (_theme: Theme) => void;
   toggleTheme: () => void;
 };
 
